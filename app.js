@@ -1,9 +1,13 @@
 const express = require('express')
 const app = express()
 
+//Setting up templaing view engine - EJS
+app.set('view engine', 'ejs')
+app.use(express.static("views"))
+
 // Testing Root
 app.get('/', (req, res) => {
-    res.send('Hello');
+    res.render('index');
 })
 
 //Localhost:3003
