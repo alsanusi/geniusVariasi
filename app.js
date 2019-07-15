@@ -57,10 +57,9 @@ app.use(methodOverride(function(req, res){
     }
 }))
 
-// Testing Root
-app.get('/', (req, res) => {
-    res.render('index');
-})
+// Routes
+const bookingRoute = require('./routes/booking')
+app.use('/', bookingRoute)
 
 //Localhost:3003
 app.listen(3000, () => {
