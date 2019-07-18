@@ -7,6 +7,10 @@ app.get('/', (req, res) => {
     res.render('index');
 })
 
+app.get('/bookingDetails', (req, res) => {
+    res.render('bookingDetails')
+})
+
 // Insert
 app.route('/book1')
     .get((req, res) => {
