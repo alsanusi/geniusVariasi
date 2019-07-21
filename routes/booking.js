@@ -15,10 +15,6 @@ app.get('/bookingDetails', (req, res) => {
     })
 })
 
-app.get('/adminPanel', (req, res) => {
-    res.render('indexPanel')
-})
-
 app.post('/book1', (req, res) => {
     res.render('bookingDetails', {
         namaPemilik: req.body.namaPemilik,

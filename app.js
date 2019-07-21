@@ -63,7 +63,9 @@ app.use(methodOverride(function (req, res) {
 
 // Routes
 const bookingRoute = require('./routes/booking')
+const adminPanel = require('./routes/panel')
 app.use('/', bookingRoute)
+app.use('/panel', adminPanel)
 
 //Localhost:3003
 app.listen(3003, () => {
