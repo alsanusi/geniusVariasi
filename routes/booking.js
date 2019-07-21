@@ -8,7 +8,15 @@ app.get('/', (req, res) => {
 })
 
 app.get('/bookingDetails', (req, res) => {
-    res.render('bookingDetails')
+    res.render('bookingDetails', {
+        namaPemilik: '',
+        merkMobil: '',
+        tanggalService: ''
+    })
+})
+
+app.get('/adminPanel', (req, res) => {
+    res.render('indexPanel')
 })
 
 app.post('/book1', (req, res) => {
@@ -45,11 +53,7 @@ app.post('/book1/details', (req, res) => {
                     })
                 } else {
                     req.flash('success', 'Client Service Data Input Successfully!')
-                    res.render('bookingDetails', {
-                        namaPemilik: '',
-                        merkMobil: '',
-                        tanggalService: '',
-                    })
+                    res.redirect('/bookingDetails')
                 }
             })
         })
