@@ -50,19 +50,20 @@
             </div>
             <ul class="nav" id="side-menu">
                 <li style="padding: 70px 0 0;">
-                    <a href="index.html" class="waves-effect"><i class="fa fa-clock-o fa-fw"
+                    <a href="/panel" class="waves-effect"><i class="fa fa-clock-o fa-fw"
                             aria-hidden="true"></i>Dashboard</a>
                 </li>
                 <li>
-                    <a href="profile.html" class="waves-effect"><i class="fa fa-user fa-fw"
+                    <a href="/panel/editBooking" class="waves-effect"><i class="fa fa-user fa-fw"
                             aria-hidden="true"></i>Profile</a>
                 </li>
                 <li>
-                    <a href="basic-table.html" class="waves-effect"><i class="fa fa-table fa-fw"
+                    <a href="/panel/listBooking" class="waves-effect"><i class="fa fa-table fa-fw"
                             aria-hidden="true"></i>Basic Table</a>
                 </li>
                 <div class="center p-20">
-                    <a href="#" target="_blank" class="btn btn-danger btn-block waves-effect waves-light">Log Out</a>
+                    <!-- Include Header -->
+                    <a href="#" target="#" class="btn btn-danger btn-block waves-effect waves-light">Log Out</a>
                 </div>
             </ul>
         </div>
@@ -165,6 +166,20 @@
                                         <td class="txt-oflo"><%= data.namaPemilik %></td>
                                         <td><%= data.merkMobil %></td>
                                         <td class="txt-oflo"><%= data.tanggalService %></td>
+                                        <td>
+                                            <a href="#"><button class="btn btn-primary notika-btn-primary">Edit Data</button></a>
+                                        </td>
+                                        <td>
+                                            <form action="#" method="POST">
+                                                <form method="post" action="#">
+                                                    <button type="submit" name="delete" value='Delete'
+                                                        onClick="return confirm('Are you sure you want to delete this alumni data?')"
+                                                        class="btn btn-primary notika-btn-primary" style="background-color:#d82436;">Remove
+                                                        Data</button>
+                                                    <input type="hidden" name="_method" value="DELETE" />
+                                                </form>
+                                            </form>
+                                        </td>
                                     </tr>
                                     <% }) %>
                                     <% } %>

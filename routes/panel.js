@@ -20,4 +20,12 @@ app.get('/', (req, res) => {
     })
 })
 
+app.get('/editBooking', (req, res) => {
+    res.render('editBooking')
+})
+
+app.get('/listBooking', (req, res) => {
+    res.render('listBooking')
+})
+
 module.exports = app
