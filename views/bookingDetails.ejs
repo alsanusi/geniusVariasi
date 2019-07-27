@@ -103,7 +103,7 @@
                              <h3 class="h4 text-black mb-4">Data Kendaraan Anda.</h3>
                              <!-- Data Kendaraan -->
                              <div class="form-group">
-                                 <select class="form-control" onchange="merkMobil(this)" name="merkMobil" required>
+                                 <select class="form-control" onchange="onSelectMerk(this)" name="merkMobil" required>
                                      <option disabled selected>Pilih Merk Mobil</option>
                                      <option value="Toyota">Toyota</option>
                                      <option value="Honda">Honda</option>
@@ -118,25 +118,254 @@
                              </div>
                              <!-- Validation -->
                              <script>
+                                 function onSelectMerk(merkMobil) {
+                                     switch (merkMobil.value) {
+                                         case "Toyota":
+                                             document.getElementById("toyota").style.display = "block";
+                                             document.getElementById("honda").style.display = "none";
+                                             document.getElementById("suzuki").style.display = "none";
+                                             document.getElementById("hyundai").style.display = "none";
+                                             document.getElementById("nissan").style.display = "none";
+                                             document.getElementById("datsun").style.display = "none";
+                                             document.getElementById("daihatsu").style.display = "none";
+                                             document.getElementById("chevrolet").style.display = "none";
+                                             document.getElementById("ford").style.display = "none";
+                                             document.getElementById("perawatanMobil").style.display = "block";
+                                             break;
+                                         case "Honda":
+                                             document.getElementById("toyota").style.display = "none";
+                                             document.getElementById("honda").style.display = "block";
+                                             document.getElementById("suzuki").style.display = "none";
+                                             document.getElementById("hyundai").style.display = "none";
+                                             document.getElementById("nissan").style.display = "none";
+                                             document.getElementById("datsun").style.display = "none";
+                                             document.getElementById("daihatsu").style.display = "none";
+                                             document.getElementById("chevrolet").style.display = "none";
+                                             document.getElementById("ford").style.display = "none";
+                                             document.getElementById("perawatanMobil").style.display = "block";
+                                             break;
+                                         case "Suzuki":
+                                             document.getElementById("toyota").style.display = "none";
+                                             document.getElementById("honda").style.display = "none";
+                                             document.getElementById("suzuki").style.display = "block";
+                                             document.getElementById("hyundai").style.display = "none";
+                                             document.getElementById("nissan").style.display = "none";
+                                             document.getElementById("datsun").style.display = "none";
+                                             document.getElementById("daihatsu").style.display = "none";
+                                             document.getElementById("chevrolet").style.display = "none";
+                                             document.getElementById("ford").style.display = "none";
+                                             document.getElementById("perawatanMobil").style.display = "block";
+                                             break;
+                                         case "Hyundai":
+                                             document.getElementById("toyota").style.display = "none";
+                                             document.getElementById("honda").style.display = "none";
+                                             document.getElementById("suzuki").style.display = "none";
+                                             document.getElementById("hyundai").style.display = "block";
+                                             document.getElementById("nissan").style.display = "none";
+                                             document.getElementById("datsun").style.display = "none";
+                                             document.getElementById("daihatsu").style.display = "none";
+                                             document.getElementById("chevrolet").style.display = "none";
+                                             document.getElementById("ford").style.display = "none";
+                                             document.getElementById("perawatanMobil").style.display = "block";
+                                             break;
+                                         case "Nissan":
+                                             document.getElementById("toyota").style.display = "none";
+                                             document.getElementById("honda").style.display = "none";
+                                             document.getElementById("suzuki").style.display = "none";
+                                             document.getElementById("hyundai").style.display = "none";
+                                             document.getElementById("nissan").style.display = "block";
+                                             document.getElementById("datsun").style.display = "none";
+                                             document.getElementById("daihatsu").style.display = "none";
+                                             document.getElementById("chevrolet").style.display = "none";
+                                             document.getElementById("ford").style.display = "none";
+                                             document.getElementById("perawatanMobil").style.display = "block";
+                                             break;
+                                         case "Datsun":
+                                             document.getElementById("toyota").style.display = "none";
+                                             document.getElementById("honda").style.display = "none";
+                                             document.getElementById("suzuki").style.display = "none";
+                                             document.getElementById("hyundai").style.display = "none";
+                                             document.getElementById("nissan").style.display = "none";
+                                             document.getElementById("datsun").style.display = "block";
+                                             document.getElementById("daihatsu").style.display = "none";
+                                             document.getElementById("chevrolet").style.display = "none";
+                                             document.getElementById("ford").style.display = "none";
+                                             document.getElementById("perawatanMobil").style.display = "block";
+                                             break;
+                                         case "Daihatsu":
+                                             document.getElementById("toyota").style.display = "none";
+                                             document.getElementById("honda").style.display = "none";
+                                             document.getElementById("suzuki").style.display = "none";
+                                             document.getElementById("hyundai").style.display = "none";
+                                             document.getElementById("nissan").style.display = "none";
+                                             document.getElementById("datsun").style.display = "none";
+                                             document.getElementById("daihatsu").style.display = "block";
+                                             document.getElementById("chevrolet").style.display = "none";
+                                             document.getElementById("ford").style.display = "none";
+                                             document.getElementById("perawatanMobil").style.display = "block";
+                                             break;
+                                         case "Chevrolet":
+                                             document.getElementById("toyota").style.display = "none";
+                                             document.getElementById("honda").style.display = "none";
+                                             document.getElementById("suzuki").style.display = "none";
+                                             document.getElementById("hyundai").style.display = "none";
+                                             document.getElementById("nissan").style.display = "none";
+                                             document.getElementById("datsun").style.display = "none";
+                                             document.getElementById("daihatsu").style.display = "none";
+                                             document.getElementById("chevrolet").style.display = "block";
+                                             document.getElementById("ford").style.display = "none";
+                                             document.getElementById("perawatanMobil").style.display = "block";
+                                             break;
+                                         case "Ford":
+                                             document.getElementById("toyota").style.display = "none";
+                                             document.getElementById("honda").style.display = "none";
+                                             document.getElementById("suzuki").style.display = "none";
+                                             document.getElementById("hyundai").style.display = "none";
+                                             document.getElementById("nissan").style.display = "none";
+                                             document.getElementById("datsun").style.display = "none";
+                                             document.getElementById("daihatsu").style.display = "none";
+                                             document.getElementById("chevrolet").style.display = "none";
+                                             document.getElementById("ford").style.display = "block";
+                                             document.getElementById("perawatanMobil").style.display = "block";
+                                             break;
+                                         default:
+                                             document.getElementById("toyota").style.display = "none";
+                                             document.getElementById("honda").style.display = "none";
+                                             document.getElementById("suzuki").style.display = "none";
+                                             document.getElementById("hyundai").style.display = "none";
+                                             document.getElementById("nissan").style.display = "none";
+                                             document.getElementById("datsun").style.display = "none";
+                                             document.getElementById("daihatsu").style.display = "none";
+                                             document.getElementById("chevrolet").style.display = "none";
+                                             document.getElementById("ford").style.display = "none";
+                                             document.getElementById("perawatanMobil").style.display = "none";
+                                     }
+                                 }
                              </script>
                              <!-- Model Kendaraan -->
                              <!-- Toyota -->
-                             <div id="Toyota" class="form-group">
-                                 <select class="form-control" name="merkMobil" required>
-                                     <option disabled selected>Pilih Merk Mobil</option>
-                                     <option value="Toyota">Toyota</option>
-                                     <option value="Honda">Honda</option>
-                                     <option value="Suzuki">Suzuki</option>
-                                     <option value="Hyundai">Hyundai</option>
-                                     <option value="Nissan">Nissan</option>
-                                     <option value="Datsun">Datsun</option>
-                                     <option value="Daihatsu">Daihatsu</option>
-                                     <option value="Chevrolet">Chevrolet</option>
-                                     <option value="Ford">Ford</option>
+                             <div id="toyota" style="display:none" class="form-group">
+                                 <select class="form-control" name="modelMobil" required>
+                                     <option disabled selected>Pilih Model Mobil</option>
+                                     <option value="Agya">Agya</option>
+                                     <option value="Avanza">Avanza</option>
+                                     <option value="Calya">Calya</option>
+                                     <option value="Yaris">Yaris</option>
+                                     <option value="Sienta">Sienta</option>
+                                     <option value="Hilux">Hilux</option>
+                                     <option value="Fortuner">Fortuner</option>
+                                     <option value="Rush">Rush</option>
+                                     <option value="Innova">Innova</option>
+                                     <option value="Vellfire">Vellfire</option>
+                                     <option value="Alphard">Alphard</option>
+                                     <option value="Vios">Vios</option>
+                                     <option value="Altis">Altis</option>
+                                     <option value="C-HR">C-HR</option>
+                                     <option value="Camry">Camry</option>
+                                     <option value="FT-86">FT-86</option>
+                                 </select>
+                             </div>
+                             <!-- Honda -->
+                             <div id="honda" style="display:none" class="form-group">
+                                 <select class="form-control" name="modelMobil" required>
+                                     <option disabled selected>Pilih Model Mobil</option>
+                                     <option value="Civic">Civic</option>
+                                     <option value="C-RV">C-RV</option>
+                                     <option value="City">City</option>
+                                     <option value="HR-V">HR-V</option>
+                                     <option value="BR-V">BR-V</option>
+                                     <option value="Mobilio">Mobilio</option>
+                                     <option value="Jazz">Jazz</option>
+                                     <option value="Brio">Brio</option>
+                                 </select>
+                             </div>
+                             <!-- Suzuki -->
+                             <div id="suzuki" style="display:none" class="form-group">
+                                 <select class="form-control" name="modelMobil" required>
+                                     <option disabled selected>Pilih Model Mobil</option>
+                                     <option value="Carry">Carry</option>
+                                     <option value="Ertiga">Ertiga</option>
+                                     <option value="Baleno">Baleno</option>
+                                     <option value="Ignis">Ignis</option>
+                                     <option value="Karimun">Karimun</option>
+                                     <option value="APV">APV</option>
+                                     <option value="SX 4">SX 4</option>
+                                 </select>
+                             </div>
+                             <!-- Hyundai -->
+                             <div id="hyundai" style="display:none" class="form-group">
+                                 <select class="form-control" name="modelMobil" required>
+                                     <option disabled selected>Pilih Model Mobil</option>
+                                     <option value="Kona">Kona</option>
+                                     <option value="Santafe">Santafe</option>
+                                     <option value="Grand i10">Grand i10</option>
+                                     <option value="i20">i20</option>
+                                     <option value="Tucson">Tucson</option>
+                                     <option value="Starex">Starex</option>
+                                     <option value="H-1">H-1</option>
+                                     <option value="Avega">Avega</option>
+                                 </select>
+                             </div>
+                             <!-- Nissan -->
+                             <div id="nissan" style="display:none" class="form-group">
+                                 <select class="form-control" name="modelMobil" required>
+                                     <option disabled selected>Pilih Model Mobil</option>
+                                     <option value="Livina">Livina</option>
+                                     <option value="X-Trail">X-Trail</option>
+                                     <option value="Terra">Terra</option>
+                                     <option value="Navara">Navara</option>
+                                     <option value="Serena">Serena</option>
+                                     <option value="Livina X-Gear">Livina X-Gear</option>
+                                 </select>
+                             </div>
+                             <!-- Datsun -->
+                             <div id="datsun" style="display:none" class="form-group">
+                                 <select class="form-control" name="modelMobil" required>
+                                     <option disabled selected>Pilih Model Mobil</option>
+                                     <option value="Cross">Cross</option>
+                                     <option value="Got">Got</option>
+                                     <option value="Go">Go</option>
+                                 </select>
+                             </div>
+                             <!-- Daihatsu -->
+                             <div id="daihatsu" style="display:none" class="form-group">
+                                 <select class="form-control" name="modelMobil" required>
+                                     <option disabled selected>Pilih Model Mobil</option>
+                                     <option value="Ayla">Ayla</option>
+                                     <option value="Xenia">Xenia</option>
+                                     <option value="Sigra">Sigra</option>
+                                     <option value="Hi-Max">Hi-Max</option>
+                                     <option value="Terios">Terios</option>
+                                     <option value="Sirion">Sirion</option>
+                                     <option value="Luxio">Luxio</option>
+                                     <option value="Grandmax Minibus">Grandmax Minibus</option>
+                                     <option value="Grandmax Pickup">Grandmax Pickup</option>
+                                 </select>
+                             </div>
+                             <!-- Chevrolet -->
+                             <div id="chevrolet" style="display:none" class="form-group">
+                                 <select class="form-control" name="modelMobil" required>
+                                     <option disabled selected>Pilih Model Mobil</option>
+                                     <option value="Captiva">Captiva</option>
+                                     <option value="Trax">Trax</option>
+                                     <option value="Spark">Spark</option>
+                                     <option value="Orlando">Orlando</option>
+                                     <option value="Aveo">Aveo</option>
+                                 </select>
+                             </div>
+                             <!-- Ford -->
+                             <div id="ford" style="display:none" class="form-group">
+                                 <select class="form-control" name="modelMobil" required>
+                                     <option disabled selected>Pilih Model Mobil</option>
+                                     <option value="Ranger">Ranger</option>
+                                     <option value="Focus">Focus</option>
+                                     <option value="Fiesta">Fiesta</option>
+                                     <option value="Everest">Everest</option>
+                                     <option value="Eco-sport">Eco-sport</option>
                                  </select>
                              </div>
                              <!-- Jenis Perawatan -->
-                             <div class="form-group">
+                             <div id="perawatanMobil" style="display:none" class="form-group">
                                  <select class="form-control" onchange="onSelectPerawatan(this)" name="jenisPerawatan"
                                      required>
                                      <option disabled selected>Pilih Jenis Perawatan Mobil</option>
@@ -145,7 +374,7 @@
                                      <option value="Car Care">Car Care</option>
                                  </select>
                              </div>
-                             <!-- Validasi -->
+                             <!-- Validasi Jenis Perawatan -->
                              <script>
                                  function onSelectPerawatan(jenisPerawatan) {
                                      switch (jenisPerawatan.value) {
