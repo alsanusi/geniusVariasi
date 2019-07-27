@@ -19,7 +19,42 @@ app.post('/book1', (req, res) => {
     res.render('bookingDetails', {
         namaPemilik: req.body.namaPemilik,
         alamat: req.body.alamat,
-        tanggalService: req.body.tanggalService
+        nomorTelepon: '',
+        tanggalService: req.body.tanggalService,
+        waktuService: '',
+        merkMobil: '',
+        tipeMobil: '',
+        jenisPerawatan: '',
+        detailPerawatan: ''
+    })
+})
+
+app.post('/book1/priceChecking', (req, res) => {
+    var clientCar = {
+        merkMobil: req.body.merkMobil,
+        tipeMobil: req.body.tipeMobil,
+        jenisPerawatan: req.body.jenisPerawatan,
+        detailPerawatan: req.body.detailPerawatan
+    }
+    req.getConnection(function (err, con) {
+        con.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + clientCar.merkMobil + "' AND tipeMobil= '" + clientCar.tipeMobil + "' AND jenisPerawatan= '" + clientCar.jenisPerawatan + "' AND detailPerawatan= '" + clientCar.detailPerawatan + "'; ", function (err, rows, fields) {
+            if (err) {
+                throw err
+            } else {
+                res.render('pricingDetails', {
+                    namaPemilik: req.body.namaPemilik,
+                    alamat: req.body.alamat,
+                    nomorTelepon: '',
+                    tanggalService: req.body.tanggalService,
+                    waktuService: '',
+                    merkMobil: '',
+                    tipeMobil: '',
+                    jenisPerawatan: '',
+                    detailPerawatan: '',
+                    harga: rows[0].harga
+                })
+            }
+        })
     })
 })
 
