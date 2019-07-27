@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
 app.get('/bookingDetails', (req, res) => {
     res.render('bookingDetails', {
         namaPemilik: '',
-        merkMobil: '',
+        alamat: '',
         tanggalService: ''
     })
 })
@@ -18,7 +18,7 @@ app.get('/bookingDetails', (req, res) => {
 app.post('/book1', (req, res) => {
     res.render('bookingDetails', {
         namaPemilik: req.body.namaPemilik,
-        merkMobil: req.body.merkMobil,
+        alamat: req.body.alamat,
         tanggalService: req.body.tanggalService
     })
 })

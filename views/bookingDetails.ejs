@@ -68,11 +68,10 @@
 
                          <h3 class="text-black">Course Description</h3>
                          <p class="mb-4">
-                             <strong class="text-black mr-3">Schedule: </strong>
+                             <strong class="text-black mr-3">Schedule: - </strong>
                          </p>
 
                          <form action="/book1/details" method="post" class="form-box">
-                             <h3 class="h4 text-black mb-4">Booking Service System.</h3>
                              <!-- Error and Success Message -->
                              <% if(messages.error){ %>
                              <h4 style="color:#d82436">Booking Gagal!</h4>
@@ -90,7 +89,8 @@
                                      value="<%= namaPemilik %>" required>
                              </div>
                              <div class="form-group">
-                                 <input type="text" class="form-control" name="alamat" placeholder="Alamat" required>
+                                 <input type="text" class="form-control" name="alamat" placeholder="Alamat"
+                                     value="<%= alamat %>" required>
                              </div>
                              <div class="form-group">
                                  <input type="text" class="form-control" name="nomorTelepon" placeholder="Nomor Telepon"
@@ -100,7 +100,19 @@
                                  <input type="date" id="bookingDate" class="form-control" name="tanggalService"
                                      placeholder="Tanggal Service" value="<%= tanggalService %>" required>
                              </div>
-                             <h3 class="h4 text-black mb-4">Data Kendaraan Anda.</h3>
+                             <div class="form-group">
+                                 <select class="form-control" name="waktuService" required>
+                                     <option disabled selected>Pilih Waktu Service</option>
+                                     <option value="10 AM">10 AM</option>
+                                     <option value="11 AM">11 AM</option>
+                                     <option value="12 PM">12 PM</option>
+                                     <option value="13 PM">13 PM</option>
+                                     <option value="14 PM">14 PM</option>
+                                     <option value="15 PM">15 PM</option>
+                                     <option value="16 PM">16 PM</option>
+                                 </select>
+                             </div>
+                             <h3 class="h4 text-black mb-4">Data Mobil Anda.</h3>
                              <!-- Data Kendaraan -->
                              <div class="form-group">
                                  <select class="form-control" onchange="onSelectMerk(this)" name="merkMobil" required>
@@ -441,13 +453,8 @@
                                      <option value="Poles Full Body">Poles Full Body</option>
                                  </select>
                              </div>
-                             <h3 class="h4 text-black mb-4">Kalkulasi Harga.</h3>
                              <div class="form-group">
-                                 <input type="text" class="form-control" name="totalHarga" placeholder="Total Harga"
-                                     required>
-                             </div>
-                             <div class="form-group">
-                                 <input type="submit" class="btn btn-primary btn-pill" value="Book Sekarang">
+                                 <input type="submit" class="btn btn-primary btn-pill" value="Kalkulasi Harga">
                              </div>
                          </form>
 
