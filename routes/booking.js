@@ -29,7 +29,7 @@ app.post('/book1', (req, res) => {
     })
 })
 
-app.post('/book1/priceChecking', (req, res) => {
+app.post('/priceChecking', (req, res) => {
     var clientCar = {
         merkMobil: req.body.merkMobil,
         tipeMobil: req.body.tipeMobil,
@@ -44,13 +44,13 @@ app.post('/book1/priceChecking', (req, res) => {
                 res.render('pricingDetails', {
                     namaPemilik: req.body.namaPemilik,
                     alamat: req.body.alamat,
-                    nomorTelepon: '',
+                    nomorTelepon: req.body.nomorTelepon,
                     tanggalService: req.body.tanggalService,
-                    waktuService: '',
-                    merkMobil: '',
-                    tipeMobil: '',
-                    jenisPerawatan: '',
-                    detailPerawatan: '',
+                    waktuService: req.body.waktuService,
+                    merkMobil: req.body.merkMobil,
+                    tipeMobil: req.body.tipeMobil,
+                    jenisPerawatan: req.body.jenisPerawatan,
+                    detailPerawatan: req.body.detailPerawatan,
                     harga: rows[0].harga
                 })
             }
