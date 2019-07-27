@@ -83,17 +83,139 @@
                              <!-- <p>Successfully insert the <b style="color:#5cb85c">Service Data</b>.</p> -->
                              </br>
                              <% } %>
+                             <h3 class="h4 text-black mb-4">Data Personal Anda.</h3>
+                             <!-- Data Personal -->
                              <div class="form-group">
                                  <input type="text" class="form-control" name="namaPemilik" placeholder="Nama Pemilik"
                                      value="<%= namaPemilik %>" required>
                              </div>
                              <div class="form-group">
-                                 <input type="text" class="form-control" name="merkMobil" placeholder="Merk Mobil"
-                                     value="<%= merkMobil %>" required>
+                                 <input type="text" class="form-control" name="alamat" placeholder="Alamat" required>
+                             </div>
+                             <div class="form-group">
+                                 <input type="text" class="form-control" name="nomorTelepon" placeholder="Nomor Telepon"
+                                     required>
                              </div>
                              <div class="form-group">
                                  <input type="date" id="bookingDate" class="form-control" name="tanggalService"
                                      placeholder="Tanggal Service" value="<%= tanggalService %>" required>
+                             </div>
+                             <h3 class="h4 text-black mb-4">Data Kendaraan Anda.</h3>
+                             <!-- Data Kendaraan -->
+                             <div class="form-group">
+                                 <select class="form-control" onchange="merkMobil(this)" name="merkMobil" required>
+                                     <option disabled selected>Pilih Merk Mobil</option>
+                                     <option value="Toyota">Toyota</option>
+                                     <option value="Honda">Honda</option>
+                                     <option value="Suzuki">Suzuki</option>
+                                     <option value="Hyundai">Hyundai</option>
+                                     <option value="Nissan">Nissan</option>
+                                     <option value="Datsun">Datsun</option>
+                                     <option value="Daihatsu">Daihatsu</option>
+                                     <option value="Chevrolet">Chevrolet</option>
+                                     <option value="Ford">Ford</option>
+                                 </select>
+                             </div>
+                             <!-- Validation -->
+                             <script>
+                             </script>
+                             <!-- Model Kendaraan -->
+                             <!-- Toyota -->
+                             <div id="Toyota" class="form-group">
+                                 <select class="form-control" name="merkMobil" required>
+                                     <option disabled selected>Pilih Merk Mobil</option>
+                                     <option value="Toyota">Toyota</option>
+                                     <option value="Honda">Honda</option>
+                                     <option value="Suzuki">Suzuki</option>
+                                     <option value="Hyundai">Hyundai</option>
+                                     <option value="Nissan">Nissan</option>
+                                     <option value="Datsun">Datsun</option>
+                                     <option value="Daihatsu">Daihatsu</option>
+                                     <option value="Chevrolet">Chevrolet</option>
+                                     <option value="Ford">Ford</option>
+                                 </select>
+                             </div>
+                             <!-- Jenis Perawatan -->
+                             <div class="form-group">
+                                 <select class="form-control" onchange="onSelectPerawatan(this)" name="jenisPerawatan"
+                                     required>
+                                     <option disabled selected>Pilih Jenis Perawatan Mobil</option>
+                                     <option value="Perawatan Khusus">Perawatan Khusus</option>
+                                     <option value="Variasi / Aksesoris Tambahan">Variasi / Aksesoris Tambahan</option>
+                                     <option value="Car Care">Car Care</option>
+                                 </select>
+                             </div>
+                             <!-- Validasi -->
+                             <script>
+                                 function onSelectPerawatan(jenisPerawatan) {
+                                     switch (jenisPerawatan.value) {
+                                         case "Perawatan Khusus":
+                                             document.getElementById("khusus").style.display = "block";
+                                             document.getElementById("variasi").style.display = "none";
+                                             document.getElementById("carCare").style.display = "none";
+                                             break;
+                                         case "Variasi / Aksesoris Tambahan":
+                                             document.getElementById("khusus").style.display = "none";
+                                             document.getElementById("variasi").style.display = "block";
+                                             document.getElementById("carCare").style.display = "none";
+                                             break;
+                                         case "Car Care":
+                                             document.getElementById("khusus").style.display = "none";
+                                             document.getElementById("variasi").style.display = "none";
+                                             document.getElementById("carCare").style.display = "block";
+                                             break;
+                                         default:
+                                             document.getElementById("khusus").style.display = "none";
+                                             document.getElementById("variasi").style.display = "none";
+                                             document.getElementById("carCare").style.display = "none";
+                                     }
+                                 }
+                             </script>
+                             <!-- Detail Perawatan -->
+                             <!-- Perawatan Khusus -->
+                             <div id="khusus" style="display:none" class="form-group">
+                                 <select class="form-control" name="detailPerawatan" required>
+                                     <option disabled selected>Pilih Detail Perawatan Mobil</option>
+                                     <option value="Kampas Rem">Kampas Rem</option>
+                                     <option value="Kampas Kopling">Kampas Kopling</option>
+                                     <option value="Shock Breaker">Shock Breaker</option>
+                                     <option value="Service AC">Servis AC</option>
+                                     <option value="Servis Berkala">Servis Berkala</option>
+                                     <option value="Ban">Ban</option>
+                                     <option value="Aki">Aki</option>
+                                     <option value="Servis Radiator">Servis Radiator</option>
+                                     <option value="Lahar Roda">Lahar Roda</option>
+                                 </select>
+                             </div>
+                             <!-- Variasi / Aksesoris Tambahan -->
+                             <div id="variasi" style="display:none" class="form-group">
+                                 <select class="form-control" name="detailPerawatan" required>
+                                     <option disabled selected>Pilih Detail Perawatan Mobil</option>
+                                     <option value="Kampas Rem">Kaca Film</option>
+                                     <option value="Cover Jok">Cover Jok</option>
+                                     <option value="Bumper Clip">Bumper Clip</option>
+                                     <option value="Tape Layar">Tape Layar</option>
+                                     <option value="Tape Klasik">Tape Klasik</option>
+                                     <option value="Kamera Mundur">Kamera Mundur</option>
+                                     <option value="Start Engine System">Start Engine System</option>
+                                     <option value="Alarm">Alarm</option>
+                                     <option value="Karpet Dasar">Karpet Dasar</option>
+                                     <option value="Bumper Depan">Bumper Depan</option>
+                                     <option value="Bumper Belakan">Bumper Belakang</option>
+                                 </select>
+                             </div>
+                             <!-- Car Care -->
+                             <div id="carCare" style="display:none" class="form-group">
+                                 <select class="form-control" name="detailPerawatan" required>
+                                     <option disabled selected>Pilih Detail Perawatan Mobil</option>
+                                     <option value="Cuci Mobil Luar dan Dalam">Cuci Mobil Luar dan Dalam</option>
+                                     <option value="Poles Full Body">Poles Full Body</option>
+                                 </select>
+                             </div>
+                             <h3 class="h4 text-black mb-4">Kalkulasi Harga.</h3>
+                             <div class="form-group">
+                                 <input type="text" class="form-control" name="totalHarga" placeholder="Total Harga"
+                                     required>
                              </div>
                              <div class="form-group">
                                  <input type="submit" class="btn btn-primary btn-pill" value="Book Sekarang">

@@ -51,12 +51,25 @@ app.delete('/deleteDetails/(:id)', (req, res) => {
         id: req.params.id
     }
 
-    req.getConnection(function(err, con){
-        con.query('DELETE FROM clientOrder WHERE id = ' + req.params.id, clientId, function(err, result){
-            if(err){
+    req.getConnection(function (err, con) {
+        con.query('DELETE FROM clientOrder WHERE id = ' + req.params.id, clientId, function (err, result) {
+            if (err) {
                 throw err
-            }else{
+            } else {
                 res.redirect('/panel')
+            }
+        })
+    })
+})
+
+//Car Treatment
+app.get('/carTreatmentList', (req, res) => {
+    req.getConnection(function (err, con) {
+        con.query('SELECT * FROM carTreatment', function (err, rows, fields) {
+            if (err) {
+                throw err
+            } else {
+                res.json(rows)
             }
         })
     })
