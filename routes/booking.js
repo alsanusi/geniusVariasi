@@ -53,14 +53,12 @@ app.post('/priceChecking', (req, res) => {
         jenisPerawatan: req.body.jenisPerawatan,
         detailPerawatan: req.body.detailPerawatan
     }
-    
+
     // Set Global Variable
     globalNamaPemilik = req.body.namaPemilik
     globalAlamat = req.body.alamat
     globalTanggalService = req.body.tanggalService
 
-    console.log(clientCar)
-    
     req.getConnection(function (err, con) {
         con.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + clientCar.merkMobil + "' AND tipeMobil= '" + clientCar.tipeMobil + "' AND jenisPerawatan= '" + clientCar.jenisPerawatan + "' AND detailPerawatan= '" + clientCar.detailPerawatan + "'; ", function (err, rows, fields) {
             if (err) {
@@ -81,6 +79,57 @@ app.post('/priceChecking', (req, res) => {
             }
         })
     })
+})
+
+app.post('/booked', (req, res) => {
+    //Input Form Validation
+    req.assert('namaPemilik', 'Silahkan Input Nama Lengkap Anda!').notEmpty()
+    req.assert('alamat', 'Silahkan Input Alamat Anda!').notEmpty()
+    req.assert('nomorTelepon', 'Silahkan Input Nomor Telepon Anda!').notEmpty()
+    req.assert('tanggalService', 'Silahkan Pilih Tanggal Service Anda!').notEmpty()
+    req.assert('waktuService', 'Silahkan Pilih Waktu Service Anda!').notEmpty()
+    req.assert('merkMobil', 'Silahkan Pilih Merk Mobil Anda!').notEmpty()
+    req.assert('tipeMobil', 'Silahkan Pilih Tipe Mobil Anda!').notEmpty()
+    req.assert('jenisPerawatan', 'Silahkan Pilih Jenis Perawatan Mobil Anda!').notEmpty()
+    req.assert('detailPerawatan', 'Silahkan Pilih Detail Perawatan Mobil Anda!').notEmpty()
+
+    var errors = req.validationErrors()
+    console.log(errors)
+
+    if (!errors) {
+        var clientData = {
+            namaPemilik: req.sanitize('namaPemilik').escape().trim(),
+            alamat: req.sanitize('alamat').escape().trim(),
+            nomorTelepon: req.sanitize('nomorTelepon').escape().trim(),
+            tanggalService: req.sanitize('tanggalService').escape().trim(),
+            waktuService: req.sanitize('waktuService').escape().trim(),
+            merkMobil: req.sanitize('merkMobil').escape().trim(),
+            tipeMobil: req.sanitize('tipeMobil').escape().trim(),
+            jenisPerawatan: req.sanitize('jenisPerawatan').escape().trim(),
+            detailPerawatan: req.sanitize('detailPerawatan').escape().trim(),
+            harga: req.sanitize('harga').escape().trim(),
+            done_flag: 'N'
+        }
+        req.getConnection(function (err, con) {
+            con.query('INSERT INTO bookingList SET ?', clientData, function (err, result) {
+                if (err) {
+                    req.flash('error', err)
+                    res.redirect('/bookingDetails')
+                } else {
+                    req.flash('success', 'Client Service Data Input Successfully!')
+                    res.redirect('/bookingDetails')
+                }
+            })
+        })
+    } else {
+        // When error occurs, the message will show.
+        var error_msg = ''
+        errors.forEach(function (error) {
+            error_msg += error.msg + '</br>'
+        })
+        req.flash('error', error_msg)
+        res.redirect('/bookingDetails')
+    }
 })
 
 app.post('/book1/details', (req, res) => {

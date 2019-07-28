@@ -72,7 +72,7 @@
                              </strong>
                          </p>
 
-                         <form action="/book1/priceChecking" method="post" class="form-box">
+                         <form action="/booked" method="post" class="form-box">
                              <!-- Error and Success Message -->
                              <% if(messages.error){ %>
                              <h4 style="color:#d82436">Booking Gagal!</h4>
@@ -86,48 +86,45 @@
                              <h3 class="h4 text-black mb-4">Data Personal Anda.</h3>
                              <!-- Data Personal -->
                              <div class="form-group">
-                                 <input type="text" class="form-control" name="namaPemilik" value="<%= namaPemilik %>"
-                                     disabled>
+                                 <input type="text" class="form-control" name="namaPemilik" value="<%= namaPemilik %>" readonly>
                              </div>
                              <div class="form-group">
-                                 <input type="text" class="form-control" name="alamat" value="<%= alamat %>" disabled>
+                                 <input type="text" class="form-control" name="alamat" value="<%= alamat %>" readonly>
                              </div>
                              <div class="form-group">
-                                 <input type="text" class="form-control" name="nomorTelepon" value="<%= nomorTelepon %>"
-                                     disabled>
+                                 <input type="text" class="form-control" name="nomorTelepon"
+                                     value="<%= nomorTelepon %>" readonly>
                              </div>
                              <div class="form-group">
                                  <input type="date" id="bookingDate" class="form-control" name="tanggalService"
-                                     value="<%= tanggalService %>" disabled>
+                                     value="<%= tanggalService %>" readonly>
                              </div>
                              <div class="form-group">
-                                 <input type="text" class="form-control" name="waktuService" value="<%= waktuService %>"
-                                     disabled>
+                                 <input type="text" class="form-control" name="waktuService"
+                                     value="<%= waktuService %>" readonly>
                              </div>
                              <h3 class="h4 text-black mb-4">Data Mobil Anda.</h3>
                              <!-- Data Kendaraan -->
                              <div class="form-group">
-                                 <input type="text" class="form-control" name="merkMobil" value="<%= merkMobil %>"
-                                     disabled>
+                                 <input type="text" class="form-control" name="merkMobil" value="<%= merkMobil %>" readonly>
                              </div>
                              <div class="form-group">
-                                 <input type="text" class="form-control" name="tipeMobil" value="<%= tipeMobil %>"
-                                     disabled>
+                                 <input type="text" class="form-control" name="tipeMobil" value="<%= tipeMobil %>" readonly>
                              </div>
                              <div class="form-group">
                                  <input type="text" class="form-control" name="jenisPerawatan"
-                                     value="<%= jenisPerawatan %>" disabled>
+                                     value="<%= jenisPerawatan %>" readonly>
                              </div>
                              <div class="form-group">
                                  <input type="text" class="form-control" name="detailPerawatan"
-                                     value="<%= detailPerawatan %>" disabled>
+                                     value="<%= detailPerawatan %>" readonly>
                              </div>
                              <h3 class="h4 text-black mb-4">Kalkulasi Harga Perawatan Mobil Anda.</h3>
                              <!-- Pricing -->
                              <div class="form-group">
                                  <input type="text" class="form-control"
                                      style="background-color: unset; border: 0; border-radius: unset; border-bottom: 2px solid green; width: 40%"
-                                     name="harga" placeholder="Total Harga" value=" Rp. <%= harga %>" disabled>
+                                     name="harga" placeholder="Total Harga" value="<%= harga %>" readonly>
                              </div>
                              <div style="margin-top: 40px">
                                  <div class="form-group">
@@ -135,6 +132,7 @@
                                  </div>
                              </div>
                          </form>
+                         <!-- Other Form -->
                          <form action="/editBooking" method="post" class="form-box" style="padding-top: 0px">
                              <div style="font-size: 15px">
                                  <div class="form-group">

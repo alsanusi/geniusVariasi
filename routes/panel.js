@@ -4,7 +4,7 @@ const mysql = require('promise-mysql')
 const config = require('../config')
 
 // Admin Credentials
-const aCrendentials = {
+const admin = {
     id: '1',
     username: 'nyzam',
     pass: '123'
@@ -13,7 +13,7 @@ const aCrendentials = {
 app.post('/login', (req, res) => {
     var username = req.body.username
     var password = req.body.password
-    if (username == aCrendentials.username && password == aCrendentials.pass){
+    if (username == admin.username && password == admin.pass){
         console.log('Success Login!')
     } else {
         console.log('Failed Login!')
