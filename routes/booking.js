@@ -2,6 +2,9 @@
 const express = require('express')
 const app = express()
 
+// Var
+var globalNamaPemilik, globalAlamat, globalTanggalService;
+
 // Default
 app.get('/', (req, res) => {
     res.render('index');
@@ -15,47 +18,33 @@ app.get('/bookingDetails', (req, res) => {
     })
 })
 
-// app.post('/book1', (req, res) => {
-//     res.render('bookingDetails', {
-//         namaPemilik: req.body.namaPemilik,
-//         alamat: req.body.alamat,
-//         nomorTelepon: '',
-//         tanggalService: req.body.tanggalService,
-//         waktuService: '',
-//         merkMobil: '',
-//         tipeMobil: '',
-//         jenisPerawatan: '',
-//         detailPerawatan: ''
-//     })
-// })
+app.post('/book1', (req, res) => {
+    res.render('bookingDetails', {
+        namaPemilik: req.body.namaPemilik,
+        alamat: req.body.alamat,
+        nomorTelepon: '',
+        tanggalService: req.body.tanggalService,
+        waktuService: '',
+        merkMobil: '',
+        tipeMobil: '',
+        jenisPerawatan: '',
+        detailPerawatan: ''
+    })
+})
 
-app.route('/book1')
-    .get((req, res) => {
-        res.render('bookingDetails', {
-            namaPemilik: req.body.namaPemilik,
-            alamat: req.body.alamat,
-            nomorTelepon: '',
-            tanggalService: req.body.tanggalService,
-            waktuService: '',
-            merkMobil: '',
-            tipeMobil: '',
-            jenisPerawatan: '',
-            detailPerawatan: ''
-        })
+app.post('/editBooking', (req, res) => {
+    res.render('bookingDetails', {
+        namaPemilik: globalNamaPemilik,
+        alamat: globalAlamat,
+        nomorTelepon: '',
+        tanggalService: globalTanggalService,
+        waktuService: '',
+        merkMobil: '',
+        tipeMobil: '',
+        jenisPerawatan: '',
+        detailPerawatan: ''
     })
-    .post((req, res) => {
-        res.render('bookingDetails', {
-            namaPemilik: req.body.namaPemilik,
-            alamat: req.body.alamat,
-            nomorTelepon: '',
-            tanggalService: req.body.tanggalService,
-            waktuService: '',
-            merkMobil: '',
-            tipeMobil: '',
-            jenisPerawatan: '',
-            detailPerawatan: ''
-        })
-    })
+})
 
 app.post('/priceChecking', (req, res) => {
     var clientCar = {
@@ -64,6 +53,14 @@ app.post('/priceChecking', (req, res) => {
         jenisPerawatan: req.body.jenisPerawatan,
         detailPerawatan: req.body.detailPerawatan
     }
+    
+    // Set Global Variable
+    globalNamaPemilik = req.body.namaPemilik
+    globalAlamat = req.body.alamat
+    globalTanggalService = req.body.tanggalService
+
+    console.log(clientCar)
+    
     req.getConnection(function (err, con) {
         con.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + clientCar.merkMobil + "' AND tipeMobil= '" + clientCar.tipeMobil + "' AND jenisPerawatan= '" + clientCar.jenisPerawatan + "' AND detailPerawatan= '" + clientCar.detailPerawatan + "'; ", function (err, rows, fields) {
             if (err) {
@@ -79,7 +76,7 @@ app.post('/priceChecking', (req, res) => {
                     tipeMobil: req.body.tipeMobil,
                     jenisPerawatan: req.body.jenisPerawatan,
                     detailPerawatan: req.body.detailPerawatan,
-                    harga: rows[0].harga
+                    harga: rows[0].harga,
                 })
             }
         })

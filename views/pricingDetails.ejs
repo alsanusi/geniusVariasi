@@ -129,15 +129,18 @@
                                      style="background-color: unset; border: 0; border-radius: unset; border-bottom: 2px solid green; width: 40%"
                                      name="harga" placeholder="Total Harga" value=" Rp. <%= harga %>" disabled>
                              </div>
-                             <!-- Back to Selection -->
-                             <div style="margin-top: 20px; font-size: 15px">
-                                 <div class="form-group">
-                                     Data yang anda input salah ? Ulangi penginputan <a href="/book1" method="post">disini.</a>
-                                 </div>
-                             </div>
                              <div style="margin-top: 40px">
                                  <div class="form-group">
                                      <input type="submit" class="btn btn-primary btn-pill" value="Book Sekarang">
+                                 </div>
+                             </div>
+                         </form>
+                         <form action="/editBooking" method="post" class="form-box" style="padding-top: 0px">
+                             <div style="font-size: 15px">
+                                 <div class="form-group">
+                                     Data yang anda input salah ?
+                                     <input type="submit" class="btn" style="padding: unset"
+                                         value="Ulangi penginputan disini">
                                  </div>
                              </div>
                          </form>
