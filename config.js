@@ -1,6 +1,8 @@
 var config = {
     database: {
         host: 'localhost',
+        // user: 'admin',
+        // password: 'sesar',
         user: 'root',
         password: 'Sesar181196',
         port: 3306,
