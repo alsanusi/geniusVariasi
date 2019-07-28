@@ -3,6 +3,23 @@ const app = express()
 const mysql = require('promise-mysql')
 const config = require('../config')
 
+// Admin Credentials
+const aCrendentials = {
+    id: '1',
+    username: 'nyzam',
+    pass: '123'
+}
+
+app.post('/login', (req, res) => {
+    var username = req.body.username
+    var password = req.body.password
+    if (username == aCrendentials.username && password == aCrendentials.pass){
+        console.log('Success Login!')
+    } else {
+        console.log('Failed Login!')
+    }
+})
+
 app.get('/', (req, res) => {
     mysql.createConnection(config.database).then(function (con) {
         con.query('SELECT * FROM clientOrder').then(rows => {

@@ -15,19 +15,47 @@ app.get('/bookingDetails', (req, res) => {
     })
 })
 
-app.post('/book1', (req, res) => {
-    res.render('bookingDetails', {
-        namaPemilik: req.body.namaPemilik,
-        alamat: req.body.alamat,
-        nomorTelepon: '',
-        tanggalService: req.body.tanggalService,
-        waktuService: '',
-        merkMobil: '',
-        tipeMobil: '',
-        jenisPerawatan: '',
-        detailPerawatan: ''
+// app.post('/book1', (req, res) => {
+//     res.render('bookingDetails', {
+//         namaPemilik: req.body.namaPemilik,
+//         alamat: req.body.alamat,
+//         nomorTelepon: '',
+//         tanggalService: req.body.tanggalService,
+//         waktuService: '',
+//         merkMobil: '',
+//         tipeMobil: '',
+//         jenisPerawatan: '',
+//         detailPerawatan: ''
+//     })
+// })
+
+app.route('/book1')
+    .get((req, res) => {
+        res.render('bookingDetails', {
+            namaPemilik: req.body.namaPemilik,
+            alamat: req.body.alamat,
+            nomorTelepon: '',
+            tanggalService: req.body.tanggalService,
+            waktuService: '',
+            merkMobil: '',
+            tipeMobil: '',
+            jenisPerawatan: '',
+            detailPerawatan: ''
+        })
     })
-})
+    .post((req, res) => {
+        res.render('bookingDetails', {
+            namaPemilik: req.body.namaPemilik,
+            alamat: req.body.alamat,
+            nomorTelepon: '',
+            tanggalService: req.body.tanggalService,
+            waktuService: '',
+            merkMobil: '',
+            tipeMobil: '',
+            jenisPerawatan: '',
+            detailPerawatan: ''
+        })
+    })
 
 app.post('/priceChecking', (req, res) => {
     var clientCar = {
