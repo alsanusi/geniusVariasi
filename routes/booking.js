@@ -4,10 +4,7 @@ const app = express()
 const mysql = require('mysql')
 const dbConfig = require('../config')
 
-// Global Variable
-var globalNamaPemilik, globalAlamat, globalTanggalService;
-
-// Db
+// SingleUse Database Connection
 var conn = mysql.createConnection({
     host: dbConfig.database.host,
     user: dbConfig.database.user,
@@ -15,6 +12,9 @@ var conn = mysql.createConnection({
     port: dbConfig.database.port,
     database: dbConfig.database.database
 })
+
+// Global Variable
+var globalNamaPemilik, globalAlamat, globalTanggalService;
 
 // Default
 app.get('/', (req, res) => {
