@@ -37,6 +37,18 @@ app.get('/', (req, res) => {
     })
 })
 
+app.get('/login', (req, res) => {
+    res.render('panelLogin')
+})
+
+app.get('/tablesPanel', (req, res) => {
+    res.render('tablesPanel')
+})
+
+app.get('/showDetails', (req, res) => {
+    res.render('bookingDetailsPanel')
+})
+
 app.get('/showDetails/(:id)', (req, res, next) => {
     req.getConnection(function (err, con) {
         con.query('SELECT * FROM clientOrder WHERE id = ?', [req.params.id], function (err, rows, fields) {
