@@ -6,23 +6,51 @@ const config = require('../config')
 // Admin Credentials
 const admin = {
     id: '1',
-    username: 'nyzam',
+    username: 'admin',
     pass: '123'
 }
 
-app.post('/login', (req, res) => {
+//Session Checking
+const redirectLogin = (req, res, next) => {
+    if (!req.session.userId) {
+        res.redirect('/panel')
+    } else {
+        next()
+    }
+}
+
+const redirectHome = (req, res, next) => {
+    if (req.session.userId) {
+        res.redirect('/panel/dashboard')
+    } else {
+        next()
+    }
+}
+
+app.get('/', (req, res) => {
+    res.render('panelLogin', {
+        lg: req.body
+    })
+})
+
+app.post('/login', redirectHome, (req, res) => {
     var username = req.body.username
     var password = req.body.password
-    if (username == admin.username && password == admin.pass){
-        console.log('Success Login!')
+    if (username === admin.username && password === admin.pass) {
+        req.session.userId = admin.id
+        return res.redirect('/panel/dashboard')
     } else {
-        console.log('Failed Login!')
+        var error_msg = "Wrong Username and Password"
+        req.flash('error', error_msg)
+        res.render('panelLogin', {
+            lg: req.query
+        })
     }
 })
 
-app.get('/', (req, res) => {
+app.get('/dashboard', (req, res) => {
     mysql.createConnection(config.database).then(function (con) {
-        con.query('SELECT * FROM clientOrder').then(rows => {
+        con.query('SELECT * FROM bookingList').then(rows => {
                 res.render('indexPanel', {
                     totalBooking: rows.length,
                     bookingList: rows
@@ -37,29 +65,29 @@ app.get('/', (req, res) => {
     })
 })
 
-app.get('/login', (req, res) => {
-    res.render('panelLogin')
-})
-
 app.get('/tablesPanel', (req, res) => {
     res.render('tablesPanel')
 })
 
-app.get('/showDetails', (req, res) => {
-    res.render('bookingDetailsPanel')
-})
-
 app.get('/showDetails/(:id)', (req, res, next) => {
     req.getConnection(function (err, con) {
-        con.query('SELECT * FROM clientOrder WHERE id = ?', [req.params.id], function (err, rows, fields) {
+        con.query('SELECT * FROM bookingList WHERE id = ?', [req.params.id], function (err, rows, fields) {
             if (err) {
                 throw err
             } else {
-                res.render('showBookingDetails', {
+                res.render('bookingDetailsPanel', {
                     id: rows[0].id,
                     namaPemilik: rows[0].namaPemilik,
+                    alamat: rows[0].alamat,
+                    nomorTelepon: rows[0].nomorTelepon,
+                    tanggalService: rows[0].tanggalService,
+                    waktuService: rows[0].waktuService,
                     merkMobil: rows[0].merkMobil,
-                    tanggalService: rows[0].tanggalService
+                    tipeMobil: rows[0].tipeMobil,
+                    jenisPerawatan: rows[0].jenisPerawatan,
+                    detailPerawatan: rows[0].detailPerawatan,
+                    harga: rows[0].harga,
+                    done_flag: rows[0].done_flag,
                 })
             }
         })
@@ -81,11 +109,11 @@ app.delete('/deleteDetails/(:id)', (req, res) => {
     }
 
     req.getConnection(function (err, con) {
-        con.query('DELETE FROM clientOrder WHERE id = ' + req.params.id, clientId, function (err, result) {
+        con.query('DELETE FROM bookingList WHERE id = ' + req.params.id, clientId, function (err, result) {
             if (err) {
                 throw err
             } else {
-                res.redirect('/panel')
+                res.redirect('/panel/dashboard')
             }
         })
     })

@@ -11,23 +11,10 @@
              </button>
              <!-- Brand -->
              <a class="navbar-brand pt-0" href="../index.html">
-                 <img src="../../back-end/assets/img/brand/blue.png" class="navbar-brand-img" alt="...">
+                 <img src="../../front-end/images/logo.png" class="navbar-brand-img" alt="...">
              </a>
              <!-- User -->
              <ul class="nav align-items-center d-md-none">
-                 <li class="nav-item dropdown">
-                     <a class="nav-link nav-link-icon" href="#" role="button" data-toggle="dropdown"
-                         aria-haspopup="true" aria-expanded="false">
-                         <i class="ni ni-bell-55"></i>
-                     </a>
-                     <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right"
-                         aria-labelledby="navbar-default_dropdown_1">
-                         <a class="dropdown-item" href="#">Action</a>
-                         <a class="dropdown-item" href="#">Another action</a>
-                         <div class="dropdown-divider"></div>
-                         <a class="dropdown-item" href="#">Something else here</a>
-                     </div>
-                 </li>
                  <li class="nav-item dropdown">
                      <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
                          aria-expanded="false">
@@ -56,7 +43,7 @@
                      <div class="row">
                          <div class="col-6 collapse-brand">
                              <a href="../index.html">
-                                 <img src="../../back-end/assets/img/brand/blue.png">
+                                 <img src="../../front-end/images/logo.png">
                              </a>
                          </div>
                          <div class="col-6 collapse-close">
@@ -69,37 +56,20 @@
                          </div>
                      </div>
                  </div>
-                 <!-- Form -->
-                 <form class="mt-4 mb-3 d-md-none">
-                     <div class="input-group input-group-rounded input-group-merge">
-                         <input type="search" class="form-control form-control-rounded form-control-prepended"
-                             placeholder="Search" aria-label="Search">
-                         <div class="input-group-prepend">
-                             <div class="input-group-text">
-                                 <span class="fa fa-search"></span>
-                             </div>
-                         </div>
-                     </div>
-                 </form>
                  <!-- Navigation -->
                  <ul class="navbar-nav">
                      <li class="nav-item  class=" active" ">
-          <a class=" nav-link " href=" ../index.html"> <i class="ni ni-tv-2 text-primary"></i> Dashboard
+                        <a class=" nav-link " href="/panel/dashboard"> <i class="ni ni-tv-2 text-primary"></i> Dashboard
                          </a>
                      </li>
                      <li class="nav-item">
-                         <a class="nav-link  active " href="../examples/profile.html">
-                             <i class="ni ni-single-02 text-yellow"></i> User profile
+                         <a class="nav-link " href="../examples/profile.html">
+                             <i class="ni ni-single-02 text-yellow"></i> Update Pricing
                          </a>
                      </li>
                      <li class="nav-item">
                          <a class="nav-link " href="../examples/tables.html">
-                             <i class="ni ni-bullet-list-67 text-red"></i> Tables
-                         </a>
-                     </li>
-                     <li class="nav-item">
-                         <a class="nav-link" href="../examples/login.html">
-                             <i class="ni ni-key-25 text-info"></i> Login
+                             <i class="ni ni-bullet-list-67 text-red"></i> Booking List
                          </a>
                      </li>
                  </ul>
@@ -111,8 +81,7 @@
          <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
              <div class="container-fluid">
                  <!-- Brand -->
-                 <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="../index.html">User
-                     Profile</a>
+                 <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="#">Booking Detail</a>
                  <!-- User -->
                  <ul class="navbar-nav align-items-center d-none d-md-flex">
                      <li class="nav-item dropdown">
@@ -152,10 +121,8 @@
              <div class="container-fluid d-flex align-items-center">
                  <div class="row">
                      <div class="col-lg-7 col-md-10">
-                         <h1 class="display-2 text-white">Hello Jesse</h1>
-                         <p class="text-white mt-0 mb-5">This is your profile page. You can see the progress you've made
-                             with your
-                             work and manage your projects or assigned tasks</p>
+                         <h1 class="display-2 text-white">Detail Booking, <%= namaPemilik %></h1>
+                         <p class="text-white mt-0 mb-5">Silahkan untuk ditindak lanjuti secepatnya.</p>
                      </div>
                  </div>
              </div>
@@ -184,17 +151,18 @@
                                              <div class="form-group">
                                                  <label class="form-control-label" for="input-username">Nama
                                                      Lengkap</label>
-                                                 <input type="text" id="input-username"
+                                                 <input type="text" name="namaPemilik"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="Username" value="">
+                                                     placeholder="Nama Lengkap" value="<%= namaPemilik %>" readonly>
                                              </div>
                                          </div>
                                          <div class="col-lg-6">
                                              <div class="form-group">
                                                  <label class="form-control-label" for="input-email">Nomor
                                                      Telepon</label>
-                                                 <input type="email" id="input-email"
-                                                     class="form-control form-control-alternative" placeholder="">
+                                                 <input type="text" name="nomorTelepon"
+                                                     class="form-control form-control-alternative"
+                                                     placeholder="Nomor Telepon" value="<%= nomorTelepon %>" readonly>
                                              </div>
                                          </div>
                                      </div>
@@ -203,9 +171,9 @@
                                              <div class="form-group">
                                                  <label class="form-control-label" for="input-username">Alamat
                                                      Lengkap</label>
-                                                 <input type="text" id="input-username"
+                                                 <input type="text" name="alamat"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="Username" value="">
+                                                     placeholder="Alamat Lengkap" value="<%= alamat %>" readonly>
                                              </div>
                                          </div>
                                      </div>
@@ -214,18 +182,19 @@
                                              <div class="form-group">
                                                  <label class="form-control-label" for="input-first-name">Tanggal
                                                      Service</label>
-                                                 <input type="text" id="input-first-name"
+                                                 <input type="text" name="tanggalService"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="First name" value="">
+                                                     placeholder="Tanggal Service" value="<%= tanggalService %>"
+                                                     readonly>
                                              </div>
                                          </div>
                                          <div class="col-lg-6">
                                              <div class="form-group">
                                                  <label class="form-control-label" for="input-last-name">Waktu
                                                      Service</label>
-                                                 <input type="text" id="input-last-name"
+                                                 <input type="text" name="waktuService"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="Last name" value="">
+                                                     placeholder="Waktu Service" value="<%= waktuService %>" readonly>
                                              </div>
                                          </div>
                                      </div>
@@ -239,16 +208,17 @@
                                              <div class="form-group">
                                                  <label class="form-control-label" for="input-username">Merk
                                                      Mobil</label>
-                                                 <input type="text" id="input-username"
+                                                 <input type="text" name="merkMobil"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="Username" value="">
+                                                     placeholder="Merk Mobil" value="<%= merkMobil %>" readonly>
                                              </div>
                                          </div>
                                          <div class="col-lg-6">
                                              <div class="form-group">
                                                  <label class="form-control-label" for="input-email">Tipe Mobil</label>
-                                                 <input type="email" id="input-email"
-                                                     class="form-control form-control-alternative" placeholder="">
+                                                 <input type="text" name="tipeMobil"
+                                                     class="form-control form-control-alternative"
+                                                     placeholder="Tipe Mobil" value="<%= tipeMobil %>" readonly>
                                              </div>
                                          </div>
                                      </div>
@@ -257,9 +227,10 @@
                                              <div class="form-group">
                                                  <label class="form-control-label" for="input-username">Jenis
                                                      Perawatan</label>
-                                                 <input type="text" id="input-username"
+                                                 <input type="text" name="jenisPerawatan"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="Username" value="">
+                                                     placeholder="Jenis Perawatan" value="<%= jenisPerawatan %>"
+                                                     readonly>
                                              </div>
                                          </div>
                                      </div>
@@ -268,9 +239,10 @@
                                              <div class="form-group">
                                                  <label class="form-control-label" for="input-username">Detail
                                                      Perawatan</label>
-                                                 <input type="text" id="input-username"
+                                                 <input type="text" name="detailPerawatan"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="Username" value="">
+                                                     placeholder="Detail Perawatan" value="<%= detailPerawatan %>"
+                                                     readonly>
                                              </div>
                                          </div>
                                      </div>
@@ -284,17 +256,18 @@
                                              <div class="form-group">
                                                  <label class="form-control-label" for="input-username">Total
                                                      Harga</label>
-                                                 <input type="text" id="input-username"
+                                                 <input type="text" name="harga"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="Username" value="">
+                                                     placeholder="Total Harga" value="<%= harga %>" readonly>
                                              </div>
                                          </div>
                                          <div class="col-lg-6">
                                              <div class="form-group">
                                                  <label class="form-control-label" for="input-email">Status
                                                      Perbaikan</label>
-                                                 <input type="email" id="input-email"
-                                                     class="form-control form-control-alternative" placeholder="">
+                                                 <input type="text" id="done_flag"
+                                                     class="form-control form-control-alternative"
+                                                     placeholder="Status Perbaikan" value="<%= done_flag %>" readonly>
                                              </div>
                                          </div>
                                      </div>

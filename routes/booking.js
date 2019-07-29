@@ -158,7 +158,7 @@ app.post('/booked', (req, res) => {
                     req.flash('error', err)
                     res.redirect('/bookingDetails')
                 } else {
-                    res.redirect('/thankyou')
+                    res.render('thankyou')
                 }
             })
         })
