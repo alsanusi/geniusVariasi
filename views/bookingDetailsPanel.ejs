@@ -29,10 +29,12 @@
                              <h6 class="text-overflow m-0">Welcome!</h6>
                          </div>
                          <div class="dropdown-divider"></div>
-                         <a href="#!" class="dropdown-item">
-                             <i class="ni ni-user-run"></i>
-                             <span>Logout</span>
-                         </a>
+                         <form action="/panel/logout" method="POST">
+                             <button type="submit" class="btn"
+                                 style="background-color: unset; width: 100%; text-align: left; color: #f5365c;">
+                                 Logout
+                             </button>
+                         </form>
                      </div>
                  </li>
              </ul>
@@ -59,7 +61,8 @@
                  <!-- Navigation -->
                  <ul class="navbar-nav">
                      <li class="nav-item  class=" active" ">
-                        <a class=" nav-link " href="/panel/dashboard"> <i class="ni ni-tv-2 text-primary"></i> Dashboard
+                        <a class=" nav-link " href="/panel/dashboard"> <i class="ni ni-tv-2 text-primary"></i>
+                         Dashboard
                          </a>
                      </li>
                      <li class="nav-item">
@@ -102,10 +105,12 @@
                                  <h6 class="text-overflow m-0">Welcome!</h6>
                              </div>
                              <div class="dropdown-divider"></div>
-                             <a href="#!" class="dropdown-item">
-                                 <i class="ni ni-user-run"></i>
-                                 <span>Logout</span>
-                             </a>
+                             <form action="/panel/logout" method="POST">
+                                 <button type="submit" class="btn"
+                                     style="background-color: unset; width: 100%; text-align: left; color: #f5365c;">
+                                     Logout
+                                 </button>
+                             </form>
                          </div>
                      </li>
                  </ul>

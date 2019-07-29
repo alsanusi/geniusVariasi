@@ -65,10 +65,6 @@ app.get('/dashboard', (req, res) => {
     })
 })
 
-app.get('/tablesPanel', (req, res) => {
-    res.render('tablesPanel')
-})
-
 app.get('/showDetails/(:id)', (req, res, next) => {
     req.getConnection(function (err, con) {
         con.query('SELECT * FROM bookingList WHERE id = ?', [req.params.id], function (err, rows, fields) {
@@ -94,8 +90,19 @@ app.get('/showDetails/(:id)', (req, res, next) => {
     })
 })
 
-app.get('/listBooking', (req, res) => {
-    res.render('listBooking')
+app.get('/bookingList', (req, res) => {
+    mysql.createConnection(config.database).then(function (con) {
+        con.query('SELECT * FROM bookingList').then(rows => {
+                res.render('tablesPanel', {
+                    bookingList: rows
+                })
+            })
+            .catch(err => {
+                res.render('tablesPanel', {
+                    bookingList: ''
+                })
+            })
+    })
 })
 
 app.get('/editBooking', (req, res) => {
@@ -129,6 +136,17 @@ app.get('/carTreatmentList', (req, res) => {
                 res.json(rows)
             }
         })
+    })
+})
+
+// Logout
+app.post('/logout', redirectLogin, function(req, res){
+    req.session.destroy(err => {
+        if(err){
+            return res.redirect('/panel/dashboard')
+        }
+        res.clearCookie('sid')
+        res.redirect('/panel')
     })
 })
 
