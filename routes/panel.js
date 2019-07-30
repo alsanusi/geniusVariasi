@@ -30,6 +30,47 @@ const redirectHome = (req, res, next) => {
     }
 }
 
+function filterBookingDone(bStatus) {
+    var doneStatus
+    doneStatus = bStatus.filter(obj => {
+        return obj.done_flag === "Y"
+    })
+    return doneStatus.length
+}
+
+function filterBookingNotDone(bStatus) {
+    var notDoneStatus
+    notDoneStatus = bStatus.filter(obj => {
+        return obj.done_flag === "N"
+    })
+    return notDoneStatus.length
+}
+
+function filterIncome(price) {
+    var income, totalIncome
+    income = price.map(obj => {
+        return obj.harga
+    })
+    totalIncome = income.reduce((a , b) => a + b, 0)
+    return totalIncome
+}
+
+function showDoneBooking(bStatus) {
+    var doneStatus
+    doneStatus = bStatus.filter(obj => {
+        return obj.done_flag === "Y"
+    })
+    return doneStatus
+}
+
+function showNotDoneBooking(bStatus) {
+    var notDoneStatus
+    notDoneStatus = bStatus.filter(obj => {
+        return obj.done_flag === "N"
+    })
+    return notDoneStatus
+}
+
 app.get('/', (req, res) => {
     res.render('panelLogin', {
         lg: req.body
@@ -53,10 +94,13 @@ app.post('/login', redirectHome, (req, res) => {
 
 app.get('/dashboard', (req, res) => {
     mysql.createConnection(config.database).then(function (con) {
-        con.query('SELECT * FROM bookingList WHERE done_flag = "N"').then(rows => {
+        con.query('SELECT * FROM bookingList').then(rows => {
                 res.render('indexPanel', {
-                    totalBooking: "-",
-                    bookingList: rows
+                    totalBooking: rows.length,
+                    doneBooking: filterBookingDone(rows),
+                    notDoneBooking: filterBookingNotDone(rows),
+                    totalIncome: filterIncome(rows),
+                    bookingList: showNotDoneBooking(rows)
                 })
             })
             .catch(err => {
@@ -236,7 +280,8 @@ app.get('/bookingList', (req, res) => {
     mysql.createConnection(config.database).then(function (con) {
         con.query('SELECT * FROM bookingList').then(rows => {
                 res.render('tablesPanel', {
-                    bookingList: rows
+                    doneTable: showDoneBooking(rows),
+                    notDoneTable: showNotDoneBooking(rows)
                 })
             })
             .catch(err => {
