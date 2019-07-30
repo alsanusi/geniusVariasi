@@ -65,6 +65,10 @@ app.get('/dashboard', (req, res) => {
     })
 })
 
+app.get('/pricingList', (req, res) => {
+    res.render('updatePricePanel')
+})
+
 app.route('/showDetails/(:id)')
     .get((req, res, next) => {
         req.getConnection(function (err, con) {
@@ -170,19 +174,6 @@ app.delete('/deleteDetails/(:id)', (req, res) => {
                 throw err
             } else {
                 res.redirect('/panel/dashboard')
-            }
-        })
-    })
-})
-
-//Car Treatment
-app.get('/carTreatmentList', (req, res) => {
-    req.getConnection(function (err, con) {
-        con.query('SELECT * FROM carTreatment', function (err, rows, fields) {
-            if (err) {
-                throw err
-            } else {
-                res.json(rows)
             }
         })
     })

@@ -66,7 +66,7 @@
                          </a>
                      </li>
                      <li class="nav-item">
-                         <a class="nav-link " href="/panel/pricingList">
+                         <a class="nav-link active" href="/panel/pricingList">
                              <i class="ni ni-single-02 text-yellow"></i> Update Pricing
                          </a>
                      </li>
@@ -126,8 +126,8 @@
              <div class="container-fluid d-flex align-items-center">
                  <div class="row">
                      <div class="col-lg-12 col-md-10">
-                         <h1 class="display-2 text-white">Detail Booking, <%= namaPemilik %></h1>
-                         <p class="text-white mt-0 mb-5">Silahkan untuk ditindak lanjuti secepatnya.</p>
+                         <h1 class="display-2 text-white">Update Harga Service</h1>
+                         <p class="text-white mt-0 mb-5">Silahkan update harga untuk setiap detail perawatan service.</p>
                          <!-- Error and Success Message -->
                          <% if(messages.error){ %>
                          <h4 style="color:#d82436">Booking Gagal!</h4>
@@ -146,14 +146,14 @@
              <div class="row">
                  <div class="col-xl-12 order-xl-1">
                      <div class="card bg-secondary shadow">
-                         <form name="update-booking" action="/panel/showDetails/<%= id %>" method="POST">
+                         <form name="update-booking" action="#" method="POST">
                              <div class="card-header bg-white border-0">
                                  <div class="row align-items-center">
                                      <div class="col-8">
                                          <h3 class="mb-0">Booking Details</h3>
                                      </div>
                                      <div class="col-4 text-right">
-                                        <button type="submit" class="btn btn-primary notika-btn-primary">Done</button>
+                                         <button type="submit" class="btn btn-primary notika-btn-primary">Done</button>
                                          <input type="hidden" name="_method" value="PUT" />
                                      </div>
                                  </div>
@@ -168,7 +168,7 @@
                                                      Lengkap</label>
                                                  <input type="text" name="namaPemilik"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="Nama Lengkap" value="<%= namaPemilik %>" readonly>
+                                                     placeholder="Nama Lengkap" value="">
                                              </div>
                                          </div>
                                          <div class="col-lg-6">
@@ -177,7 +177,7 @@
                                                      Telepon</label>
                                                  <input type="text" name="nomorTelepon"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="Nomor Telepon" value="<%= nomorTelepon %>" readonly>
+                                                     placeholder="Nomor Telepon" value="">
                                              </div>
                                          </div>
                                      </div>
@@ -188,7 +188,7 @@
                                                      Lengkap</label>
                                                  <input type="text" name="alamat"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="Alamat Lengkap" value="<%= alamat %>" readonly>
+                                                     placeholder="Alamat Lengkap" value="">
                                              </div>
                                          </div>
                                      </div>
@@ -199,8 +199,7 @@
                                                      Service</label>
                                                  <input type="text" name="tanggalService"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="Tanggal Service" value="<%= tanggalService %>"
-                                                     readonly>
+                                                     placeholder="Tanggal Service" value="">
                                              </div>
                                          </div>
                                          <div class="col-lg-6">
@@ -209,7 +208,7 @@
                                                      Service</label>
                                                  <input type="text" name="waktuService"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="Waktu Service" value="<%= waktuService %>" readonly>
+                                                     placeholder="Waktu Service" value="">
                                              </div>
                                          </div>
                                      </div>
@@ -225,7 +224,7 @@
                                                      Mobil</label>
                                                  <input type="text" name="merkMobil"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="Merk Mobil" value="<%= merkMobil %>" readonly>
+                                                     placeholder="Merk Mobil" value="">
                                              </div>
                                          </div>
                                          <div class="col-lg-6">
@@ -233,7 +232,7 @@
                                                  <label class="form-control-label" for="input-email">Tipe Mobil</label>
                                                  <input type="text" name="tipeMobil"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="Tipe Mobil" value="<%= tipeMobil %>" readonly>
+                                                     placeholder="Tipe Mobil" value="">
                                              </div>
                                          </div>
                                      </div>
@@ -244,8 +243,7 @@
                                                      Perawatan</label>
                                                  <input type="text" name="jenisPerawatan"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="Jenis Perawatan" value="<%= jenisPerawatan %>"
-                                                     readonly>
+                                                     placeholder="Jenis Perawatan" value="">
                                              </div>
                                          </div>
                                      </div>
@@ -256,8 +254,7 @@
                                                      Perawatan</label>
                                                  <input type="text" name="detailPerawatan"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="Detail Perawatan" value="<%= detailPerawatan %>"
-                                                     readonly>
+                                                     placeholder="Detail Perawatan" value="">
                                              </div>
                                          </div>
                                      </div>
@@ -273,7 +270,7 @@
                                                      Harga</label>
                                                  <input type="text" name="harga"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="Total Harga" value="<%= harga %>" readonly>
+                                                     placeholder="Total Harga" value="">
                                              </div>
                                          </div>
                                          <div class="col-lg-6">
@@ -282,7 +279,7 @@
                                                      Perbaikan</label>
                                                  <input type="text" name="done_flag"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="Status Perbaikan" value="<%= done_flag %>" readonly>
+                                                     placeholder="Status Perbaikan" value="">
                                              </div>
                                          </div>
                                      </div>
