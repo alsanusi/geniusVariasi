@@ -50,9 +50,9 @@ app.post('/login', redirectHome, (req, res) => {
 
 app.get('/dashboard', (req, res) => {
     mysql.createConnection(config.database).then(function (con) {
-        con.query('SELECT * FROM bookingList').then(rows => {
+        con.query('SELECT * FROM bookingList WHERE done_flag = "N"').then(rows => {
                 res.render('indexPanel', {
-                    totalBooking: rows.length,
+                    totalBooking: "-",
                     bookingList: rows
                 })
             })
@@ -65,30 +65,83 @@ app.get('/dashboard', (req, res) => {
     })
 })
 
-app.get('/showDetails/(:id)', (req, res, next) => {
-    req.getConnection(function (err, con) {
-        con.query('SELECT * FROM bookingList WHERE id = ?', [req.params.id], function (err, rows, fields) {
-            if (err) {
-                throw err
-            } else {
-                res.render('bookingDetailsPanel', {
-                    id: rows[0].id,
-                    namaPemilik: rows[0].namaPemilik,
-                    alamat: rows[0].alamat,
-                    nomorTelepon: rows[0].nomorTelepon,
-                    tanggalService: rows[0].tanggalService,
-                    waktuService: rows[0].waktuService,
-                    merkMobil: rows[0].merkMobil,
-                    tipeMobil: rows[0].tipeMobil,
-                    jenisPerawatan: rows[0].jenisPerawatan,
-                    detailPerawatan: rows[0].detailPerawatan,
-                    harga: rows[0].harga,
-                    done_flag: rows[0].done_flag,
-                })
-            }
+app.route('/showDetails/(:id)')
+    .get((req, res, next) => {
+        req.getConnection(function (err, con) {
+            con.query('SELECT * FROM bookingList WHERE id = ?', [req.params.id], function (err, rows, fields) {
+                if (err) {
+                    throw err
+                } else {
+                    res.render('bookingDetailsPanel', {
+                        id: rows[0].id,
+                        namaPemilik: rows[0].namaPemilik,
+                        alamat: rows[0].alamat,
+                        nomorTelepon: rows[0].nomorTelepon,
+                        tanggalService: rows[0].tanggalService,
+                        waktuService: rows[0].waktuService,
+                        merkMobil: rows[0].merkMobil,
+                        tipeMobil: rows[0].tipeMobil,
+                        jenisPerawatan: rows[0].jenisPerawatan,
+                        detailPerawatan: rows[0].detailPerawatan,
+                        harga: rows[0].harga,
+                        done_flag: rows[0].done_flag
+                    })
+                }
+            })
         })
     })
-})
+    .put((req, res, next) => {
+        req.assert('done_flag', 'Require Status Perawatan!').notEmpty()
+
+        var errors = req.validationErrors()
+        if (!errors) {
+            var bookingStatus = {
+                done_flag: 'Y'
+            }
+            mysql.createConnection(config.database).then(function (con) {
+                    con.query('UPDATE bookingList SET ? WHERE id = ' + req.params.id, bookingStatus).then(rows => {
+                        res.redirect('/panel/dashboard')
+                    })
+                })
+                .catch(err => {
+                    res.render('bookingDetailsPanel', {
+                        id: req.params.id,
+                        namaPemilik: req.body.namaPemilik,
+                        alamat: req.body.alamat,
+                        nomorTelepon: req.body.nomorTelepon,
+                        tanggalService: req.body.tanggalService,
+                        waktuService: req.body.waktuService,
+                        merkMobil: req.body.merkMobil,
+                        tipeMobil: req.body.tipeMobil,
+                        jenisPerawatan: req.body.jenisPerawatan,
+                        detailPerawatan: req.body.detailPerawatan,
+                        harga: req.body.harga,
+                        done_flag: req.body.done_flag,
+                    })
+                })
+        } else {
+            var error_msg = ''
+            errors.forEach(function (error) {
+                error_msg += error.msg + '</br>'
+            })
+            req.flash('error', error_msg)
+            console.log(req.body.harga)
+            res.render('bookingDetailsPanel', {
+                id: req.params.id,
+                namaPemilik: req.body.namaPemilik,
+                alamat: req.body.alamat,
+                nomorTelepon: req.body.nomorTelepon,
+                tanggalService: req.body.tanggalService,
+                waktuService: req.body.waktuService,
+                merkMobil: req.body.merkMobil,
+                tipeMobil: req.body.tipeMobil,
+                jenisPerawatan: req.body.jenisPerawatan,
+                detailPerawatan: req.body.detailPerawatan,
+                harga: req.body.harga,
+                done_flag: req.body.done_flag,
+            })
+        }
+    })
 
 app.get('/bookingList', (req, res) => {
     mysql.createConnection(config.database).then(function (con) {
@@ -103,10 +156,6 @@ app.get('/bookingList', (req, res) => {
                 })
             })
     })
-})
-
-app.get('/editBooking', (req, res) => {
-    res.render('editBooking')
 })
 
 // Delete
@@ -140,9 +189,9 @@ app.get('/carTreatmentList', (req, res) => {
 })
 
 // Logout
-app.post('/logout', redirectLogin, function(req, res){
+app.post('/logout', redirectLogin, function (req, res) {
     req.session.destroy(err => {
-        if(err){
+        if (err) {
             return res.redirect('/panel/dashboard')
         }
         res.clearCookie('sid')

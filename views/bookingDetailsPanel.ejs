@@ -10,7 +10,7 @@
                  <span class="navbar-toggler-icon"></span>
              </button>
              <!-- Brand -->
-             <a class="navbar-brand pt-0" href="../index.html">
+             <a class="navbar-brand pt-0" href="/panel/dashboard">
                  <img src="../../front-end/images/logo.png" class="navbar-brand-img" alt="...">
              </a>
              <!-- User -->
@@ -44,7 +44,7 @@
                  <div class="navbar-collapse-header d-md-none">
                      <div class="row">
                          <div class="col-6 collapse-brand">
-                             <a href="../index.html">
+                             <a href="/panel/dashboard">
                                  <img src="../../front-end/images/logo.png">
                              </a>
                          </div>
@@ -119,7 +119,7 @@
          <!-- End Navbar -->
          <!-- Header -->
          <div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
-             style="min-height: 600px; background-image: url(../../back-end/assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
+             style="min-height: 600px; background-image: url(../../front-end/images/hero_1.jpg); background-size: cover; background-position: center top;">
              <!-- Mask -->
              <span class="mask bg-gradient-default opacity-8"></span>
              <!-- Header container -->
@@ -128,6 +128,15 @@
                      <div class="col-lg-7 col-md-10">
                          <h1 class="display-2 text-white">Detail Booking, <%= namaPemilik %></h1>
                          <p class="text-white mt-0 mb-5">Silahkan untuk ditindak lanjuti secepatnya.</p>
+                         <!-- Error and Success Message -->
+                         <% if(messages.error){ %>
+                         <h4 style="color:#d82436">Booking Gagal!</h4>
+                         <p><%- messages.error %></p>
+                         <!-- </br> -->
+                         <%} else if(messages.success){ %>
+                         <h4 style="color:#5cb85c">Booking Sukses!</h4>
+                         </br>
+                         <% } %>
                      </div>
                  </div>
              </div>
@@ -137,18 +146,19 @@
              <div class="row">
                  <div class="col-xl-12 order-xl-1">
                      <div class="card bg-secondary shadow">
-                         <div class="card-header bg-white border-0">
-                             <div class="row align-items-center">
-                                 <div class="col-8">
-                                     <h3 class="mb-0">Booking Details</h3>
-                                 </div>
-                                 <div class="col-4 text-right">
-                                     <a href="#!" class="btn btn-sm btn-primary">Done</a>
+                         <form name="update-booking" action="/panel/showDetails/<%= id %>" method="POST">
+                             <div class="card-header bg-white border-0">
+                                 <div class="row align-items-center">
+                                     <div class="col-8">
+                                         <h3 class="mb-0">Booking Details</h3>
+                                     </div>
+                                     <div class="col-4 text-right">
+                                        <button type="submit" class="btn btn-primary notika-btn-primary">Done</button>
+                                         <input type="hidden" name="_method" value="PUT" />
+                                     </div>
                                  </div>
                              </div>
-                         </div>
-                         <div class="card-body">
-                             <form>
+                             <div class="card-body">
                                  <h6 class="heading-small text-muted mb-4">Client Personal Information</h6>
                                  <div class="pl-lg-4">
                                      <div class="row">
@@ -270,40 +280,40 @@
                                              <div class="form-group">
                                                  <label class="form-control-label" for="input-email">Status
                                                      Perbaikan</label>
-                                                 <input type="text" id="done_flag"
+                                                 <input type="text" name="done_flag"
                                                      class="form-control form-control-alternative"
                                                      placeholder="Status Perbaikan" value="<%= done_flag %>" readonly>
                                              </div>
                                          </div>
                                      </div>
                                  </div>
-                             </form>
-                         </div>
+                         </form>
                      </div>
                  </div>
              </div>
-             <!-- Footer -->
-             <footer class="footer">
-                 <div class="row align-items-center justify-content-xl-between">
-                     <div class="col-xl-6">
-                         <div class="copyright text-center text-xl-left text-muted">
-                             &copy; 2018 <a href="https://www.creative-tim.com" class="font-weight-bold ml-1"
-                                 target="_blank">Creative
-                                 Tim</a> x <a href="https://www.metrotechdigital.asia" class="font-weight-bold ml-1"
-                                 target="_blank">MetroTech Digital Asia.</a>
-                         </div>
-                     </div>
-                     <div class="col-xl-6">
-                         <ul class="nav nav-footer justify-content-center justify-content-xl-end">
-                             <li class="nav-item">
-                                 <a href="https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md"
-                                     class="nav-link" target="_blank">MIT License</a>
-                             </li>
-                         </ul>
+         </div>
+         <!-- Footer -->
+         <footer class="footer">
+             <div class="row align-items-center justify-content-xl-between">
+                 <div class="col-xl-6">
+                     <div class="copyright text-center text-xl-left text-muted">
+                         &copy; 2018 <a href="https://www.creative-tim.com" class="font-weight-bold ml-1"
+                             target="_blank">Creative
+                             Tim</a> x <a href="https://www.metrotechdigital.asia" class="font-weight-bold ml-1"
+                             target="_blank">MetroTech Digital Asia.</a>
                      </div>
                  </div>
-             </footer>
-         </div>
+                 <div class="col-xl-6">
+                     <ul class="nav nav-footer justify-content-center justify-content-xl-end">
+                         <li class="nav-item">
+                             <a href="https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md"
+                                 class="nav-link" target="_blank">MIT License</a>
+                         </li>
+                     </ul>
+                 </div>
+             </div>
+         </footer>
+     </div>
      </div>
  </body>
 
