@@ -3,6 +3,9 @@ const app = express()
 const mysql = require('promise-mysql')
 const config = require('../config')
 
+// Global Variable
+var globalId
+
 // Admin Credentials
 const admin = {
     id: '1',
@@ -65,8 +68,91 @@ app.get('/dashboard', (req, res) => {
     })
 })
 
-app.get('/pricingList', (req, res) => {
-    res.render('updatePricePanel')
+app.route('/pricingList')
+    .get((req, res, next) => {
+        res.render('updatePricePanel', {
+            merkMobil: '',
+            tipeMobil: '',
+            jenisPerawatan: '',
+            detailPerawatan: ''
+        })
+    })
+    .post((req, res, next) => {
+        var clientCar = {
+            merkMobil: req.body.merkMobil,
+            tipeMobil: req.body.tipeMobil,
+            jenisPerawatan: req.body.jenisPerawatan,
+            detailPerawatan: req.body.detailPerawatan
+        }
+
+        mysql.createConnection(config.database).then(function (con) {
+                con.query("SELECT harga, id FROM carTreatment WHERE merkMobil = '" + clientCar.merkMobil + "' AND tipeMobil= '" + clientCar.tipeMobil + "' AND jenisPerawatan= '" + clientCar.jenisPerawatan + "' AND detailPerawatan= '" + clientCar.detailPerawatan + "'").then(rows => {
+                    globalId = rows[0].id
+                    res.render('updatePriceDetailsPanel', {
+                        merkMobil: req.body.merkMobil,
+                        tipeMobil: req.body.tipeMobil,
+                        jenisPerawatan: req.body.jenisPerawatan,
+                        detailPerawatan: req.body.detailPerawatan,
+                        harga: rows[0].harga
+                    })
+                })
+            })
+            .catch(err => {
+                res.render('updatePriceDetailsPanel', {
+                    merkMobil: req.body.merkMobil,
+                    tipeMobil: req.body.tipeMobil,
+                    jenisPerawatan: req.body.jenisPerawatan,
+                    detailPerawatan: req.body.detailPerawatan,
+                    harga: ""
+                })
+            })
+    })
+
+app.put('/pricingListDetails', (req, res) => {
+    req.assert('merkMobil', 'Require Merk Mobil!').notEmpty()
+    req.assert('tipeMobil', 'Require Tipe Mobil!').notEmpty()
+    req.assert('jenisPerawatan', 'Require Jenis Perawatan!').notEmpty()
+    req.assert('detailPerawatan', 'Require Detail Perawatan!').notEmpty()
+    req.assert('harga', 'Require Harga!').notEmpty()
+
+    var errors = req.validationErrors()
+    if (!errors) {
+        var bookingStatus = {
+            merkMobil: req.body.merkMobil,
+            tipeMobil: req.body.tipeMobil,
+            jenisPerawatan: req.body.jenisPerawatan,
+            detailPerawatan: req.body.detailPerawatan,
+            harga: req.body.harga
+        }
+        mysql.createConnection(config.database).then(function (con) {
+                con.query('UPDATE carTreatment SET ? WHERE id = ' + globalId, bookingStatus).then(rows => {
+                    res.redirect('/panel/pricingList')
+                })
+            })
+            .catch(err => {
+                res.render('updatePricePanel', {
+                    merkMobil: req.body.merkMobil,
+                    tipeMobil: req.body.tipeMobil,
+                    jenisPerawatan: req.body.jenisPerawatan,
+                    detailPerawatan: req.body.detailPerawatan,
+                    harga: req.body.harga
+                })
+            })
+    } else {
+        var error_msg = ''
+        errors.forEach(function (error) {
+            error_msg += error.msg + '</br>'
+        })
+        req.flash('error', error_msg)
+        res.render('updatePricePanel', {
+            merkMobil: req.body.merkMobil,
+            tipeMobil: req.body.tipeMobil,
+            jenisPerawatan: req.body.jenisPerawatan,
+            detailPerawatan: req.body.detailPerawatan,
+            harga: req.body.harga,
+        })
+    }
+
 })
 
 app.route('/showDetails/(:id)')
@@ -129,7 +215,6 @@ app.route('/showDetails/(:id)')
                 error_msg += error.msg + '</br>'
             })
             req.flash('error', error_msg)
-            console.log(req.body.harga)
             res.render('bookingDetailsPanel', {
                 id: req.params.id,
                 namaPemilik: req.body.namaPemilik,

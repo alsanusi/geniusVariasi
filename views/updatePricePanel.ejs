@@ -127,7 +127,8 @@
                  <div class="row">
                      <div class="col-lg-12 col-md-10">
                          <h1 class="display-2 text-white">Update Harga Service</h1>
-                         <p class="text-white mt-0 mb-5">Silahkan update harga untuk setiap detail perawatan service.</p>
+                         <p class="text-white mt-0 mb-5">Silahkan update harga untuk setiap detail perawatan service.
+                         </p>
                          <!-- Error and Success Message -->
                          <% if(messages.error){ %>
                          <h4 style="color:#d82436">Booking Gagal!</h4>
@@ -146,140 +147,420 @@
              <div class="row">
                  <div class="col-xl-12 order-xl-1">
                      <div class="card bg-secondary shadow">
-                         <form name="update-booking" action="#" method="POST">
+                         <form name="update-booking" action="/panel/pricingList" method="POST">
                              <div class="card-header bg-white border-0">
                                  <div class="row align-items-center">
                                      <div class="col-8">
-                                         <h3 class="mb-0">Booking Details</h3>
+                                         <h3 class="mb-0">Pricing Details</h3>
                                      </div>
                                      <div class="col-4 text-right">
                                          <button type="submit" class="btn btn-primary notika-btn-primary">Done</button>
-                                         <input type="hidden" name="_method" value="PUT" />
                                      </div>
                                  </div>
                              </div>
                              <div class="card-body">
-                                 <h6 class="heading-small text-muted mb-4">Client Personal Information</h6>
+                                 <h6 class="heading-small text-muted mb-4">Detail Price Information</h6>
                                  <div class="pl-lg-4">
-                                     <div class="row">
-                                         <div class="col-lg-6">
-                                             <div class="form-group">
-                                                 <label class="form-control-label" for="input-username">Nama
-                                                     Lengkap</label>
-                                                 <input type="text" name="namaPemilik"
-                                                     class="form-control form-control-alternative"
-                                                     placeholder="Nama Lengkap" value="">
-                                             </div>
-                                         </div>
-                                         <div class="col-lg-6">
-                                             <div class="form-group">
-                                                 <label class="form-control-label" for="input-email">Nomor
-                                                     Telepon</label>
-                                                 <input type="text" name="nomorTelepon"
-                                                     class="form-control form-control-alternative"
-                                                     placeholder="Nomor Telepon" value="">
-                                             </div>
-                                         </div>
-                                     </div>
                                      <div class="row">
                                          <div class="col-lg-12">
-                                             <div class="form-group">
-                                                 <label class="form-control-label" for="input-username">Alamat
-                                                     Lengkap</label>
-                                                 <input type="text" name="alamat"
-                                                     class="form-control form-control-alternative"
-                                                     placeholder="Alamat Lengkap" value="">
-                                             </div>
-                                         </div>
-                                     </div>
-                                     <div class="row">
-                                         <div class="col-lg-6">
-                                             <div class="form-group">
-                                                 <label class="form-control-label" for="input-first-name">Tanggal
-                                                     Service</label>
-                                                 <input type="text" name="tanggalService"
-                                                     class="form-control form-control-alternative"
-                                                     placeholder="Tanggal Service" value="">
-                                             </div>
-                                         </div>
-                                         <div class="col-lg-6">
-                                             <div class="form-group">
-                                                 <label class="form-control-label" for="input-last-name">Waktu
-                                                     Service</label>
-                                                 <input type="text" name="waktuService"
-                                                     class="form-control form-control-alternative"
-                                                     placeholder="Waktu Service" value="">
-                                             </div>
-                                         </div>
-                                     </div>
-                                 </div>
-                                 <hr class="my-4" />
-                                 <!-- Address -->
-                                 <h6 class="heading-small text-muted mb-4">Client Car Information</h6>
-                                 <div class="pl-lg-4">
-                                     <div class="row">
-                                         <div class="col-lg-6">
                                              <div class="form-group">
                                                  <label class="form-control-label" for="input-username">Merk
                                                      Mobil</label>
-                                                 <input type="text" name="merkMobil"
-                                                     class="form-control form-control-alternative"
-                                                     placeholder="Merk Mobil" value="">
+                                                 <select class="form-control" onchange="onSelectMerk(this)"
+                                                     name="merkMobil" required>
+                                                     <option disabled selected>Pilih Merk Mobil</option>
+                                                     <option value="Toyota">Toyota</option>
+                                                     <option value="Honda">Honda</option>
+                                                     <option value="Suzuki">Suzuki</option>
+                                                     <option value="Hyundai">Hyundai</option>
+                                                     <option value="Nissan">Nissan</option>
+                                                     <option value="Datsun">Datsun</option>
+                                                     <option value="Daihatsu">Daihatsu</option>
+                                                     <option value="Chevrolet">Chevrolet</option>
+                                                     <option value="Ford">Ford</option>
+                                                 </select>
                                              </div>
                                          </div>
-                                         <div class="col-lg-6">
+                                         <!-- Validation -->
+                                         <script>
+                                             function onSelectMerk(merkMobil) {
+                                                 switch (merkMobil.value) {
+                                                     case "Toyota":
+                                                         document.getElementById("toyota").style.display = "block";
+                                                         document.getElementById("honda").style.display = "none";
+                                                         document.getElementById("suzuki").style.display = "none";
+                                                         document.getElementById("hyundai").style.display = "none";
+                                                         document.getElementById("nissan").style.display = "none";
+                                                         document.getElementById("datsun").style.display = "none";
+                                                         document.getElementById("daihatsu").style.display = "none";
+                                                         document.getElementById("chevrolet").style.display = "none";
+                                                         document.getElementById("ford").style.display = "none";
+                                                         document.getElementById("perawatanMobil").style.display =
+                                                             "block";
+                                                         break;
+                                                     case "Honda":
+                                                         document.getElementById("toyota").style.display = "none";
+                                                         document.getElementById("honda").style.display = "block";
+                                                         document.getElementById("suzuki").style.display = "none";
+                                                         document.getElementById("hyundai").style.display = "none";
+                                                         document.getElementById("nissan").style.display = "none";
+                                                         document.getElementById("datsun").style.display = "none";
+                                                         document.getElementById("daihatsu").style.display = "none";
+                                                         document.getElementById("chevrolet").style.display = "none";
+                                                         document.getElementById("ford").style.display = "none";
+                                                         document.getElementById("perawatanMobil").style.display =
+                                                             "block";
+                                                         break;
+                                                     case "Suzuki":
+                                                         document.getElementById("toyota").style.display = "none";
+                                                         document.getElementById("honda").style.display = "none";
+                                                         document.getElementById("suzuki").style.display = "block";
+                                                         document.getElementById("hyundai").style.display = "none";
+                                                         document.getElementById("nissan").style.display = "none";
+                                                         document.getElementById("datsun").style.display = "none";
+                                                         document.getElementById("daihatsu").style.display = "none";
+                                                         document.getElementById("chevrolet").style.display = "none";
+                                                         document.getElementById("ford").style.display = "none";
+                                                         document.getElementById("perawatanMobil").style.display =
+                                                             "block";
+                                                         break;
+                                                     case "Hyundai":
+                                                         document.getElementById("toyota").style.display = "none";
+                                                         document.getElementById("honda").style.display = "none";
+                                                         document.getElementById("suzuki").style.display = "none";
+                                                         document.getElementById("hyundai").style.display = "block";
+                                                         document.getElementById("nissan").style.display = "none";
+                                                         document.getElementById("datsun").style.display = "none";
+                                                         document.getElementById("daihatsu").style.display = "none";
+                                                         document.getElementById("chevrolet").style.display = "none";
+                                                         document.getElementById("ford").style.display = "none";
+                                                         document.getElementById("perawatanMobil").style.display =
+                                                             "block";
+                                                         break;
+                                                     case "Nissan":
+                                                         document.getElementById("toyota").style.display = "none";
+                                                         document.getElementById("honda").style.display = "none";
+                                                         document.getElementById("suzuki").style.display = "none";
+                                                         document.getElementById("hyundai").style.display = "none";
+                                                         document.getElementById("nissan").style.display = "block";
+                                                         document.getElementById("datsun").style.display = "none";
+                                                         document.getElementById("daihatsu").style.display = "none";
+                                                         document.getElementById("chevrolet").style.display = "none";
+                                                         document.getElementById("ford").style.display = "none";
+                                                         document.getElementById("perawatanMobil").style.display =
+                                                             "block";
+                                                         break;
+                                                     case "Datsun":
+                                                         document.getElementById("toyota").style.display = "none";
+                                                         document.getElementById("honda").style.display = "none";
+                                                         document.getElementById("suzuki").style.display = "none";
+                                                         document.getElementById("hyundai").style.display = "none";
+                                                         document.getElementById("nissan").style.display = "none";
+                                                         document.getElementById("datsun").style.display = "block";
+                                                         document.getElementById("daihatsu").style.display = "none";
+                                                         document.getElementById("chevrolet").style.display = "none";
+                                                         document.getElementById("ford").style.display = "none";
+                                                         document.getElementById("perawatanMobil").style.display =
+                                                             "block";
+                                                         break;
+                                                     case "Daihatsu":
+                                                         document.getElementById("toyota").style.display = "none";
+                                                         document.getElementById("honda").style.display = "none";
+                                                         document.getElementById("suzuki").style.display = "none";
+                                                         document.getElementById("hyundai").style.display = "none";
+                                                         document.getElementById("nissan").style.display = "none";
+                                                         document.getElementById("datsun").style.display = "none";
+                                                         document.getElementById("daihatsu").style.display = "block";
+                                                         document.getElementById("chevrolet").style.display = "none";
+                                                         document.getElementById("ford").style.display = "none";
+                                                         document.getElementById("perawatanMobil").style.display =
+                                                             "block";
+                                                         break;
+                                                     case "Chevrolet":
+                                                         document.getElementById("toyota").style.display = "none";
+                                                         document.getElementById("honda").style.display = "none";
+                                                         document.getElementById("suzuki").style.display = "none";
+                                                         document.getElementById("hyundai").style.display = "none";
+                                                         document.getElementById("nissan").style.display = "none";
+                                                         document.getElementById("datsun").style.display = "none";
+                                                         document.getElementById("daihatsu").style.display = "none";
+                                                         document.getElementById("chevrolet").style.display = "block";
+                                                         document.getElementById("ford").style.display = "none";
+                                                         document.getElementById("perawatanMobil").style.display =
+                                                             "block";
+                                                         break;
+                                                     case "Ford":
+                                                         document.getElementById("toyota").style.display = "none";
+                                                         document.getElementById("honda").style.display = "none";
+                                                         document.getElementById("suzuki").style.display = "none";
+                                                         document.getElementById("hyundai").style.display = "none";
+                                                         document.getElementById("nissan").style.display = "none";
+                                                         document.getElementById("datsun").style.display = "none";
+                                                         document.getElementById("daihatsu").style.display = "none";
+                                                         document.getElementById("chevrolet").style.display = "none";
+                                                         document.getElementById("ford").style.display = "block";
+                                                         document.getElementById("perawatanMobil").style.display =
+                                                             "block";
+                                                         break;
+                                                     default:
+                                                         document.getElementById("toyota").style.display = "none";
+                                                         document.getElementById("honda").style.display = "none";
+                                                         document.getElementById("suzuki").style.display = "none";
+                                                         document.getElementById("hyundai").style.display = "none";
+                                                         document.getElementById("nissan").style.display = "none";
+                                                         document.getElementById("datsun").style.display = "none";
+                                                         document.getElementById("daihatsu").style.display = "none";
+                                                         document.getElementById("chevrolet").style.display = "none";
+                                                         document.getElementById("ford").style.display = "none";
+                                                         document.getElementById("perawatanMobil").style.display =
+                                                             "none";
+                                                 }
+                                             }
+                                         </script>
+                                         <!-- End Validation -->
+                                     </div>
+                                     <div class="row">
+                                         <div id="toyota" style="display: none" class="col-lg-12">
                                              <div class="form-group">
-                                                 <label class="form-control-label" for="input-email">Tipe Mobil</label>
-                                                 <input type="text" name="tipeMobil"
-                                                     class="form-control form-control-alternative"
-                                                     placeholder="Tipe Mobil" value="">
+                                                 <label class="form-control-label" for="input-email">Tipe
+                                                     Mobil</label>
+                                                 <select class="form-control" name="tipeMobil" required>
+                                                     <option disabled selected>Pilih Model Mobil</option>
+                                                     <option value="Agya">Agya</option>
+                                                     <option value="Avanza">Avanza</option>
+                                                     <option value="Calya">Calya</option>
+                                                     <option value="Yaris">Yaris</option>
+                                                     <option value="Sienta">Sienta</option>
+                                                     <option value="Hilux">Hilux</option>
+                                                     <option value="Fortuner">Fortuner</option>
+                                                     <option value="Rush">Rush</option>
+                                                     <option value="Innova">Innova</option>
+                                                     <option value="Vellfire">Vellfire</option>
+                                                     <option value="Alphard">Alphard</option>
+                                                     <option value="Vios">Vios</option>
+                                                     <option value="Altis">Altis</option>
+                                                     <option value="C-HR">C-HR</option>
+                                                     <option value="Camry">Camry</option>
+                                                     <option value="FT-86">FT-86</option>
+                                                 </select>
+                                             </div>
+                                         </div>
+                                         <div id="honda" style="display: none" class="col-lg-12">
+                                             <div class="form-group">
+                                                 <label class="form-control-label" for="input-email">Tipe
+                                                     Mobil</label>
+                                                 <select class="form-control" name="tipeMobil" required>
+                                                     <option disabled selected>Pilih Model Mobil</option>
+                                                     <option value="Civic">Civic</option>
+                                                     <option value="CR-V">CR-V</option>
+                                                     <option value="City">City</option>
+                                                     <option value="HR-V">HR-V</option>
+                                                     <option value="BR-V">BR-V</option>
+                                                     <option value="Mobilio">Mobilio</option>
+                                                     <option value="Jazz">Jazz</option>
+                                                     <option value="Brio">Brio</option>
+                                                 </select>
+                                             </div>
+                                         </div>
+                                         <div id="suzuki" style="display: none" class="col-lg-12">
+                                             <div class="form-group">
+                                                 <label class="form-control-label" for="input-email">Tipe
+                                                     Mobil</label>
+                                                 <select class="form-control" name="tipeMobil" required>
+                                                     <option disabled selected>Pilih Model Mobil</option>
+                                                     <option value="Carry">Carry</option>
+                                                     <option value="Ertiga">Ertiga</option>
+                                                     <option value="Baleno">Baleno</option>
+                                                     <option value="Ignis">Ignis</option>
+                                                     <option value="Karimun">Karimun</option>
+                                                     <option value="APV">APV</option>
+                                                     <option value="SX 4">SX 4</option>
+                                                 </select>
+                                             </div>
+                                         </div>
+                                         <div id="hyundai" style="display: none" class="col-lg-12">
+                                             <div class="form-group">
+                                                 <label class="form-control-label" for="input-email">Tipe
+                                                     Mobil</label>
+                                                 <select class="form-control" name="tipeMobil" required>
+                                                     <option disabled selected>Pilih Model Mobil</option>
+                                                     <option value="Kona">Kona</option>
+                                                     <option value="Santafe">Santafe</option>
+                                                     <option value="Grand i10">Grand i10</option>
+                                                     <option value="i20">i20</option>
+                                                     <option value="Tucson">Tucson</option>
+                                                     <option value="Starex">Starex</option>
+                                                     <option value="H-1">H-1</option>
+                                                     <option value="Avega">Avega</option>
+                                                 </select>
+                                             </div>
+                                         </div>
+                                         <div id="nissan" style="display: none" class="col-lg-12">
+                                             <div class="form-group">
+                                                 <label class="form-control-label" for="input-email">Tipe
+                                                     Mobil</label>
+                                                 <select class="form-control" name="tipeMobil" required>
+                                                     <option disabled selected>Pilih Model Mobil</option>
+                                                     <option value="Livina">Livina</option>
+                                                     <option value="X-Trail">X-Trail</option>
+                                                     <option value="Terra">Terra</option>
+                                                     <option value="Navara">Navara</option>
+                                                     <option value="Serena">Serena</option>
+                                                     <option value="Livina X-Gear">Livina X-Gear</option>
+                                                 </select>
+                                             </div>
+                                         </div>
+                                         <div id="datsun" style="display: none" class="col-lg-12">
+                                             <div class="form-group">
+                                                 <label class="form-control-label" for="input-email">Tipe
+                                                     Mobil</label>
+                                                 <select class="form-control" name="tipeMobil" required>
+                                                     <option disabled selected>Pilih Model Mobil</option>
+                                                     <option value="Cross">Cross</option>
+                                                     <option value="Got">Got</option>
+                                                     <option value="Go">Go</option>
+                                                 </select>
+                                             </div>
+                                         </div>
+                                         <div id="daihatsu" style="display: none" class="col-lg-12">
+                                             <div class="form-group">
+                                                 <label class="form-control-label" for="input-email">Tipe
+                                                     Mobil</label>
+                                                 <select class="form-control" name="tipeMobil" required>
+                                                     <option disabled selected>Pilih Model Mobil</option>
+                                                     <option value="Ayla">Ayla</option>
+                                                     <option value="Xenia">Xenia</option>
+                                                     <option value="Sigra">Sigra</option>
+                                                     <option value="Hi-Max">Hi-Max</option>
+                                                     <option value="Terios">Terios</option>
+                                                     <option value="Sirion">Sirion</option>
+                                                     <option value="Luxio">Luxio</option>
+                                                     <option value="Grandmax Minibus">Grandmax Minibus</option>
+                                                     <option value="Grandmax Pickup">Grandmax Pickup</option>
+                                                 </select>
+                                             </div>
+                                         </div>
+                                         <div id="chevrolet" style="display: none" class="col-lg-12">
+                                             <div class="form-group">
+                                                 <label class="form-control-label" for="input-email">Tipe
+                                                     Mobil</label>
+                                                 <select class="form-control" name="tipeMobil" required>
+                                                     <option disabled selected>Pilih Model Mobil</option>
+                                                     <option value="Captiva">Captiva</option>
+                                                     <option value="Trax">Trax</option>
+                                                     <option value="Spark">Spark</option>
+                                                     <option value="Orlando">Orlando</option>
+                                                     <option value="Aveo">Aveo</option>
+                                                 </select>
+                                             </div>
+                                         </div>
+                                         <div id="ford" style="display: none" class="col-lg-12">
+                                             <div class="form-group">
+                                                 <label class="form-control-label" for="input-email">Tipe
+                                                     Mobil</label>
+                                                 <select class="form-control" name="tipeMobil" required>
+                                                     <option disabled selected>Pilih Model Mobil</option>
+                                                     <option value="Ranger">Ranger</option>
+                                                     <option value="Focus">Focus</option>
+                                                     <option value="Fiesta">Fiesta</option>
+                                                     <option value="Everest">Everest</option>
+                                                     <option value="Eco-sport">Eco-sport</option>
+                                                 </select>
                                              </div>
                                          </div>
                                      </div>
                                      <div class="row">
-                                         <div class="col-lg-12">
+                                         <div id="perawatanMobil" style="display: none" class="col-lg-12">
                                              <div class="form-group">
                                                  <label class="form-control-label" for="input-username">Jenis
-                                                     Perawatan</label>
-                                                 <input type="text" name="jenisPerawatan"
-                                                     class="form-control form-control-alternative"
-                                                     placeholder="Jenis Perawatan" value="">
+                                                     perawatan</label>
+                                                 <select class="form-control" onchange="onSelectPerawatan(this)"
+                                                     name="jenisPerawatan" required>
+                                                     <option disabled selected>Pilih Jenis Perawatan Mobil</option>
+                                                     <option value="Perawatan Khusus">Perawatan Khusus</option>
+                                                     <option value="Variasi / Aksesoris Tambahan">Variasi / Aksesoris
+                                                         Tambahan</option>
+                                                     <option value="Car Care">Car Care</option>
+                                                 </select>
                                              </div>
                                          </div>
+                                         <!-- Validation -->
+                                         <script>
+                                             function onSelectPerawatan(jenisPerawatan) {
+                                                 switch (jenisPerawatan.value) {
+                                                     case "Perawatan Khusus":
+                                                         document.getElementById("khusus").style.display = "block";
+                                                         document.getElementById("variasi").style.display = "none";
+                                                         document.getElementById("carCare").style.display = "none";
+                                                         break;
+                                                     case "Variasi / Aksesoris Tambahan":
+                                                         document.getElementById("khusus").style.display = "none";
+                                                         document.getElementById("variasi").style.display = "block";
+                                                         document.getElementById("carCare").style.display = "none";
+                                                         break;
+                                                     case "Car Care":
+                                                         document.getElementById("khusus").style.display = "none";
+                                                         document.getElementById("variasi").style.display = "none";
+                                                         document.getElementById("carCare").style.display = "block";
+                                                         break;
+                                                     default:
+                                                         document.getElementById("khusus").style.display = "none";
+                                                         document.getElementById("variasi").style.display = "none";
+                                                         document.getElementById("carCare").style.display = "none";
+                                                 }
+                                             }
+                                         </script>
+                                         <!-- End Validation -->
                                      </div>
                                      <div class="row">
-                                         <div class="col-lg-12">
+                                         <div id="khusus" style="display: none" class="col-lg-12">
                                              <div class="form-group">
-                                                 <label class="form-control-label" for="input-username">Detail
+                                                 <label class="form-control-label" for="input-first-name">Detail
                                                      Perawatan</label>
-                                                 <input type="text" name="detailPerawatan"
-                                                     class="form-control form-control-alternative"
-                                                     placeholder="Detail Perawatan" value="">
+                                                 <select class="form-control" name="detailPerawatan" required>
+                                                     <option disabled selected>Pilih Detail Perawatan Mobil</option>
+                                                     <option value="Kampas Rem">Kampas Rem</option>
+                                                     <option value="Kampas Kopling">Kampas Kopling</option>
+                                                     <option value="Shock Breaker">Shock Breaker</option>
+                                                     <option value="Service AC">Servis AC</option>
+                                                     <option value="Servis Berkala">Servis Berkala</option>
+                                                     <option value="Ban">Ban</option>
+                                                     <option value="Aki">Aki</option>
+                                                     <option value="Servis Radiator">Servis Radiator</option>
+                                                     <option value="Lahar Roda">Lahar Roda</option>
+                                                 </select>
                                              </div>
                                          </div>
-                                     </div>
-                                 </div>
-                                 <hr class="my-4" />
-                                 <!-- Description -->
-                                 <h6 class="heading-small text-muted mb-4">Price Detail Information</h6>
-                                 <div class="pl-lg-4">
-                                     <div class="row">
-                                         <div class="col-lg-6">
+                                         <div id="variasi" style="display: none" class="col-lg-12">
                                              <div class="form-group">
-                                                 <label class="form-control-label" for="input-username">Total
-                                                     Harga</label>
-                                                 <input type="text" name="harga"
-                                                     class="form-control form-control-alternative"
-                                                     placeholder="Total Harga" value="">
+                                                 <label class="form-control-label" for="input-first-name">Detail
+                                                     Perawatan</label>
+                                                 <select class="form-control" name="detailPerawatan" required>
+                                                     <option disabled selected>Pilih Detail Perawatan Mobil</option>
+                                                     <option value="Kampas Rem">Kaca Film</option>
+                                                     <option value="Cover Jok">Cover Jok</option>
+                                                     <option value="Bumper Clip">Bumper Clip</option>
+                                                     <option value="Tape Layar">Tape Layar</option>
+                                                     <option value="Tape Klasik">Tape Klasik</option>
+                                                     <option value="Kamera Mundur">Kamera Mundur</option>
+                                                     <option value="Start Engine System">Start Engine System</option>
+                                                     <option value="Alarm">Alarm</option>
+                                                     <option value="Karpet Dasar">Karpet Dasar</option>
+                                                     <option value="Bumper Depan">Bumper Depan</option>
+                                                     <option value="Bumper Belakan">Bumper Belakang</option>
+                                                 </select>
                                              </div>
                                          </div>
-                                         <div class="col-lg-6">
+                                         <div id="carCare" style="display: none" class="col-lg-12">
                                              <div class="form-group">
-                                                 <label class="form-control-label" for="input-email">Status
-                                                     Perbaikan</label>
-                                                 <input type="text" name="done_flag"
-                                                     class="form-control form-control-alternative"
-                                                     placeholder="Status Perbaikan" value="">
+                                                 <label class="form-control-label" for="input-first-name">Detail
+                                                     Perawatan</label>
+                                                 <select class="form-control" name="detailPerawatan" required>
+                                                     <option disabled selected>Pilih Detail Perawatan Mobil</option>
+                                                     <option value="Cuci Mobil Luar dan Dalam">Cuci Mobil Luar dan Dalam
+                                                     </option>
+                                                     <option value="Poles Full Body">Poles Full Body</option>
+                                                 </select>
                                              </div>
                                          </div>
                                      </div>
