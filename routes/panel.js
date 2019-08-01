@@ -95,12 +95,38 @@ app.post('/login', redirectHome, (req, res) => {
 app.get('/dashboard', (req, res) => {
     mysql.createConnection(config.database).then(function (con) {
         con.query('SELECT * FROM bookingList').then(rows => {
+                // Table Pagination
+                var totalOnGoingBooking = filterBookingNotDone(rows),
+                    pageSize = 8,
+                    pageCount = totalOnGoingBooking / 8,
+                    currentPage = 1,
+                    onGoingBookingArray = [],
+                    onGoingBookingList = [],
+                    onGoingBooking = JSON.parse(JSON.stringify(showNotDoneBooking(rows)))
+
+                // Split to groups
+                while (onGoingBooking.length > 0) {
+                    onGoingBookingArray.push(onGoingBooking.splice(0, pageSize))
+                }
+
+                // Set current page
+                if (typeof req.query.page != 'undefined') {
+                    currentPage = +req.query.page
+                }
+
+                // Show list of not done booking
+                onGoingBookingList = onGoingBookingArray[+currentPage - 1];
+
                 res.render('indexPanel', {
                     totalBooking: rows.length,
                     doneBooking: filterBookingDone(rows),
                     notDoneBooking: filterBookingNotDone(rows),
                     totalIncome: filterIncome(rows),
-                    bookingList: showNotDoneBooking(rows)
+                    bookingList: onGoingBookingList,
+                    pageSize: pageSize,
+                    totalOnGoingBooking: totalOnGoingBooking,
+                    pageCount: pageCount,
+                    currentPage: currentPage
                 })
             })
             .catch(err => {
@@ -110,6 +136,25 @@ app.get('/dashboard', (req, res) => {
                 })
             })
     })
+})
+
+app.post('/report', (req, res) => {
+    // Split Month and Year
+    userInput = req.body.inputDate
+    resultDate = userInput.split("-")
+    year = resultDate[0]
+    month = resultDate[1]
+    
+    mysql.createConnection(config.database).then(function (con) {
+        con.query("SELECT * FROM bookingList WHERE month(tanggalService)= '" + month + "' AND year(tanggalService)= '" + year + "';").then(rows => {
+                console.log(rows)
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    })
+
+    // Continue to generate report
 })
 
 app.route('/pricingList')
@@ -286,7 +331,7 @@ app.get('/bookingList', (req, res) => {
                     currentPage = 1,
                     doneBookingsArray = [],
                     doneBookingList = [],
-                    doneBooking = JSON.parse(JSON.stringify(rows))
+                    doneBooking = JSON.parse(JSON.stringify(showDoneBooking(rows)))
 
                 // Split to groups
                 while (doneBooking.length > 0) {
