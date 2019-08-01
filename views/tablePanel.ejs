@@ -1,6 +1,8 @@
  <!-- Include Header -->
  <%- include back-end/layout/header.ejs %>
 
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
  <body class="">
      <nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white" id="sidenav-main">
          <div class="container-fluid">
@@ -60,9 +62,9 @@
                  </div>
                  <!-- Navigation -->
                  <ul class="navbar-nav">
-                     <li class="nav-item  class=" active" ">
+                     <li class="nav-item  class=" active>
                          <a class=" nav-link " href="/panel/dashboard"> <i class="ni ni-tv-2 text-primary"></i>
-                         Dashboard
+                             Dashboard
                          </a>
                      </li>
                      <li class="nav-item">
@@ -214,122 +216,46 @@
          </div>
          <div class="container-fluid mt--7">
              <!-- Table -->
-             <div class="row">
-                 <div class="col">
-                     <div class="card shadow">
-                         <div class="card-header border-0">
-                             <h3 class="mb-0">Ongoing Booking List</h3>
-                         </div>
-                         <div class="table-responsive">
-                             <table id="data-table-basic" class="table align-items-center table-flush">
-                                 <thead class="thead-light">
-                                     <tr>
-                                         <th scope="col">Nama Pemilik</th>
-                                         <th scope="col">Tanggal Service</th>
-                                         <th scope="col">Waktu Service</th>
-                                         <th scope="col">Alamat</th>
-                                         <th scope="col"></th>
-                                     </tr>
-                                 </thead>
-                                 <tbody>
-                                     <!-- Looping Data -->
-                                     <% if (notDoneTable) { %>
-                                     <% notDoneTable.forEach(function(data){ %>
-                                     <tr>
-                                         <th scope="row">
-                                             <div class="media align-items-center">
-                                                 <div class="media-body">
-                                                     <%= data.namaPemilik %>
-                                                     <span class="mb-0 text-sm"></span>
-                                                 </div>
-                                             </div>
-                                         </th>
-                                         <td>
-                                             <%= data.tanggalService %>
-                                         </td>
-                                         <td>
-                                             <span class="badge badge-dot">
-                                                 <i class="bg-danger"></i> <%= data.waktuService %>
-                                             </span>
-                                         </td>
-                                         <td>
-                                             <%= data.alamat %>
-                                         </td>
-                                         <td class="text-right">
-                                             <div class="dropdown">
-                                                 <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
-                                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                     <i class="fas fa-ellipsis-v"></i>
-                                                 </a>
-                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                     <a class="dropdown-item" href="/panel/showDetails/<%= data.id %>"
-                                                         style="margin-left: 5px">Show Details</a>
-                                                     <form action="/panel/deleteDetails/<%= data.id %>" method="POST">
-                                                         <form method="post"
-                                                             action="/panel/deleteDetails/<%= data.id %>"
-                                                             style="float:right">
-                                                             <button type="submit" name="delete" value='Delete'
-                                                                 onClick="return confirm('Are you sure you want to delete this alumni data?')"
-                                                                 class="btn"
-                                                                 style="background-color: unset; width: 100%; text-align: left; color: #f5365c;">Remove
-                                                                 Data</button>
-                                                             <input type="hidden" name="_method" value="DELETE" />
-                                                         </form>
-                                                     </form>
-                                                     <a class="dropdown-item" href="#" style="margin-left: 5px">Done</a>
-                                                 </div>
-                                             </div>
-                                         </td>
-                                     </tr>
-                                     <% }) %>
-                                     <% } %>
-                                 </tbody>
-                             </table>
-                         </div>
-                     </div>
-                 </div>
-             </div>
-             <!-- Table -->
              <div class="row" style="margin-top: 40px">
                  <div class="col">
                      <div class="card shadow">
                          <div class="card-header border-0">
                              <h3 class="mb-0">Done Booking List</h3>
+                             </br>
+                             <div>
+                                 <input class="form-control form-control-alternative" type="text" id="myInput"
+                                     placeholder="Enter data to search">
+                             </div>
                          </div>
                          <div class="table-responsive">
-                             <table id="myTable" class="table align-items-center table-flush">
+                             <table class="table align-items-center table-flush">
                                  <thead class="thead-light">
                                      <tr>
                                          <th scope="col">Nama Pemilik</th>
                                          <th scope="col">Tanggal Service</th>
-                                         <th scope="col">Waktu Service</th>
                                          <th scope="col">Alamat</th>
+                                         <th scope="col">Waktu Service</th>
                                          <th scope="col"></th>
                                      </tr>
                                  </thead>
-                                 <tbody>
+                                 <tbody id="myTable">
                                      <!-- Looping Data -->
                                      <% if (doneTable) { %>
                                      <% doneTable.forEach(function(data){ %>
                                      <tr>
-                                         <th scope="row">
-                                             <div class="media align-items-center">
-                                                 <div class="media-body">
-                                                     <%= data.namaPemilik %>
-                                                     <span class="mb-0 text-sm"></span>
-                                                 </div>
-                                             </div>
-                                         </th>
+                                         <td>
+                                             <%= data.namaPemilik %>
+                                         </td>
                                          <td>
                                              <%= data.tanggalService %>
+                                         </td>
+                                         <td>
+                                             <%= data.alamat %>
                                          </td>
                                          <td>
                                              <span class="badge badge-dot">
                                                  <i class="bg-danger"></i> <%= data.waktuService %>
                                              </span>
-                                         </td>
-                                         <td>
-                                             <%= data.alamat %>
                                          </td>
                                          <td class="text-right">
                                              <div class="dropdown">
@@ -369,7 +295,7 @@
                                      <% if (currentPage > 1) { %>
                                      <li class="page-item active">
                                          <a class="page-link" href="/panel/bookingList?page=1">&laquo;</a>
-                                    </li>
+                                     </li>
                                      <% } %>
                                      <% var i = 1;
                                 if (currentPage > 5) {
@@ -380,17 +306,19 @@
                                      <% } %>
                                      <% for (i; i<=pageCount; i++) { %>
                                      <% if (currentPage == i) { %>
-                                     <li class="page-item active"><a class="page-link"><%= i %> </a>
+                                     <li class="page-item"><a class="page-link"><%= i %> </a>
                                      </li>
                                      <% } else { %>
-                                     <li class="page-item active"><a class="page-link" href="/panel/bookingList?page=<%= i %>"><%= i %></a></li>
+                                     <li class="page-item active"><a class="page-link"
+                                             href="/panel/bookingList?page=<%= i %>"><%= i %></a></li>
                                      <% } %>
                                      <% if (i == (+currentPage + 2)) { %>
                                      <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
                                      <% break; } %>
                                      <% } %>
                                      <% if (currentPage != pageCount) { %>
-                                     <li class="page-item disabled"><a class="page-link" href="/panel/bookingList/?page=<%= pageCount %>">&raquo;</a></li>
+                                     <li class="page-item disabled"><a class="page-link"
+                                             href="/panel/bookingList/?page=<%= pageCount %>">&raquo;</a></li>
                                      <% } %>
                                  </ul>
                                  <% } %>
@@ -422,6 +350,16 @@
              </footer>
          </div>
      </div>
+     <script>
+         $(document).ready(function () {
+             $("#myInput").on("keyup", function () {
+                 var value = $(this).val().toLowerCase();
+                 $("#myTable tr").filter(function () {
+                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                 });
+             });
+         });
+     </script>
  </body>
 
  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

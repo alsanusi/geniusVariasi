@@ -280,12 +280,12 @@ app.get('/bookingList', (req, res) => {
     mysql.createConnection(config.database).then(function (con) {
         con.query('SELECT * FROM bookingList').then(rows => {
                 // Table Pagination
-                var totalDoneBooking = filterBookingDone(rows)
+                var totalDoneBooking = filterBookingDone(rows),
                     pageSize = 8,
                     pageCount = totalDoneBooking / 8,
                     currentPage = 1,
                     doneBookingsArray = [],
-                    doneBookingList = []
+                    doneBookingList = [],
                     doneBooking = JSON.parse(JSON.stringify(rows))
 
                 // Split to groups
@@ -301,9 +301,8 @@ app.get('/bookingList', (req, res) => {
                 // Show list of not done booking
                 doneBookingList = doneBookingsArray[+currentPage - 1];
 
-                res.render('tablesPanel', {
+                res.render('tablePanel', {
                     doneTable: doneBookingList,
-                    notDoneTable: doneBookingList,
                     pageSize: pageSize,
                     totalDoneBooking: totalDoneBooking,
                     pageCount: pageCount,
@@ -311,8 +310,12 @@ app.get('/bookingList', (req, res) => {
                 })
             })
             .catch(err => {
-                res.render('tablesPanel', {
-                    bookingList: ''
+                res.render('tablePanel', {
+                    doneTable: doneBookingList,
+                    pageSize: '',
+                    totalDoneBooking: '',
+                    pageCount: '',
+                    currentPage: ''
                 })
             })
     })
