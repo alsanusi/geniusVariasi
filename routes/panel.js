@@ -51,7 +51,7 @@ function filterIncome(price) {
     income = price.map(obj => {
         return obj.harga
     })
-    totalIncome = income.reduce((a , b) => a + b, 0)
+    totalIncome = income.reduce((a, b) => a + b, 0)
     return totalIncome
 }
 
@@ -279,9 +279,35 @@ app.route('/showDetails/(:id)')
 app.get('/bookingList', (req, res) => {
     mysql.createConnection(config.database).then(function (con) {
         con.query('SELECT * FROM bookingList').then(rows => {
+                // Table Pagination
+                var totalDoneBooking = filterBookingDone(rows)
+                    pageSize = 8,
+                    pageCount = totalDoneBooking / 8,
+                    currentPage = 1,
+                    doneBookingsArray = [],
+                    doneBookingList = []
+                    doneBooking = JSON.parse(JSON.stringify(rows))
+
+                // Split to groups
+                while (doneBooking.length > 0) {
+                    doneBookingsArray.push(doneBooking.splice(0, pageSize))
+                }
+
+                // Set current page
+                if (typeof req.query.page != 'undefined') {
+                    currentPage = +req.query.page
+                }
+
+                // Show list of not done booking
+                doneBookingList = doneBookingsArray[+currentPage - 1];
+
                 res.render('tablesPanel', {
-                    doneTable: showDoneBooking(rows),
-                    notDoneTable: showNotDoneBooking(rows)
+                    doneTable: doneBookingList,
+                    notDoneTable: doneBookingList,
+                    pageSize: pageSize,
+                    totalDoneBooking: totalDoneBooking,
+                    pageCount: pageCount,
+                    currentPage: currentPage
                 })
             })
             .catch(err => {

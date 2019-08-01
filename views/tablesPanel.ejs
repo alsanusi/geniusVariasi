@@ -221,7 +221,7 @@
                              <h3 class="mb-0">Ongoing Booking List</h3>
                          </div>
                          <div class="table-responsive">
-                             <table class="table align-items-center table-flush">
+                             <table id="data-table-basic" class="table align-items-center table-flush">
                                  <thead class="thead-light">
                                      <tr>
                                          <th scope="col">Nama Pemilik</th>
@@ -286,31 +286,6 @@
                                  </tbody>
                              </table>
                          </div>
-                         <div class="card-footer py-4">
-                             <nav aria-label="...">
-                                 <ul class="pagination justify-content-end mb-0">
-                                     <li class="page-item disabled">
-                                         <a class="page-link" href="#" tabindex="-1">
-                                             <i class="fas fa-angle-left"></i>
-                                             <span class="sr-only">Previous</span>
-                                         </a>
-                                     </li>
-                                     <li class="page-item active">
-                                         <a class="page-link" href="#">1</a>
-                                     </li>
-                                     <li class="page-item">
-                                         <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-                                     </li>
-                                     <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                     <li class="page-item">
-                                         <a class="page-link" href="#">
-                                             <i class="fas fa-angle-right"></i>
-                                             <span class="sr-only">Next</span>
-                                         </a>
-                                     </li>
-                                 </ul>
-                             </nav>
-                         </div>
                      </div>
                  </div>
              </div>
@@ -322,7 +297,7 @@
                              <h3 class="mb-0">Done Booking List</h3>
                          </div>
                          <div class="table-responsive">
-                             <table class="table align-items-center table-flush">
+                             <table id="myTable" class="table align-items-center table-flush">
                                  <thead class="thead-light">
                                      <tr>
                                          <th scope="col">Nama Pemilik</th>
@@ -389,27 +364,36 @@
                          </div>
                          <div class="card-footer py-4">
                              <nav aria-label="...">
+                                 <% if (pageCount > 1) { %>
                                  <ul class="pagination justify-content-end mb-0">
-                                     <li class="page-item disabled">
-                                         <a class="page-link" href="#" tabindex="-1">
-                                             <i class="fas fa-angle-left"></i>
-                                             <span class="sr-only">Previous</span>
-                                         </a>
-                                     </li>
+                                     <% if (currentPage > 1) { %>
                                      <li class="page-item active">
-                                         <a class="page-link" href="#">1</a>
+                                         <a class="page-link" href="/panel/bookingList?page=1">&laquo;</a>
+                                    </li>
+                                     <% } %>
+                                     <% var i = 1;
+                                if (currentPage > 5) {
+                                    i = +currentPage - 4;
+                                } %>
+                                     <% if (i !== 1) { %>
+                                     <li class="disabled"><a href="#">...</a></li>
+                                     <% } %>
+                                     <% for (i; i<=pageCount; i++) { %>
+                                     <% if (currentPage == i) { %>
+                                     <li class="page-item active"><a class="page-link"><%= i %> </a>
                                      </li>
-                                     <li class="page-item">
-                                         <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-                                     </li>
-                                     <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                     <li class="page-item">
-                                         <a class="page-link" href="#">
-                                             <i class="fas fa-angle-right"></i>
-                                             <span class="sr-only">Next</span>
-                                         </a>
-                                     </li>
+                                     <% } else { %>
+                                     <li class="page-item active"><a class="page-link" href="/panel/bookingList?page=<%= i %>"><%= i %></a></li>
+                                     <% } %>
+                                     <% if (i == (+currentPage + 2)) { %>
+                                     <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+                                     <% break; } %>
+                                     <% } %>
+                                     <% if (currentPage != pageCount) { %>
+                                     <li class="page-item disabled"><a class="page-link" href="/panel/bookingList/?page=<%= pageCount %>">&raquo;</a></li>
+                                     <% } %>
                                  </ul>
+                                 <% } %>
                              </nav>
                          </div>
                      </div>
@@ -439,6 +423,11 @@
          </div>
      </div>
  </body>
+
+ <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+ <!-- Include all compiled plugins (below), or include individual files as needed -->
+ <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
  <!-- Include Footer -->
  <%- include back-end/layout/footer.ejs %>

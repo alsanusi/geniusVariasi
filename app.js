@@ -69,5 +69,5 @@ app.use('/panel', adminPanel)
 
 //Localhost:3003
 app.listen(3003, () => {
-    console.log('Serve Running at Port 3000: http://127.0.0.1:3003')
+    console.log('Serve Running at Port 3003: http://127.0.0.1:3003')
 })
