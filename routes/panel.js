@@ -60,8 +60,11 @@ function filterBookingNotDone(bStatus) {
 }
 
 function filterIncome(price) {
-    var income, totalIncome
-    income = price.map(obj => {
+    var income, totalIncome, statusDone
+    statusDone = price.filter(obj => {
+        return obj.done_flag === "Y"
+    })
+    income = statusDone.map(obj => {
         return obj.harga
     })
     totalIncome = income.reduce((a, b) => a + b, 0)
@@ -151,101 +154,15 @@ app.get('/dashboard', (req, res) => {
     })
 })
 
-app.post('/report', (req, res) => {
-    // Split Month and Year
-    userInput = req.body.inputDate
-    resultDate = userInput.split("-")
-    year = resultDate[0]
-    month = resultDate[1]
-
-    mysql.createConnection(config.database).then(function (con) {
-        // con.query("SELECT * FROM bookingList WHERE month(tanggalService)= '" + month + "' AND year(tanggalService)= '" + year + "';").then(rows => {
-        con.query("SELECT * FROM bookingList").then(rows => {
-                pdfJson = rows
-
-                var bodyData = []
-                var priceTotal = []
-
-                pdfJson.forEach(function (bookingData) {
-                    var dataRow = []
-                    dataRow.push(bookingData.id)
-                    dataRow.push(bookingData.namaPemilik)
-                    dataRow.push(bookingData.alamat)
-                    dataRow.push(bookingData.tanggalService)
-                    dataRow.push(bookingData.waktuService)
-                    dataRow.push(bookingData.merkMobil)
-                    dataRow.push(bookingData.tipeMobil)
-                    dataRow.push(bookingData.jenisPerawatan)
-                    dataRow.push(bookingData.detailPerawatan)
-                    dataRow.push(bookingData.harga)
-                    priceTotal.push(bookingData.harga)
-                    bodyData.push(dataRow)
-                })
-
-                var totalIncome = priceTotal.reduce((a, b) => a + b, 0)
-
-                var myTableLayout = {
-                    pageOrientation: 'landscape',
-                    content: [{
-                            text: 'Monthly Report',
-                            style: 'header'
-                        },
-                        {
-                            text: 'Genius Car Repair Monthly Report',
-                            style: 'subHeader',
-                            lineHeight: 2
-                        },
-                        {
-                            text: '// Report For Month and Year : ' + month + '-' + year,
-                            style: 'subHeaderX',
-                            lineHeight: 2
-                        },
-                        {
-                            text: '// Total Income : Rp. ' + totalIncome,
-                            style: 'subHeaderX',
-                            lineHeight: 2
-                        },
-                        {
-                            text: 'Id / Nama Pemilik / Alamat / Tanggal Service / Waktu Service / Merk Mobil / Tipe Mobil / Jenis Perawatan / Detail Perawatan / Harga',
-                            style: 'subHeaderTable',
-                            lineHeight: 2
-                        },
-                        {
-                            layout: 'headerLineOnly',
-                            table: {
-                                widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
-                                lineHeight: 1,
-                                heights: 20,
-                                body: bodyData
-                            }
-                        }
-                    ],
-                    styles: {
-                        header: {
-                            fontSize: 25,
-                            bold: true
-                        },
-                        subHeader: {
-                            fontSize: 20
-                        },
-                        subHeaderTable: {
-                            bold: true,
-                            fontSize: 11.5
-                        },
-                        subHeaderX: {
-                            fontSize: 13
-                        }
-                    }
-                }
-
-                generatePdf(myTableLayout).then(res.redirect('/panel/dashboard'))
-
+function monthYearReport(month, year) {
+    return new Promise(resolve => {
+        mysql.createConnection(config.database).then(function (con) {
+            con.query("SELECT * FROM bookingList WHERE month(tanggalService)= '" + month + "' AND year(tanggalService)= '" + year + "';").then(rows => {
+                resolve(rows)
             })
-            .catch(err => {
-                console.log(err);
-            })
+        })
     })
-})
+}
 
 //GeneratePdf
 async function generatePdf(tableLayout) {
@@ -255,6 +172,116 @@ async function generatePdf(tableLayout) {
     pdfDoc.pipe(fs.createWriteStream('./report/monthlyReport.pdf'))
     pdfDoc.end()
 }
+
+app.post('/report', async (req, res) => {
+    // Split Month and Year
+    userInput = req.body.inputDate
+    resultDate = userInput.split("-")
+    year = resultDate[0]
+    month = resultDate[1]
+
+    let getMonthYearReport = await monthYearReport(month, year)
+
+    if (getMonthYearReport) {
+        pdfJson = getMonthYearReport
+
+        var bodyData = []
+        var priceTotal = []
+
+        pdfJson.forEach(function (bookingData) {
+            var dataRow = []
+            dataRow.push(bookingData.id)
+            dataRow.push(bookingData.namaPemilik)
+            dataRow.push(bookingData.alamat)
+            dataRow.push(bookingData.tanggalService)
+            dataRow.push(bookingData.waktuService)
+            dataRow.push(bookingData.merkMobil)
+            dataRow.push(bookingData.tipeMobil)
+            dataRow.push(bookingData.jenisPerawatan)
+            dataRow.push(bookingData.detailPerawatan)
+            dataRow.push(bookingData.harga)
+            priceTotal.push(bookingData.harga)
+            bodyData.push(dataRow)
+        })
+
+        var totalIncome = priceTotal.reduce((a, b) => a + b, 0)
+
+        var myTableLayout = {
+            pageOrientation: 'landscape',
+            content: [{
+                    image: './report/logo.png',
+                    width: 150,
+                    lineHeight: 2
+                },
+                {
+                    text: 'Monthly Report',
+                    style: 'header'
+                },
+                {
+                    text: 'Genius Car Repair Monthly Report',
+                    style: 'subHeader',
+                    lineHeight: 2
+                },
+                {
+                    text: '// Report For Month and Year : ' + month + '-' + year,
+                    style: 'subHeaderX',
+                    lineHeight: 2
+                },
+                {
+                    text: '// Total Income : Rp. ' + totalIncome,
+                    style: 'subHeaderX',
+                    lineHeight: 2
+                },
+                {
+                    text: 'Id / Nama Pemilik / Alamat / Tanggal Service / Waktu Service / Merk Mobil / Tipe Mobil / Jenis Perawatan / Detail Perawatan / Harga',
+                    style: 'subHeaderTable',
+                    lineHeight: 2
+                },
+                {
+                    layout: 'headerLineOnly',
+                    table: {
+                        widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+                        lineHeight: 1,
+                        heights: 20,
+                        body: bodyData
+                    }
+                }
+            ],
+            styles: {
+                header: {
+                    fontSize: 25,
+                    bold: true
+                },
+                subHeader: {
+                    fontSize: 20
+                },
+                subHeaderTable: {
+                    bold: true,
+                    fontSize: 11.5
+                },
+                subHeaderX: {
+                    fontSize: 13
+                }
+            }
+        }
+
+        async function donwloadGeneratePdf() {
+            await generatePdf(myTableLayout)
+            setTimeout(function () {
+                var file = fs.createReadStream('./report/monthlyReport.pdf')
+                var stat = fs.statSync('./report/monthlyReport.pdf')
+                res.setHeader('Content-Length', stat.size);
+                res.setHeader('Content-Type', 'application/pdf');
+                res.setHeader('Content-Disposition', 'attachment; filename=monthlyReport.pdf');
+                file.pipe(res)
+            }, 2000);
+        }
+
+        donwloadGeneratePdf()
+    } else {
+        res.redirect('/panel/dashboard')
+    }
+})
 
 app.route('/pricingList')
     .get((req, res, next) => {
@@ -446,6 +473,8 @@ app.get('/bookingList', (req, res) => {
                 doneBookingList = doneBookingsArray[+currentPage - 1];
 
                 res.render('tablePanel', {
+                    doneBooking: filterBookingDone(rows),
+                    totalIncome: filterIncome(rows),
                     doneTable: doneBookingList,
                     pageSize: pageSize,
                     totalDoneBooking: totalDoneBooking,
