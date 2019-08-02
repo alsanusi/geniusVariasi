@@ -159,10 +159,12 @@ app.post('/report', (req, res) => {
     month = resultDate[1]
 
     mysql.createConnection(config.database).then(function (con) {
-        con.query("SELECT * FROM bookingList WHERE month(tanggalService)= '" + month + "' AND year(tanggalService)= '" + year + "';").then(rows => {
+        // con.query("SELECT * FROM bookingList WHERE month(tanggalService)= '" + month + "' AND year(tanggalService)= '" + year + "';").then(rows => {
+        con.query("SELECT * FROM bookingList").then(rows => {
                 pdfJson = rows
 
                 var bodyData = []
+                var priceTotal = []
 
                 pdfJson.forEach(function (bookingData) {
                     var dataRow = []
@@ -176,8 +178,11 @@ app.post('/report', (req, res) => {
                     dataRow.push(bookingData.jenisPerawatan)
                     dataRow.push(bookingData.detailPerawatan)
                     dataRow.push(bookingData.harga)
+                    priceTotal.push(bookingData.harga)
                     bodyData.push(dataRow)
                 })
+
+                var totalIncome = priceTotal.reduce((a, b) => a + b, 0)
 
                 var myTableLayout = {
                     pageOrientation: 'landscape',
@@ -191,10 +196,26 @@ app.post('/report', (req, res) => {
                             lineHeight: 2
                         },
                         {
+                            text: '// Report For Month and Year : ' + month + '-' + year,
+                            style: 'subHeaderX',
+                            lineHeight: 2
+                        },
+                        {
+                            text: '// Total Income : Rp. ' + totalIncome,
+                            style: 'subHeaderX',
+                            lineHeight: 2
+                        },
+                        {
+                            text: 'Id / Nama Pemilik / Alamat / Tanggal Service / Waktu Service / Merk Mobil / Tipe Mobil / Jenis Perawatan / Detail Perawatan / Harga',
+                            style: 'subHeaderTable',
+                            lineHeight: 2
+                        },
+                        {
                             layout: 'headerLineOnly',
                             table: {
                                 widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
                                 lineHeight: 1,
+                                heights: 20,
                                 body: bodyData
                             }
                         }
@@ -206,6 +227,13 @@ app.post('/report', (req, res) => {
                         },
                         subHeader: {
                             fontSize: 20
+                        },
+                        subHeaderTable: {
+                            bold: true,
+                            fontSize: 11.5
+                        },
+                        subHeaderX: {
+                            fontSize: 13
                         }
                     }
                 }
