@@ -2,9 +2,11 @@ const express = require('express')
 const app = express()
 const mysql = require('promise-mysql')
 const config = require('../config')
+const pdfPrinter = require('pdfmake')
+const fs = require('fs')
 
 // Global Variable
-var globalId
+var globalId, pdfJson
 
 // Admin Credentials
 const admin = {
@@ -12,6 +14,17 @@ const admin = {
     username: 'admin',
     pass: '123'
 }
+
+//Font Files
+var fonts = {
+    Roboto: {
+        normal: 'fonts/Roboto-Regular.ttf',
+        bold: 'fonts/Roboto-Medium.ttf',
+        italics: 'fonts/Roboto-Italic.ttf',
+        bolditalics: 'fonts/Roboto-MediumItalic.ttf'
+    }
+}
+const printer = new pdfPrinter(fonts)
 
 //Session Checking
 const redirectLogin = (req, res, next) => {
@@ -144,18 +157,76 @@ app.post('/report', (req, res) => {
     resultDate = userInput.split("-")
     year = resultDate[0]
     month = resultDate[1]
-    
+
     mysql.createConnection(config.database).then(function (con) {
         con.query("SELECT * FROM bookingList WHERE month(tanggalService)= '" + month + "' AND year(tanggalService)= '" + year + "';").then(rows => {
-                console.log(rows)
+                pdfJson = rows
+
+                var bodyData = []
+
+                pdfJson.forEach(function (bookingData) {
+                    var dataRow = []
+                    dataRow.push(bookingData.id)
+                    dataRow.push(bookingData.namaPemilik)
+                    dataRow.push(bookingData.alamat)
+                    dataRow.push(bookingData.tanggalService)
+                    dataRow.push(bookingData.waktuService)
+                    dataRow.push(bookingData.merkMobil)
+                    dataRow.push(bookingData.tipeMobil)
+                    dataRow.push(bookingData.jenisPerawatan)
+                    dataRow.push(bookingData.detailPerawatan)
+                    dataRow.push(bookingData.harga)
+                    bodyData.push(dataRow)
+                })
+
+                var myTableLayout = {
+                    pageOrientation: 'landscape',
+                    content: [{
+                            text: 'Monthly Report',
+                            style: 'header'
+                        },
+                        {
+                            text: 'Genius Car Repair Monthly Report',
+                            style: 'subHeader',
+                            lineHeight: 2
+                        },
+                        {
+                            layout: 'headerLineOnly',
+                            table: {
+                                widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+                                lineHeight: 1,
+                                body: bodyData
+                            }
+                        }
+                    ],
+                    styles: {
+                        header: {
+                            fontSize: 25,
+                            bold: true
+                        },
+                        subHeader: {
+                            fontSize: 20
+                        }
+                    }
+                }
+
+                generatePdf(myTableLayout).then(res.redirect('/panel/dashboard'))
+
             })
             .catch(err => {
                 console.log(err);
             })
     })
-
-    // Continue to generate report
 })
+
+//GeneratePdf
+async function generatePdf(tableLayout) {
+    //Build the PDF
+    var pdfDoc = printer.createPdfKitDocument(tableLayout)
+    //Writing to disk
+    pdfDoc.pipe(fs.createWriteStream('./report/monthlyReport.pdf'))
+    pdfDoc.end()
+}
 
 app.route('/pricingList')
     .get((req, res, next) => {
