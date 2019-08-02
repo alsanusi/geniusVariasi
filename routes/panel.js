@@ -2,9 +2,11 @@ const express = require('express')
 const app = express()
 const mysql = require('promise-mysql')
 const config = require('../config')
+const pdfPrinter = require('pdfmake')
+const fs = require('fs')
 
 // Global Variable
-var globalId
+var globalId, pdfJson
 
 // Admin Credentials
 const admin = {
@@ -12,6 +14,17 @@ const admin = {
     username: 'admin',
     pass: '123'
 }
+
+//Font Files
+var fonts = {
+    Roboto: {
+        normal: 'fonts/Roboto-Regular.ttf',
+        bold: 'fonts/Roboto-Medium.ttf',
+        italics: 'fonts/Roboto-Italic.ttf',
+        bolditalics: 'fonts/Roboto-MediumItalic.ttf'
+    }
+}
+const printer = new pdfPrinter(fonts)
 
 //Session Checking
 const redirectLogin = (req, res, next) => {
@@ -47,11 +60,14 @@ function filterBookingNotDone(bStatus) {
 }
 
 function filterIncome(price) {
-    var income, totalIncome
-    income = price.map(obj => {
+    var income, totalIncome, statusDone
+    statusDone = price.filter(obj => {
+        return obj.done_flag === "Y"
+    })
+    income = statusDone.map(obj => {
         return obj.harga
     })
-    totalIncome = income.reduce((a , b) => a + b, 0)
+    totalIncome = income.reduce((a, b) => a + b, 0)
     return totalIncome
 }
 
@@ -95,12 +111,38 @@ app.post('/login', redirectHome, (req, res) => {
 app.get('/dashboard', (req, res) => {
     mysql.createConnection(config.database).then(function (con) {
         con.query('SELECT * FROM bookingList').then(rows => {
+                // Table Pagination
+                var totalOnGoingBooking = filterBookingNotDone(rows),
+                    pageSize = 8,
+                    pageCount = totalOnGoingBooking / 8,
+                    currentPage = 1,
+                    onGoingBookingArray = [],
+                    onGoingBookingList = [],
+                    onGoingBooking = JSON.parse(JSON.stringify(showNotDoneBooking(rows)))
+
+                // Split to groups
+                while (onGoingBooking.length > 0) {
+                    onGoingBookingArray.push(onGoingBooking.splice(0, pageSize))
+                }
+
+                // Set current page
+                if (typeof req.query.page != 'undefined') {
+                    currentPage = +req.query.page
+                }
+
+                // Show list of not done booking
+                onGoingBookingList = onGoingBookingArray[+currentPage - 1];
+
                 res.render('indexPanel', {
                     totalBooking: rows.length,
                     doneBooking: filterBookingDone(rows),
                     notDoneBooking: filterBookingNotDone(rows),
                     totalIncome: filterIncome(rows),
-                    bookingList: showNotDoneBooking(rows)
+                    bookingList: onGoingBookingList,
+                    pageSize: pageSize,
+                    totalOnGoingBooking: totalOnGoingBooking,
+                    pageCount: pageCount,
+                    currentPage: currentPage
                 })
             })
             .catch(err => {
@@ -110,6 +152,135 @@ app.get('/dashboard', (req, res) => {
                 })
             })
     })
+})
+
+function monthYearReport(month, year) {
+    return new Promise(resolve => {
+        mysql.createConnection(config.database).then(function (con) {
+            con.query("SELECT * FROM bookingList WHERE month(tanggalService)= '" + month + "' AND year(tanggalService)= '" + year + "' AND done_flag = 'Y' ").then(rows => {
+                resolve(rows)
+            })
+        })
+    })
+}
+
+//GeneratePdf
+async function generatePdf(tableLayout) {
+    //Build the PDF
+    var pdfDoc = printer.createPdfKitDocument(tableLayout)
+    //Writing to disk
+    pdfDoc.pipe(fs.createWriteStream('./report/monthlyReport.pdf'))
+    pdfDoc.end()
+}
+
+app.post('/report', async (req, res) => {
+    // Split Month and Year
+    userInput = req.body.inputDate
+    resultDate = userInput.split("-")
+    year = resultDate[0]
+    month = resultDate[1]
+
+    let getMonthYearReport = await monthYearReport(month, year)
+
+    if (getMonthYearReport) {
+        pdfJson = getMonthYearReport
+
+        var bodyData = []
+        var priceTotal = []
+
+        pdfJson.forEach(function (bookingData) {
+            var dataRow = []
+            dataRow.push(bookingData.id)
+            dataRow.push(bookingData.namaPemilik)
+            dataRow.push(bookingData.alamat)
+            dataRow.push(bookingData.tanggalService)
+            dataRow.push(bookingData.waktuService)
+            dataRow.push(bookingData.merkMobil)
+            dataRow.push(bookingData.tipeMobil)
+            dataRow.push(bookingData.jenisPerawatan)
+            dataRow.push(bookingData.detailPerawatan)
+            dataRow.push(bookingData.harga)
+            priceTotal.push(bookingData.harga)
+            bodyData.push(dataRow)
+        })
+
+        var totalIncome = priceTotal.reduce((a, b) => a + b, 0)
+
+        var myTableLayout = {
+            pageOrientation: 'landscape',
+            content: [{
+                    image: './report/logo.png',
+                    width: 150,
+                    lineHeight: 2
+                },
+                {
+                    text: 'Monthly Report',
+                    style: 'header'
+                },
+                {
+                    text: 'Genius Car Repair Monthly Report',
+                    style: 'subHeader',
+                    lineHeight: 2
+                },
+                {
+                    text: '// Report For Month and Year : ' + month + '-' + year,
+                    style: 'subHeaderX',
+                    lineHeight: 2
+                },
+                {
+                    text: '// Total Income : Rp. ' + totalIncome,
+                    style: 'subHeaderX',
+                    lineHeight: 4
+                },
+                {
+                    text: 'Id / Nama Pemilik / Alamat / Tanggal Service / Waktu Service / Merk Mobil / Tipe Mobil / Jenis Perawatan / Detail Perawatan / Harga',
+                    style: 'subHeaderTable',
+                    lineHeight: 2
+                },
+                {
+                    layout: 'headerLineOnly',
+                    table: {
+                        widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+                        lineHeight: 1,
+                        heights: 20,
+                        body: bodyData
+                    }
+                }
+            ],
+            styles: {
+                header: {
+                    fontSize: 25,
+                    bold: true
+                },
+                subHeader: {
+                    fontSize: 20
+                },
+                subHeaderTable: {
+                    bold: true,
+                    fontSize: 11.5
+                },
+                subHeaderX: {
+                    fontSize: 13
+                }
+            }
+        }
+
+        async function donwloadGeneratePdf() {
+            await generatePdf(myTableLayout)
+            setTimeout(function () {
+                var file = fs.createReadStream('./report/monthlyReport.pdf')
+                var stat = fs.statSync('./report/monthlyReport.pdf')
+                res.setHeader('Content-Length', stat.size);
+                res.setHeader('Content-Type', 'application/pdf');
+                res.setHeader('Content-Disposition', 'attachment; filename=monthlyReport.pdf');
+                file.pipe(res)
+            }, 2000);
+        }
+
+        donwloadGeneratePdf()
+    } else {
+        res.redirect('/panel/dashboard')
+    }
 })
 
 app.route('/pricingList')
@@ -279,14 +450,45 @@ app.route('/showDetails/(:id)')
 app.get('/bookingList', (req, res) => {
     mysql.createConnection(config.database).then(function (con) {
         con.query('SELECT * FROM bookingList').then(rows => {
-                res.render('tablesPanel', {
-                    doneTable: showDoneBooking(rows),
-                    notDoneTable: showNotDoneBooking(rows)
+                // Table Pagination
+                var totalDoneBooking = filterBookingDone(rows),
+                    pageSize = 8,
+                    pageCount = totalDoneBooking / 8,
+                    currentPage = 1,
+                    doneBookingsArray = [],
+                    doneBookingList = [],
+                    doneBooking = JSON.parse(JSON.stringify(showDoneBooking(rows)))
+
+                // Split to groups
+                while (doneBooking.length > 0) {
+                    doneBookingsArray.push(doneBooking.splice(0, pageSize))
+                }
+
+                // Set current page
+                if (typeof req.query.page != 'undefined') {
+                    currentPage = +req.query.page
+                }
+
+                // Show list of not done booking
+                doneBookingList = doneBookingsArray[+currentPage - 1];
+
+                res.render('tablePanel', {
+                    doneBooking: filterBookingDone(rows),
+                    totalIncome: filterIncome(rows),
+                    doneTable: doneBookingList,
+                    pageSize: pageSize,
+                    totalDoneBooking: totalDoneBooking,
+                    pageCount: pageCount,
+                    currentPage: currentPage
                 })
             })
             .catch(err => {
-                res.render('tablesPanel', {
-                    bookingList: ''
+                res.render('tablePanel', {
+                    doneTable: doneBookingList,
+                    pageSize: '',
+                    totalDoneBooking: '',
+                    pageCount: '',
+                    currentPage: ''
                 })
             })
     })

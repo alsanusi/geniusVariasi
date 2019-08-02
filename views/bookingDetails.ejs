@@ -100,8 +100,8 @@
                                      placeholder="Tanggal Service" value="<%= tanggalService %>" required>
                              </div>
                              <div class="form-group">
-                                 <select class="form-control" name="waktuService" required>
-                                     <option disabled selected>Pilih Waktu Service</option>
+                                 <select required class="form-control" name="waktuService">
+                                     <option value="" disabled selected>Pilih Waktu Service</option>
                                      <option value="10 AM">10 AM</option>
                                      <option value="11 AM">11 AM</option>
                                      <option value="12 PM">12 PM</option>
@@ -115,7 +115,7 @@
                              <!-- Data Kendaraan -->
                              <div class="form-group">
                                  <select class="form-control" onchange="onSelectMerk(this)" name="merkMobil" required>
-                                     <option disabled selected>Pilih Merk Mobil</option>
+                                     <option value="" disabled selected>Pilih Merk Mobil</option>
                                      <option value="Toyota">Toyota</option>
                                      <option value="Honda">Honda</option>
                                      <option value="Suzuki">Suzuki</option>
@@ -257,7 +257,7 @@
                              <!-- Toyota -->
                              <div id="toyota" style="display:none" class="form-group">
                                  <select class="form-control" name="tipeMobil" required>
-                                     <option disabled selected>Pilih Model Mobil</option>
+                                     <option value="" disabled selected>Pilih Model Mobil</option>
                                      <option value="Agya">Agya</option>
                                      <option value="Avanza">Avanza</option>
                                      <option value="Calya">Calya</option>
@@ -279,7 +279,7 @@
                              <!-- Honda -->
                              <div id="honda" style="display:none" class="form-group">
                                  <select class="form-control" name="tipeMobil" required>
-                                     <option disabled selected>Pilih Model Mobil</option>
+                                     <option value="" disabled selected>Pilih Model Mobil</option>
                                      <option value="Civic">Civic</option>
                                      <option value="CR-V">CR-V</option>
                                      <option value="City">City</option>
@@ -293,7 +293,7 @@
                              <!-- Suzuki -->
                              <div id="suzuki" style="display:none" class="form-group">
                                  <select class="form-control" name="tipeMobil" required>
-                                     <option disabled selected>Pilih Model Mobil</option>
+                                     <option value="" disabled selected>Pilih Model Mobil</option>
                                      <option value="Carry">Carry</option>
                                      <option value="Ertiga">Ertiga</option>
                                      <option value="Baleno">Baleno</option>
@@ -306,7 +306,7 @@
                              <!-- Hyundai -->
                              <div id="hyundai" style="display:none" class="form-group">
                                  <select class="form-control" name="tipeMobil" required>
-                                     <option disabled selected>Pilih Model Mobil</option>
+                                     <option value="" disabled selected>Pilih Model Mobil</option>
                                      <option value="Kona">Kona</option>
                                      <option value="Santafe">Santafe</option>
                                      <option value="Grand i10">Grand i10</option>
@@ -320,7 +320,7 @@
                              <!-- Nissan -->
                              <div id="nissan" style="display:none" class="form-group">
                                  <select class="form-control" name="tipeMobil" required>
-                                     <option disabled selected>Pilih Model Mobil</option>
+                                     <option value="" disabled selected>Pilih Model Mobil</option>
                                      <option value="Livina">Livina</option>
                                      <option value="X-Trail">X-Trail</option>
                                      <option value="Terra">Terra</option>
@@ -332,7 +332,7 @@
                              <!-- Datsun -->
                              <div id="datsun" style="display:none" class="form-group">
                                  <select class="form-control" name="tipeMobil" required>
-                                     <option disabled selected>Pilih Model Mobil</option>
+                                     <option value="" disabled selected>Pilih Model Mobil</option>
                                      <option value="Cross">Cross</option>
                                      <option value="Got">Got</option>
                                      <option value="Go">Go</option>
@@ -341,7 +341,7 @@
                              <!-- Daihatsu -->
                              <div id="daihatsu" style="display:none" class="form-group">
                                  <select class="form-control" name="tipeMobil" required>
-                                     <option disabled selected>Pilih Model Mobil</option>
+                                     <option value="" disabled selected>Pilih Model Mobil</option>
                                      <option value="Ayla">Ayla</option>
                                      <option value="Xenia">Xenia</option>
                                      <option value="Sigra">Sigra</option>
@@ -356,7 +356,7 @@
                              <!-- Chevrolet -->
                              <div id="chevrolet" style="display:none" class="form-group">
                                  <select class="form-control" name="tipeMobil" required>
-                                     <option disabled selected>Pilih Model Mobil</option>
+                                     <option value="" disabled selected>Pilih Model Mobil</option>
                                      <option value="Captiva">Captiva</option>
                                      <option value="Trax">Trax</option>
                                      <option value="Spark">Spark</option>
@@ -367,7 +367,7 @@
                              <!-- Ford -->
                              <div id="ford" style="display:none" class="form-group">
                                  <select class="form-control" name="tipeMobil" required>
-                                     <option disabled selected>Pilih Model Mobil</option>
+                                     <option value="" disabled selected>Pilih Model Mobil</option>
                                      <option value="Ranger">Ranger</option>
                                      <option value="Focus">Focus</option>
                                      <option value="Fiesta">Fiesta</option>
@@ -379,7 +379,7 @@
                              <div id="perawatanMobil" style="display:none" class="form-group">
                                  <select class="form-control" onchange="onSelectPerawatan(this)" name="jenisPerawatan"
                                      required>
-                                     <option disabled selected>Pilih Jenis Perawatan Mobil</option>
+                                     <option value="" disabled selected>Pilih Jenis Perawatan Mobil</option>
                                      <option value="Perawatan Khusus">Perawatan Khusus</option>
                                      <option value="Variasi / Aksesoris Tambahan">Variasi / Aksesoris Tambahan</option>
                                      <option value="Car Care">Car Care</option>
@@ -415,7 +415,7 @@
                              <!-- Perawatan Khusus -->
                              <div id="khusus" style="display:none" class="form-group">
                                  <select class="form-control" name="detailPerawatan" required>
-                                     <option disabled selected>Pilih Detail Perawatan Mobil</option>
+                                     <option value="" disabled selected>Pilih Detail Perawatan Mobil</option>
                                      <option value="Kampas Rem">Kampas Rem</option>
                                      <option value="Kampas Kopling">Kampas Kopling</option>
                                      <option value="Shock Breaker">Shock Breaker</option>
@@ -430,7 +430,7 @@
                              <!-- Variasi / Aksesoris Tambahan -->
                              <div id="variasi" style="display:none" class="form-group">
                                  <select class="form-control" name="detailPerawatan" required>
-                                     <option disabled selected>Pilih Detail Perawatan Mobil</option>
+                                     <option value="" disabled selected>Pilih Detail Perawatan Mobil</option>
                                      <option value="Kampas Rem">Kaca Film</option>
                                      <option value="Cover Jok">Cover Jok</option>
                                      <option value="Bumper Clip">Bumper Clip</option>
@@ -447,7 +447,7 @@
                              <!-- Car Care -->
                              <div id="carCare" style="display:none" class="form-group">
                                  <select class="form-control" name="detailPerawatan" required>
-                                     <option disabled selected>Pilih Detail Perawatan Mobil</option>
+                                     <option value="" disabled selected>Pilih Detail Perawatan Mobil</option>
                                      <option value="Cuci Mobil Luar dan Dalam">Cuci Mobil Luar dan Dalam</option>
                                      <option value="Poles Full Body">Poles Full Body</option>
                                  </select>
