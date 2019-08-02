@@ -157,7 +157,7 @@ app.get('/dashboard', (req, res) => {
 function monthYearReport(month, year) {
     return new Promise(resolve => {
         mysql.createConnection(config.database).then(function (con) {
-            con.query("SELECT * FROM bookingList WHERE month(tanggalService)= '" + month + "' AND year(tanggalService)= '" + year + "';").then(rows => {
+            con.query("SELECT * FROM bookingList WHERE month(tanggalService)= '" + month + "' AND year(tanggalService)= '" + year + "' AND done_flag = 'Y' ").then(rows => {
                 resolve(rows)
             })
         })
@@ -230,7 +230,7 @@ app.post('/report', async (req, res) => {
                 {
                     text: '// Total Income : Rp. ' + totalIncome,
                     style: 'subHeaderX',
-                    lineHeight: 2
+                    lineHeight: 4
                 },
                 {
                     text: 'Id / Nama Pemilik / Alamat / Tanggal Service / Waktu Service / Merk Mobil / Tipe Mobil / Jenis Perawatan / Detail Perawatan / Harga',
