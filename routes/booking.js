@@ -80,47 +80,56 @@ function dateAndTimeChecking(time, date) {
 }
 
 app.post('/priceChecking', async (req, res) => {
+    // Set Global Variable
+    globalNamaPemilik = req.body.namaPemilik
+    globalAlamat = req.body.alamat
+    globalTanggalService = req.body.tanggalService
+
     var clientCar = {
+        waktuService: req.body.waktuService,
         merkMobil: req.body.merkMobil,
         tipeMobil: req.body.tipeMobil,
         jenisPerawatan: req.body.jenisPerawatan,
         detailPerawatan: req.body.detailPerawatan
     }
 
-    // Set Global Variable
-    globalNamaPemilik = req.body.namaPemilik
-    globalAlamat = req.body.alamat
-    globalTanggalService = req.body.tanggalService
-
-    getTime = req.body.waktuService
-
-    let log = await dateAndTimeChecking(getTime, globalTanggalService)
-
-    if (log.length > 0) {
-        var error_msg = "Tanggal dan waktu bookingan anda tidak tersedia. Silahkan untuk menginput kembali."
+    if (clientCar.waktuService === undefined) {
+        var error_msg = "Silahkan mengisi waktu booking servis anda."
+        req.flash('error', error_msg)
+        res.redirect('/editBooking')
+    } else if (clientCar.merkMobil === undefined || clientCar.tipeMobil === undefined || clientCar.jenisPerawatan === undefined || clientCar.detailPerawatan === undefined) {
+        var error_msg = "Silahkan mengisi data mobil anda."
         req.flash('error', error_msg)
         res.redirect('/editBooking')
     } else {
-        req.getConnection(function (err, con) {
-            con.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + clientCar.merkMobil + "' AND tipeMobil= '" + clientCar.tipeMobil + "' AND jenisPerawatan= '" + clientCar.jenisPerawatan + "' AND detailPerawatan= '" + clientCar.detailPerawatan + "'; ", function (err, rows, fields) {
-                if (err) {
-                    throw err
-                } else {
-                    res.render('pricingDetails', {
-                        namaPemilik: req.body.namaPemilik,
-                        alamat: req.body.alamat,
-                        nomorTelepon: req.body.nomorTelepon,
-                        tanggalService: req.body.tanggalService,
-                        waktuService: req.body.waktuService,
-                        merkMobil: req.body.merkMobil,
-                        tipeMobil: req.body.tipeMobil,
-                        jenisPerawatan: req.body.jenisPerawatan,
-                        detailPerawatan: req.body.detailPerawatan,
-                        harga: rows[0].harga,
-                    })
-                }
+        let log = await dateAndTimeChecking(clientCar.waktuService, globalTanggalService)
+
+        if (log.length > 0) {
+            var error_msg = "Tanggal dan waktu bookingan anda tidak tersedia. Silahkan untuk menginput kembali."
+            req.flash('error', error_msg)
+            res.redirect('/editBooking')
+        } else {
+            req.getConnection(function (err, con) {
+                con.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + clientCar.merkMobil + "' AND tipeMobil= '" + clientCar.tipeMobil + "' AND jenisPerawatan= '" + clientCar.jenisPerawatan + "' AND detailPerawatan= '" + clientCar.detailPerawatan + "'; ", function (err, rows, fields) {
+                    if (err) {
+                        throw err
+                    } else {
+                        res.render('pricingDetails', {
+                            namaPemilik: req.body.namaPemilik,
+                            alamat: req.body.alamat,
+                            nomorTelepon: req.body.nomorTelepon,
+                            tanggalService: req.body.tanggalService,
+                            waktuService: req.body.waktuService,
+                            merkMobil: req.body.merkMobil,
+                            tipeMobil: req.body.tipeMobil,
+                            jenisPerawatan: req.body.jenisPerawatan,
+                            detailPerawatan: req.body.detailPerawatan,
+                            harga: rows[0].harga,
+                        })
+                    }
+                })
             })
-        })
+        }
     }
 })
 
