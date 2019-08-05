@@ -134,7 +134,7 @@ app.post('/priceChecking', async (req, res) => {
     }
 })
 
-function emailNotifier(){
+function emailNotifier() {
     let transporter = nodeMailer.createTransport({
         service: 'gmail',
         auth: {
@@ -145,7 +145,7 @@ function emailNotifier(){
 
     let mailOptions = {
         from: 'malkautsars@gmail.com',
-        to: 'alkautsars.sanusi@gmail.com',
+        to: 'malkautsars@gmail.com',
         subject: "Testing",
         text: "Ada Booking Bro!"
     };
@@ -192,10 +192,10 @@ app.post('/booked', (req, res) => {
                     req.flash('error', err)
                     res.redirect('/bookingDetails')
                 } else {
-                    setTimeout(function(){
-                        emailNotifier()
+                    emailNotifier()
+                    setTimeout(function () {
+                        res.render('thankyou')
                     }, 5000)
-                    res.render('thankyou')
                 }
             })
         })
