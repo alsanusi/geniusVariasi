@@ -3,6 +3,7 @@ const express = require('express')
 const app = express()
 const mysql = require('mysql')
 const dbConfig = require('../config')
+const nodeMailer = require('nodemailer')
 
 // SingleUse Database Connection
 var conn = mysql.createConnection({
@@ -133,6 +134,30 @@ app.post('/priceChecking', async (req, res) => {
     }
 })
 
+function emailNotifier(){
+    let transporter = nodeMailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'malkautsars@gmail.com',
+            pass: 'Sesar181196'
+        }
+    });
+
+    let mailOptions = {
+        from: 'malkautsars@gmail.com',
+        to: 'alkautsars.sanusi@gmail.com',
+        subject: "Testing",
+        text: "Ada Booking Bro!"
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message %s sent: %s', info.messageId, info.response);
+    });
+}
+
 app.post('/booked', (req, res) => {
     //Input Form Validation
     req.assert('namaPemilik', 'Silahkan Input Nama Lengkap Anda!').notEmpty()
@@ -167,6 +192,9 @@ app.post('/booked', (req, res) => {
                     req.flash('error', err)
                     res.redirect('/bookingDetails')
                 } else {
+                    setTimeout(function(){
+                        emailNotifier()
+                    }, 5000)
                     res.render('thankyou')
                 }
             })
