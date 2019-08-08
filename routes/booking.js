@@ -4,6 +4,7 @@ const app = express()
 const mysql = require('mysql')
 const dbConfig = require('../config')
 const nodeMailer = require('nodemailer')
+const hbs = require('nodemailer-express-handlebars')
 
 // SingleUse Database Connection
 var conn = mysql.createConnection({
@@ -31,17 +32,18 @@ app.get('/bookingDetails', (req, res) => {
 })
 
 app.post('/book1', (req, res) => {
-    res.render('bookingDetails', {
-        namaPemilik: req.body.namaPemilik,
-        alamat: req.body.alamat,
-        nomorTelepon: '',
-        tanggalService: req.body.tanggalService,
-        waktuService: '',
-        merkMobil: '',
-        tipeMobil: '',
-        jenisPerawatan: '',
-        detailPerawatan: ''
-    })
+    // res.render('bookingDetails', {
+    //     namaPemilik: req.body.namaPemilik,
+    //     alamat: req.body.alamat,
+    //     nomorTelepon: '',
+    //     tanggalService: req.body.tanggalService,
+    //     waktuService: '',
+    //     merkMobil: '',
+    //     tipeMobil: '',
+    //     jenisPerawatan: '',
+    //     detailPerawatan: ''
+    // })
+    emailNotifier()
 })
 
 app.route('/editBooking')
@@ -143,11 +145,31 @@ function emailNotifier() {
         }
     });
 
+    const handlebarOptions = {
+        viewEngine: {
+          extName: '.handlebars',
+          partialsDir: './views',
+          layoutsDir: './views',
+          defaultLayout: 'bookingTemplates.handlebars',
+        },
+        viewPath: './views',
+        extName: '.handlebars',
+      };
+      
+    transporter.use('compile', hbs(handlebarOptions));
+
     let mailOptions = {
         from: 'malkautsars@gmail.com',
         to: 'malkautsars@gmail.com',
         subject: "Testing",
-        text: "Ada Booking Bro!"
+        context: {
+            name: 'Alkautsar Sanusi',
+            address: 'Jln Toddopuli X No 11',
+            date: '18-08-2019',
+            time: '10 AM'
+
+        },
+        template: 'bookingTemplates'
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
