@@ -16,7 +16,18 @@ var conn = mysql.createConnection({
 })
 
 // Global Variable
-var globalNamaPemilik, globalAlamat, globalTanggalService, globalWaktuServis;
+var globalBooking = {
+    namaPemilik: '',
+    alamat: '',
+    nomorTelepon: '',
+    tanggalService: '',
+    waktuService: '',
+    merkMobil: '',
+    tipeMobil: '',
+    jenisPerawatan: '',
+    detailPerawatan: '',
+    totalHarga: ''
+}
 
 // Default
 app.get('/', (req, res) => {
@@ -52,10 +63,10 @@ app.post('/book1', (req, res) => {
 app.route('/editBooking')
     .get((req, res) => {
         res.render('bookingDetails', {
-            namaPemilik: globalNamaPemilik,
-            alamat: globalAlamat,
+            namaPemilik: globalBooking.namaPemilik,
+            alamat: globalBooking.alamat,
             nomorTelepon: '',
-            tanggalService: globalTanggalService,
+            tanggalService: globalBooking.tanggalService,
             waktuService: '',
             merkMobil: '',
             tipeMobil: '',
@@ -65,10 +76,10 @@ app.route('/editBooking')
     })
     .post((req, res) => {
         res.render('bookingDetails', {
-            namaPemilik: globalNamaPemilik,
-            alamat: globalAlamat,
+            namaPemilik: globalBooking.namaPemilik,
+            alamat: globalBooking.alamat,
             nomorTelepon: '',
-            tanggalService: globalTanggalService,
+            tanggalService: globalBooking.tanggalService,
             waktuService: '',
             merkMobil: '',
             tipeMobil: '',
@@ -87,10 +98,18 @@ function dateAndTimeChecking(time, date) {
 
 app.post('/priceChecking', async (req, res) => {
     // Set Global Variable
-    globalNamaPemilik = req.body.namaPemilik
-    globalAlamat = req.body.alamat
-    globalTanggalService = req.body.tanggalService
-    globalWaktuServis = req.body.waktuService
+    globalBooking = {
+        namaPemilik: req.body.namaPemilik,
+        alamat: req.body.alamat,
+        tanggalService: req.body.tanggalService,
+        waktuService: req.body.waktuService,
+        nomorTelepon: req.body.nomorTelepon,
+        merkMobil: req.body.merkMobil,
+        tipeMobil: req.body.tipeMobil,
+        jenisPerawatan: req.body.jenisPerawatan,
+        detailPerawatan: req.body.detailPerawatan,
+        totalHarga: ''
+    }
 
     var clientCar = {
         waktuService: req.body.waktuService,
@@ -109,7 +128,7 @@ app.post('/priceChecking', async (req, res) => {
         req.flash('error', error_msg)
         res.redirect('/editBooking')
     } else {
-        let log = await dateAndTimeChecking(clientCar.waktuService, globalTanggalService)
+        let log = await dateAndTimeChecking(clientCar.waktuService, globalBooking.tanggalService)
 
         if (log.length > 0) {
             var error_msg = "Tanggal dan waktu bookingan anda tidak tersedia. Silahkan untuk menginput kembali."
@@ -121,6 +140,7 @@ app.post('/priceChecking', async (req, res) => {
                     if (err) {
                         throw err
                     } else {
+                        globalBooking.totalHarga = rows[0].harga
                         res.render('pricingDetails', {
                             namaPemilik: req.body.namaPemilik,
                             alamat: req.body.alamat,
@@ -167,10 +187,10 @@ function adminEmailNotifier() {
         to: 'malkautsars@gmail.com',
         subject: "New Incoming Booking!",
         context: {
-            name: globalNamaPemilik,
-            address: globalAlamat,
-            date: globalTanggalService,
-            time: globalWaktuServis
+            name: globalBooking.namaPemilik,
+            address: globalBooking.alamat,
+            date: globalBooking.tanggalService,
+            time: globalBooking.waktuService,
 
         },
         template: 'adminTemplate'
@@ -211,10 +231,16 @@ function customerEmailNotifier() {
         to: 'malkautsars@gmail.com',
         subject: "Booking Service Detail",
         context: {
-            name: globalNamaPemilik,
-            address: globalAlamat,
-            date: globalTanggalService,
-            time: globalWaktuServis
+            name: globalBooking.namaPemilik,
+            address: globalBooking.alamat,
+            date: globalBooking.tanggalService,
+            time: globalBooking.waktuService,
+            phoneNumber: globalBooking.nomorTelepon,
+            carBrand: globalBooking.merkMobil,
+            carType: globalBooking.tipeMobil,
+            careType: globalBooking.jenisPerawatan,
+            careDetail: globalBooking.detailPerawatan,
+            totalPrice:  globalBooking.totalHarga
 
         },
         template: 'customerTemplate'
@@ -264,7 +290,7 @@ app.post('/booked', (req, res) => {
                 } else {
                     customerEmailNotifier()
                     adminEmailNotifier()
-                    setTimeout(_ => res.render('thankyou'), 5000) 
+                    setTimeout(_ => res.render('thankyou'), 5000)
                 }
             })
         })
