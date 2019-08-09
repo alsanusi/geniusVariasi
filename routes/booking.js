@@ -16,7 +16,7 @@ var conn = mysql.createConnection({
 })
 
 // Global Variable
-var globalNamaPemilik, globalAlamat, globalTanggalService;
+var globalNamaPemilik, globalAlamat, globalTanggalService, globalWaktuServis;
 
 // Default
 app.get('/', (req, res) => {
@@ -32,18 +32,21 @@ app.get('/bookingDetails', (req, res) => {
 })
 
 app.post('/book1', (req, res) => {
-    // res.render('bookingDetails', {
-    //     namaPemilik: req.body.namaPemilik,
-    //     alamat: req.body.alamat,
-    //     nomorTelepon: '',
-    //     tanggalService: req.body.tanggalService,
-    //     waktuService: '',
-    //     merkMobil: '',
-    //     tipeMobil: '',
-    //     jenisPerawatan: '',
-    //     detailPerawatan: ''
-    // })
-    emailNotifier()
+    res.render('bookingDetails', {
+        namaPemilik: req.body.namaPemilik,
+        alamat: req.body.alamat,
+        nomorTelepon: '',
+        tanggalService: req.body.tanggalService,
+        waktuService: '',
+        merkMobil: '',
+        tipeMobil: '',
+        jenisPerawatan: '',
+        detailPerawatan: ''
+    })
+    // customerEmailNotifier()
+    // setTimeout(function() {
+    //     adminEmailNotifier()
+    // }, 5000)
 })
 
 app.route('/editBooking')
@@ -87,6 +90,7 @@ app.post('/priceChecking', async (req, res) => {
     globalNamaPemilik = req.body.namaPemilik
     globalAlamat = req.body.alamat
     globalTanggalService = req.body.tanggalService
+    globalWaktuServis = req.body.waktuService
 
     var clientCar = {
         waktuService: req.body.waktuService,
@@ -136,7 +140,7 @@ app.post('/priceChecking', async (req, res) => {
     }
 })
 
-function emailNotifier() {
+function adminEmailNotifier() {
     let transporter = nodeMailer.createTransport({
         service: 'gmail',
         auth: {
@@ -147,29 +151,73 @@ function emailNotifier() {
 
     const handlebarOptions = {
         viewEngine: {
-          extName: '.handlebars',
-          partialsDir: './views',
-          layoutsDir: './views',
-          defaultLayout: 'bookingTemplates.handlebars',
+            extName: '.handlebars',
+            partialsDir: './views',
+            layoutsDir: './views',
+            defaultLayout: 'adminTemplate.handlebars',
         },
         viewPath: './views',
         extName: '.handlebars',
-      };
-      
+    };
+
     transporter.use('compile', hbs(handlebarOptions));
 
     let mailOptions = {
         from: 'malkautsars@gmail.com',
         to: 'malkautsars@gmail.com',
-        subject: "Testing",
+        subject: "New Incoming Booking!",
         context: {
-            name: 'Alkautsar Sanusi',
-            address: 'Jln Toddopuli X No 11',
-            date: '18-08-2019',
-            time: '10 AM'
+            name: globalNamaPemilik,
+            address: globalAlamat,
+            date: globalTanggalService,
+            time: globalWaktuServis
 
         },
-        template: 'bookingTemplates'
+        template: 'adminTemplate'
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message %s sent: %s', info.messageId, info.response);
+    });
+}
+
+function customerEmailNotifier() {
+    let transporter = nodeMailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'malkautsars@gmail.com',
+            pass: 'Sesar181196'
+        }
+    });
+
+    const handlebarOptions = {
+        viewEngine: {
+            extName: '.handlebars',
+            partialsDir: './views',
+            layoutsDir: './views',
+            defaultLayout: 'customerTemplate.handlebars',
+        },
+        viewPath: './views',
+        extName: '.handlebars',
+    };
+
+    transporter.use('compile', hbs(handlebarOptions));
+
+    let mailOptions = {
+        from: 'malkautsars@gmail.com',
+        to: 'malkautsars@gmail.com',
+        subject: "Booking Service Detail",
+        context: {
+            name: globalNamaPemilik,
+            address: globalAlamat,
+            date: globalTanggalService,
+            time: globalWaktuServis
+
+        },
+        template: 'customerTemplate'
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -214,10 +262,9 @@ app.post('/booked', (req, res) => {
                     req.flash('error', err)
                     res.redirect('/bookingDetails')
                 } else {
-                    emailNotifier()
-                    setTimeout(function () {
-                        res.render('thankyou')
-                    }, 5000)
+                    customerEmailNotifier()
+                    adminEmailNotifier()
+                    setTimeout(_ => res.render('thankyou'), 5000) 
                 }
             })
         })
