@@ -3,6 +3,8 @@ const express = require('express')
 const app = express()
 const mysql = require('mysql')
 const dbConfig = require('../config')
+const nodeMailer = require('nodemailer')
+const hbs = require('nodemailer-express-handlebars')
 
 // SingleUse Database Connection
 var conn = mysql.createConnection({
@@ -14,7 +16,7 @@ var conn = mysql.createConnection({
 })
 
 // Global Variable
-var globalNamaPemilik, globalAlamat, globalTanggalService;
+var globalNamaPemilik, globalAlamat, globalTanggalService, globalWaktuServis;
 
 // Default
 app.get('/', (req, res) => {
@@ -41,6 +43,10 @@ app.post('/book1', (req, res) => {
         jenisPerawatan: '',
         detailPerawatan: ''
     })
+    // customerEmailNotifier()
+    // setTimeout(function() {
+    //     adminEmailNotifier()
+    // }, 5000)
 })
 
 app.route('/editBooking')
@@ -80,49 +86,147 @@ function dateAndTimeChecking(time, date) {
 }
 
 app.post('/priceChecking', async (req, res) => {
+    // Set Global Variable
+    globalNamaPemilik = req.body.namaPemilik
+    globalAlamat = req.body.alamat
+    globalTanggalService = req.body.tanggalService
+    globalWaktuServis = req.body.waktuService
+
     var clientCar = {
+        waktuService: req.body.waktuService,
         merkMobil: req.body.merkMobil,
         tipeMobil: req.body.tipeMobil,
         jenisPerawatan: req.body.jenisPerawatan,
         detailPerawatan: req.body.detailPerawatan
     }
 
-    // Set Global Variable
-    globalNamaPemilik = req.body.namaPemilik
-    globalAlamat = req.body.alamat
-    globalTanggalService = req.body.tanggalService
-
-    getTime = req.body.waktuService
-
-    let log = await dateAndTimeChecking(getTime, globalTanggalService)
-
-    if (log.length > 0) {
-        var error_msg = "Tanggal dan waktu bookingan anda tidak tersedia. Silahkan untuk menginput kembali."
+    if (clientCar.waktuService === undefined) {
+        var error_msg = "Silahkan mengisi waktu booking servis anda."
+        req.flash('error', error_msg)
+        res.redirect('/editBooking')
+    } else if (clientCar.merkMobil === undefined || clientCar.tipeMobil === undefined || clientCar.jenisPerawatan === undefined || clientCar.detailPerawatan === undefined) {
+        var error_msg = "Silahkan mengisi data mobil anda."
         req.flash('error', error_msg)
         res.redirect('/editBooking')
     } else {
-        req.getConnection(function (err, con) {
-            con.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + clientCar.merkMobil + "' AND tipeMobil= '" + clientCar.tipeMobil + "' AND jenisPerawatan= '" + clientCar.jenisPerawatan + "' AND detailPerawatan= '" + clientCar.detailPerawatan + "'; ", function (err, rows, fields) {
-                if (err) {
-                    throw err
-                } else {
-                    res.render('pricingDetails', {
-                        namaPemilik: req.body.namaPemilik,
-                        alamat: req.body.alamat,
-                        nomorTelepon: req.body.nomorTelepon,
-                        tanggalService: req.body.tanggalService,
-                        waktuService: req.body.waktuService,
-                        merkMobil: req.body.merkMobil,
-                        tipeMobil: req.body.tipeMobil,
-                        jenisPerawatan: req.body.jenisPerawatan,
-                        detailPerawatan: req.body.detailPerawatan,
-                        harga: rows[0].harga,
-                    })
-                }
+        let log = await dateAndTimeChecking(clientCar.waktuService, globalTanggalService)
+
+        if (log.length > 0) {
+            var error_msg = "Tanggal dan waktu bookingan anda tidak tersedia. Silahkan untuk menginput kembali."
+            req.flash('error', error_msg)
+            res.redirect('/editBooking')
+        } else {
+            req.getConnection(function (err, con) {
+                con.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + clientCar.merkMobil + "' AND tipeMobil= '" + clientCar.tipeMobil + "' AND jenisPerawatan= '" + clientCar.jenisPerawatan + "' AND detailPerawatan= '" + clientCar.detailPerawatan + "'; ", function (err, rows, fields) {
+                    if (err) {
+                        throw err
+                    } else {
+                        res.render('pricingDetails', {
+                            namaPemilik: req.body.namaPemilik,
+                            alamat: req.body.alamat,
+                            nomorTelepon: req.body.nomorTelepon,
+                            tanggalService: req.body.tanggalService,
+                            waktuService: req.body.waktuService,
+                            merkMobil: req.body.merkMobil,
+                            tipeMobil: req.body.tipeMobil,
+                            jenisPerawatan: req.body.jenisPerawatan,
+                            detailPerawatan: req.body.detailPerawatan,
+                            harga: rows[0].harga,
+                        })
+                    }
+                })
             })
-        })
+        }
     }
 })
+
+function adminEmailNotifier() {
+    let transporter = nodeMailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'malkautsars@gmail.com',
+            pass: 'Sesar181196'
+        }
+    });
+
+    const handlebarOptions = {
+        viewEngine: {
+            extName: '.handlebars',
+            partialsDir: './views',
+            layoutsDir: './views',
+            defaultLayout: 'adminTemplate.handlebars',
+        },
+        viewPath: './views',
+        extName: '.handlebars',
+    };
+
+    transporter.use('compile', hbs(handlebarOptions));
+
+    let mailOptions = {
+        from: 'malkautsars@gmail.com',
+        to: 'malkautsars@gmail.com',
+        subject: "New Incoming Booking!",
+        context: {
+            name: globalNamaPemilik,
+            address: globalAlamat,
+            date: globalTanggalService,
+            time: globalWaktuServis
+
+        },
+        template: 'adminTemplate'
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message %s sent: %s', info.messageId, info.response);
+    });
+}
+
+function customerEmailNotifier() {
+    let transporter = nodeMailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'malkautsars@gmail.com',
+            pass: 'Sesar181196'
+        }
+    });
+
+    const handlebarOptions = {
+        viewEngine: {
+            extName: '.handlebars',
+            partialsDir: './views',
+            layoutsDir: './views',
+            defaultLayout: 'customerTemplate.handlebars',
+        },
+        viewPath: './views',
+        extName: '.handlebars',
+    };
+
+    transporter.use('compile', hbs(handlebarOptions));
+
+    let mailOptions = {
+        from: 'malkautsars@gmail.com',
+        to: 'malkautsars@gmail.com',
+        subject: "Booking Service Detail",
+        context: {
+            name: globalNamaPemilik,
+            address: globalAlamat,
+            date: globalTanggalService,
+            time: globalWaktuServis
+
+        },
+        template: 'customerTemplate'
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message %s sent: %s', info.messageId, info.response);
+    });
+}
 
 app.post('/booked', (req, res) => {
     //Input Form Validation
@@ -158,7 +262,9 @@ app.post('/booked', (req, res) => {
                     req.flash('error', err)
                     res.redirect('/bookingDetails')
                 } else {
-                    res.render('thankyou')
+                    customerEmailNotifier()
+                    adminEmailNotifier()
+                    setTimeout(_ => res.render('thankyou'), 5000) 
                 }
             })
         })
