@@ -292,7 +292,7 @@
                                              <ul class="pagination justify-content-end mb-0">
                                                  <% if (currentPage > 1) { %>
                                                  <li class="page-item active">
-                                                     <a class="page-link" href="/panel/bookingList?page=1">&laquo;</a>
+                                                     <a class="page-link" href="/panel/dashboard?page=1">&laquo;</a>
                                                  </li>
                                                  <% } %>
                                                  <% var i = 1;
@@ -308,7 +308,7 @@
                                                  </li>
                                                  <% } else { %>
                                                  <li class="page-item active"><a class="page-link"
-                                                         href="/panel/bookingList?page=<%= i %>"><%= i %></a></li>
+                                                         href="/panel/dashboard?page=<%= i %>"><%= i %></a></li>
                                                  <% } %>
                                                  <% if (i == (+currentPage + 2)) { %>
                                                  <li class="page-item disabled"><a class="page-link" href="#">...</a>
@@ -317,7 +317,7 @@
                                                  <% } %>
                                                  <% if (currentPage != pageCount) { %>
                                                  <li class="page-item disabled"><a class="page-link"
-                                                         href="/panel/bookingList/?page=<%= pageCount %>">&raquo;</a>
+                                                         href="/panel/dashboard/?page=<%= pageCount %>">&raquo;</a>
                                                  </li>
                                                  <% } %>
                                              </ul>
