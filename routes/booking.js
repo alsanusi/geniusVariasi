@@ -261,6 +261,7 @@ function customerEmailNotifier() {
 app.post('/booked', (req, res) => {
     //Input Form Validation
     req.assert('namaPemilik', 'Silahkan Input Nama Lengkap Anda!').notEmpty()
+    req.assert('email', 'Silahkan Input Email Anda!').notEmpty()
     req.assert('alamat', 'Silahkan Input Alamat Anda!').notEmpty()
     req.assert('nomorTelepon', 'Silahkan Input Nomor Telepon Anda!').notEmpty()
     req.assert('tanggalService', 'Silahkan Pilih Tanggal Service Anda!').notEmpty()
@@ -275,6 +276,7 @@ app.post('/booked', (req, res) => {
     if (!errors) {
         var clientData = {
             namaPemilik: req.sanitize('namaPemilik').escape().trim(),
+            email: req.sanitize('email').escape().trim(),
             alamat: req.sanitize('alamat').escape().trim(),
             nomorTelepon: req.sanitize('nomorTelepon').escape().trim(),
             tanggalService: req.sanitize('tanggalService').escape().trim(),
