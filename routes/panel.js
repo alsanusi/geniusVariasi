@@ -110,11 +110,11 @@ app.post('/login', redirectHome, (req, res) => {
 
 app.get('/dashboard', (req, res) => {
     mysql.createConnection(config.database).then(function (con) {
-        con.query('SELECT * FROM bookingList').then(rows => {
+        con.query('SELECT * FROM bookingList ORDER BY ID DESC').then(rows => {
                 // Table Pagination
                 var totalOnGoingBooking = filterBookingNotDone(rows),
                     pageSize = 8,
-                    pageCount = totalOnGoingBooking / 8,
+                    pageCount = totalOnGoingBooking / 4,
                     currentPage = 1,
                     onGoingBookingArray = [],
                     onGoingBookingList = [],
@@ -132,7 +132,7 @@ app.get('/dashboard', (req, res) => {
 
                 // Show list of not done booking
                 onGoingBookingList = onGoingBookingArray[+currentPage - 1];
-
+            
                 res.render('indexPanel', {
                     totalBooking: rows.length,
                     doneBooking: filterBookingDone(rows),
@@ -148,7 +148,11 @@ app.get('/dashboard', (req, res) => {
             .catch(err => {
                 res.render('indexPanel', {
                     totalBooking: '',
-                    bookingList: ''
+                    bookingList: '',
+                    pageSize: '',
+                    totalOnGoingBooking: '',
+                    pageCount: '',
+                    currentPage: ''
                 })
             })
     })
