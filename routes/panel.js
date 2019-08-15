@@ -218,7 +218,7 @@ app.post('/report', async (req, res) => {
                     style: 'header'
                 },
                 {
-                    text: 'Genius Car Repair Monthly Report',
+                    text: 'CarGenius Monthly Report',
                     style: 'subHeader',
                     lineHeight: 2
                 },
