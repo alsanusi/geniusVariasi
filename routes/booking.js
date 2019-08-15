@@ -18,6 +18,7 @@ var conn = mysql.createConnection({
 // Global Variable
 var globalBooking = {
     namaPemilik: '',
+    email: '',
     alamat: '',
     nomorTelepon: '',
     tanggalService: '',
@@ -45,6 +46,7 @@ app.get('/bookingDetails', (req, res) => {
 app.post('/book1', (req, res) => {
     res.render('bookingDetails', {
         namaPemilik: req.body.namaPemilik,
+        email: '',
         alamat: req.body.alamat,
         nomorTelepon: '',
         tanggalService: req.body.tanggalService,
@@ -54,16 +56,13 @@ app.post('/book1', (req, res) => {
         jenisPerawatan: '',
         detailPerawatan: ''
     })
-    // customerEmailNotifier()
-    // setTimeout(function() {
-    //     adminEmailNotifier()
-    // }, 5000)
 })
 
 app.route('/editBooking')
     .get((req, res) => {
         res.render('bookingDetails', {
             namaPemilik: globalBooking.namaPemilik,
+            email: globalBooking.email,
             alamat: globalBooking.alamat,
             nomorTelepon: '',
             tanggalService: globalBooking.tanggalService,
@@ -77,6 +76,7 @@ app.route('/editBooking')
     .post((req, res) => {
         res.render('bookingDetails', {
             namaPemilik: globalBooking.namaPemilik,
+            email: globalBooking.email,
             alamat: globalBooking.alamat,
             nomorTelepon: '',
             tanggalService: globalBooking.tanggalService,
@@ -100,6 +100,7 @@ app.post('/priceChecking', async (req, res) => {
     // Set Global Variable
     globalBooking = {
         namaPemilik: req.body.namaPemilik,
+        email: req.body.email,
         alamat: req.body.alamat,
         tanggalService: req.body.tanggalService,
         waktuService: req.body.waktuService,
@@ -113,13 +114,15 @@ app.post('/priceChecking', async (req, res) => {
 
     var clientCar = {
         waktuService: req.body.waktuService,
-        merkMobil: req.body.merkMobil,
-        tipeMobil: req.body.tipeMobil,
-        jenisPerawatan: req.body.jenisPerawatan,
-        detailPerawatan: req.body.detailPerawatan
+        merkMobil: [req.body.merkMobil],
+        tipeMobil: [req.body.tipeMobil],
+        jenisPerawatan: [req.body.jenisPerawatan],
+        detailPerawatan: [req.body.detailPerawatan]
     }
 
-    if (clientCar.waktuService === undefined) {
+    if (clientCar.merkMobil.length > 1 || clientCar.tipeMobil.length > 1 || clientCar.jenisPerawatan.length > 1 || clientCar.detailPerawatan.length > 1) {
+        res.redirect('/editBooking')
+    } else if (clientCar.waktuService === undefined) {
         var error_msg = "Silahkan mengisi waktu booking servis anda."
         req.flash('error', error_msg)
         res.redirect('/editBooking')
@@ -143,6 +146,7 @@ app.post('/priceChecking', async (req, res) => {
                         globalBooking.totalHarga = rows[0].harga
                         res.render('pricingDetails', {
                             namaPemilik: req.body.namaPemilik,
+                            email: req.body.email,
                             alamat: req.body.alamat,
                             nomorTelepon: req.body.nomorTelepon,
                             tanggalService: req.body.tanggalService,
@@ -228,7 +232,7 @@ function customerEmailNotifier() {
 
     let mailOptions = {
         from: 'malkautsars@gmail.com',
-        to: 'malkautsars@gmail.com',
+        to: globalBooking.email,
         subject: "Booking Service Detail",
         context: {
             name: globalBooking.namaPemilik,
@@ -240,7 +244,7 @@ function customerEmailNotifier() {
             carType: globalBooking.tipeMobil,
             careType: globalBooking.jenisPerawatan,
             careDetail: globalBooking.detailPerawatan,
-            totalPrice:  globalBooking.totalHarga
+            totalPrice: globalBooking.totalHarga
 
         },
         template: 'customerTemplate'
