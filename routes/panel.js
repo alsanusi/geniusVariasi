@@ -453,11 +453,11 @@ app.route('/showDetails/(:id)')
 
 app.get('/bookingList', (req, res) => {
     mysql.createConnection(config.database).then(function (con) {
-        con.query('SELECT * FROM bookingList').then(rows => {
+        con.query('SELECT * FROM bookingList ORDER BY ID DESC').then(rows => {
                 // Table Pagination
                 var totalDoneBooking = filterBookingDone(rows),
                     pageSize = 8,
-                    pageCount = totalDoneBooking / 8,
+                    pageCount = totalDoneBooking / 4,
                     currentPage = 1,
                     doneBookingsArray = [],
                     doneBookingList = [],
