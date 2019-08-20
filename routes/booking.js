@@ -27,6 +27,7 @@ var globalBooking = {
     tipeMobil: '',
     jenisPerawatan: '',
     detailPerawatan: '',
+    // kuantiti: 0,
     totalHarga: ''
 }
 
@@ -55,6 +56,7 @@ app.post('/book1', (req, res) => {
         tipeMobil: '',
         jenisPerawatan: '',
         detailPerawatan: '',
+        kuantiti: ''
     })
 })
 
@@ -70,7 +72,8 @@ app.route('/editBooking')
             merkMobil: '',
             tipeMobil: '',
             jenisPerawatan: '',
-            detailPerawatan: ''
+            detailPerawatan: '',
+            kuantiti: ''
         })
     })
     .post((req, res) => {
@@ -84,7 +87,8 @@ app.route('/editBooking')
             merkMobil: '',
             tipeMobil: '',
             jenisPerawatan: '',
-            detailPerawatan: ''
+            detailPerawatan: '',
+            kuantiti: ''
         })
     })
 
@@ -109,8 +113,11 @@ app.post('/priceChecking', async (req, res) => {
         tipeMobil: req.body.tipeMobil,
         jenisPerawatan: req.body.jenisPerawatan,
         detailPerawatan: req.body.detailPerawatan,
+        kuantiti: req.body.kuantiti ? req.body.kuantiti : 1,
         totalHarga: ''
     }
+
+    var priceTotal;
 
     var clientCar = {
         waktuService: req.body.waktuService,
@@ -144,6 +151,7 @@ app.post('/priceChecking', async (req, res) => {
                         throw err
                     } else {
                         globalBooking.totalHarga = rows[0].harga
+                        priceTotal = globalBooking.kuantiti * globalBooking.totalHarga;
                         res.render('pricingDetails', {
                             namaPemilik: req.body.namaPemilik,
                             email: req.body.email,
@@ -155,7 +163,8 @@ app.post('/priceChecking', async (req, res) => {
                             tipeMobil: req.body.tipeMobil,
                             jenisPerawatan: req.body.jenisPerawatan,
                             detailPerawatan: req.body.detailPerawatan,
-                            harga: rows[0].harga,
+                            kuantiti: req.body.kuantiti ? req.body.kuantiti : 1,
+                            harga: priceTotal
                         })
                     }
                 })
@@ -285,6 +294,7 @@ app.post('/booked', (req, res) => {
             tipeMobil: req.sanitize('tipeMobil').escape().trim(),
             jenisPerawatan: req.sanitize('jenisPerawatan').escape().trim(),
             detailPerawatan: req.sanitize('detailPerawatan').escape().trim(),
+            kuantiti: req.sanitize('kuantiti').escape().trim(),
             harga: req.sanitize('harga').escape().trim(),
             done_flag: 'N'
         }
