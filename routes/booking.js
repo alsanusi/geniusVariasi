@@ -54,8 +54,10 @@ app.post('/book1', (req, res) => {
         merkMobil: '',
         tipeMobil: '',
         jenisPerawatan: '',
-        detailPerawatan: ''
+        detailPerawatan: '',
     })
+    var today = new Date();
+    console.log(today)
 })
 
 app.route('/editBooking')
