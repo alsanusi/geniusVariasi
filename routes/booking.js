@@ -56,8 +56,6 @@ app.post('/book1', (req, res) => {
         jenisPerawatan: '',
         detailPerawatan: '',
     })
-    var today = new Date();
-    console.log(today)
 })
 
 app.route('/editBooking')
