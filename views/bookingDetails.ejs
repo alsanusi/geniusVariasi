@@ -84,22 +84,45 @@
                              <h3 class="h4 text-black mb-4">Data Personal Anda.</h3>
                              <!-- Data Personal -->
                              <div class="form-group">
-                                 <input type="text" class="form-control" name="namaPemilik" placeholder="Nama Pemilik"
+                                 <label for="name">Nama Lengkap</label>
+                                 <input type="text" class="form-control" name="namaPemilik" placeholder="Nama Lengkap"
                                      value="<%= namaPemilik %>" required>
                              </div>
                              <div class="form-group">
+                                 <label for="name">Email</label>
+                                 <input type="email" class="form-control" name="email" placeholder="Email"
+                                     value="<%= email %>" required>
+                             </div>
+                             <div class="form-group">
+                                 <label for="name">Alamat Lengkap</label>
                                  <input type="text" class="form-control" name="alamat" placeholder="Alamat"
                                      value="<%= alamat %>" required>
                              </div>
                              <div class="form-group">
+                                 <label for="name">Nomor Telepon</label>
                                  <input type="text" class="form-control" name="nomorTelepon" placeholder="Nomor Telepon"
                                      required>
                              </div>
                              <div class="form-group">
+                                 <label for="name">Tanggal Service</label>
                                  <input type="date" id="bookingDate" class="form-control" name="tanggalService"
                                      placeholder="Tanggal Service" value="<%= tanggalService %>" required>
                              </div>
+                             <script>
+                                 const picker = document.getElementById('bookingDate');
+                                 picker.addEventListener('input', function (e) {
+                                     var day = new Date(this.value).getUTCDay();
+                                     if ([6, 0].includes(day)) {
+                                         e.preventDefault();
+                                         this.value = '';
+                                         alert(
+                                             'Maaf kami sedang libur :), silahkan memilih tanggal yang lain.'
+                                         );
+                                     }
+                                 });
+                             </script>
                              <div class="form-group">
+                                 <label for="name">Waktu Service</label>
                                  <select class="form-control" name="waktuService">
                                      <option disabled selected>Pilih Waktu Service</option>
                                      <option value="10 AM">10 AM</option>
@@ -114,6 +137,7 @@
                              <h3 class="h4 text-black mb-4">Data Mobil Anda.</h3>
                              <!-- Data Kendaraan -->
                              <div class="form-group">
+                                 <label for="name">Merk Mobil</label>
                                  <select class="form-control" onchange="onSelectMerk(this)" name="merkMobil">
                                      <option disabled selected>Pilih Merk Mobil</option>
                                      <option value="Toyota">Toyota</option>
@@ -256,6 +280,7 @@
                              <!-- Model Kendaraan -->
                              <!-- Toyota -->
                              <div id="toyota" style="display:none" class="form-group">
+                                 <label for="name">Tipe Mobil</label>
                                  <select class="form-control" name="tipeMobil">
                                      <option disabled selected>Pilih Model Mobil</option>
                                      <option value="Agya">Agya</option>
@@ -278,7 +303,8 @@
                              </div>
                              <!-- Honda -->
                              <div id="honda" style="display:none" class="form-group">
-                                 <select class="form-control" name="tipeMobil" >
+                                 <label for="name">Tipe Mobil</label>
+                                 <select class="form-control" name="tipeMobil">
                                      <option disabled selected>Pilih Model Mobil</option>
                                      <option value="Civic">Civic</option>
                                      <option value="CR-V">CR-V</option>
@@ -292,6 +318,7 @@
                              </div>
                              <!-- Suzuki -->
                              <div id="suzuki" style="display:none" class="form-group">
+                                 <label for="name">Tipe Mobil</label>
                                  <select class="form-control" name="tipeMobil">
                                      <option disabled selected>Pilih Model Mobil</option>
                                      <option value="Carry">Carry</option>
@@ -305,6 +332,7 @@
                              </div>
                              <!-- Hyundai -->
                              <div id="hyundai" style="display:none" class="form-group">
+                                 <label for="name">Tipe Mobil</label>
                                  <select class="form-control" name="tipeMobil">
                                      <option disabled selected>Pilih Model Mobil</option>
                                      <option value="Kona">Kona</option>
@@ -319,6 +347,7 @@
                              </div>
                              <!-- Nissan -->
                              <div id="nissan" style="display:none" class="form-group">
+                                 <label for="name">Tipe Mobil</label>
                                  <select class="form-control" name="tipeMobil">
                                      <option disabled selected>Pilih Model Mobil</option>
                                      <option value="Livina">Livina</option>
@@ -331,6 +360,7 @@
                              </div>
                              <!-- Datsun -->
                              <div id="datsun" style="display:none" class="form-group">
+                                 <label for="name">Tipe Mobil</label>
                                  <select class="form-control" name="tipeMobil">
                                      <option disabled selected>Pilih Model Mobil</option>
                                      <option value="Cross">Cross</option>
@@ -340,6 +370,7 @@
                              </div>
                              <!-- Daihatsu -->
                              <div id="daihatsu" style="display:none" class="form-group">
+                                 <label for="name">Tipe Mobil</label>
                                  <select class="form-control" name="tipeMobil">
                                      <option disabled selected>Pilih Model Mobil</option>
                                      <option value="Ayla">Ayla</option>
@@ -355,6 +386,7 @@
                              </div>
                              <!-- Chevrolet -->
                              <div id="chevrolet" style="display:none" class="form-group">
+                                 <label for="name">Tipe Mobil</label>
                                  <select class="form-control" name="tipeMobil">
                                      <option disabled selected>Pilih Model Mobil</option>
                                      <option value="Captiva">Captiva</option>
@@ -366,6 +398,7 @@
                              </div>
                              <!-- Ford -->
                              <div id="ford" style="display:none" class="form-group">
+                                 <label for="name">Tipe Mobil</label>
                                  <select class="form-control" name="tipeMobil">
                                      <option disabled selected> Pilih Model Mobil</option>
                                      <option value="Ranger">Ranger</option>
@@ -377,6 +410,7 @@
                              </div>
                              <!-- Jenis Perawatan -->
                              <div id="perawatanMobil" style="display:none" class="form-group">
+                                 <label for="name">Jenis Perawatan</label>
                                  <select class="form-control" onchange="onSelectPerawatan(this)" name="jenisPerawatan">
                                      <option disabled selected>Pilih Jenis Perawatan Mobil</option>
                                      <option value="Perawatan Khusus">Perawatan Khusus</option>
@@ -413,7 +447,8 @@
                              <!-- Detail Perawatan -->
                              <!-- Perawatan Khusus -->
                              <div id="khusus" style="display:none" class="form-group">
-                                 <select class="form-control" name="detailPerawatan">
+                                 <label for="name">Detail Perawatan</label>
+                                 <select class="form-control" onchange="onSelectKhusus(this)" name="detailPerawatan">
                                      <option disabled selected>Pilih Detail Perawatan Mobil</option>
                                      <option value="Kampas Rem">Kampas Rem</option>
                                      <option value="Kampas Kopling">Kampas Kopling</option>
@@ -428,6 +463,7 @@
                              </div>
                              <!-- Variasi / Aksesoris Tambahan -->
                              <div id="variasi" style="display:none" class="form-group">
+                                 <label for="name">Detail Perawatan</label>
                                  <select class="form-control" name="detailPerawatan">
                                      <option disabled selected>Pilih Detail Perawatan Mobil</option>
                                      <option value="Kampas Rem">Kaca Film</option>
@@ -445,11 +481,45 @@
                              </div>
                              <!-- Car Care -->
                              <div id="carCare" style="display:none" class="form-group">
+                                 <label for="name">Detail Perawatan</label>
                                  <select class="form-control" name="detailPerawatan">
                                      <option disabled selected>Pilih Detail Perawatan Mobil</option>
                                      <option value="Cuci Mobil Luar dan Dalam">Cuci Mobil Luar dan Dalam</option>
                                      <option value="Poles Full Body">Poles Full Body</option>
                                  </select>
+                             </div>
+                             <!-- Validasi Kuantiti -->
+                             <script>
+                                 function onSelectKhusus(detailPerawatan) {
+                                     switch (detailPerawatan.value) {
+                                         case "Kampas Rem":
+                                             document.getElementById("kuantiti").style.display = "block";
+                                             break;
+                                         case "Kampas Kopling":
+                                             document.getElementById("kuantiti").style.display = "block";
+                                             break;
+                                         case "Shock Breaker":
+                                             document.getElementById("kuantiti").style.display = "block";
+                                             break;
+                                         case "Ban":
+                                             document.getElementById("kuantiti").style.display = "block";
+                                             break;
+                                         case "Aki":
+                                             document.getElementById("kuantiti").style.display = "block";
+                                             break;
+                                         case "Lahar Roda":
+                                             document.getElementById("kuantiti").style.display = "block";
+                                             break;
+                                         default:
+                                             document.getElementById("kuantiti").style.display = "none";
+                                     }
+                                 }
+                             </script>
+                             <!-- Kuantiti -->
+                             <div id="kuantiti" style="display:none" class="form-group">
+                                 <label for="name">Kuantiti</label>
+                                 <input type="text" class="form-control" name="kuantiti" placeholder="Kuantiti"
+                                     value="<%= kuantiti %>">
                              </div>
                              <div class="form-group">
                                  <input type="submit" class="btn btn-primary btn-pill" value="Kalkulasi Harga">

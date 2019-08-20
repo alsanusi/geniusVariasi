@@ -18,6 +18,7 @@ var conn = mysql.createConnection({
 // Global Variable
 var globalBooking = {
     namaPemilik: '',
+    email: '',
     alamat: '',
     nomorTelepon: '',
     tanggalService: '',
@@ -26,6 +27,7 @@ var globalBooking = {
     tipeMobil: '',
     jenisPerawatan: '',
     detailPerawatan: '',
+    // kuantiti: 0,
     totalHarga: ''
 }
 
@@ -45,6 +47,7 @@ app.get('/bookingDetails', (req, res) => {
 app.post('/book1', (req, res) => {
     res.render('bookingDetails', {
         namaPemilik: req.body.namaPemilik,
+        email: '',
         alamat: req.body.alamat,
         nomorTelepon: '',
         tanggalService: req.body.tanggalService,
@@ -52,18 +55,16 @@ app.post('/book1', (req, res) => {
         merkMobil: '',
         tipeMobil: '',
         jenisPerawatan: '',
-        detailPerawatan: ''
+        detailPerawatan: '',
+        kuantiti: ''
     })
-    // customerEmailNotifier()
-    // setTimeout(function() {
-    //     adminEmailNotifier()
-    // }, 5000)
 })
 
 app.route('/editBooking')
     .get((req, res) => {
         res.render('bookingDetails', {
             namaPemilik: globalBooking.namaPemilik,
+            email: globalBooking.email,
             alamat: globalBooking.alamat,
             nomorTelepon: '',
             tanggalService: globalBooking.tanggalService,
@@ -71,12 +72,14 @@ app.route('/editBooking')
             merkMobil: '',
             tipeMobil: '',
             jenisPerawatan: '',
-            detailPerawatan: ''
+            detailPerawatan: '',
+            kuantiti: ''
         })
     })
     .post((req, res) => {
         res.render('bookingDetails', {
             namaPemilik: globalBooking.namaPemilik,
+            email: globalBooking.email,
             alamat: globalBooking.alamat,
             nomorTelepon: '',
             tanggalService: globalBooking.tanggalService,
@@ -84,7 +87,8 @@ app.route('/editBooking')
             merkMobil: '',
             tipeMobil: '',
             jenisPerawatan: '',
-            detailPerawatan: ''
+            detailPerawatan: '',
+            kuantiti: ''
         })
     })
 
@@ -100,6 +104,7 @@ app.post('/priceChecking', async (req, res) => {
     // Set Global Variable
     globalBooking = {
         namaPemilik: req.body.namaPemilik,
+        email: req.body.email,
         alamat: req.body.alamat,
         tanggalService: req.body.tanggalService,
         waktuService: req.body.waktuService,
@@ -108,18 +113,23 @@ app.post('/priceChecking', async (req, res) => {
         tipeMobil: req.body.tipeMobil,
         jenisPerawatan: req.body.jenisPerawatan,
         detailPerawatan: req.body.detailPerawatan,
+        kuantiti: req.body.kuantiti ? req.body.kuantiti : 1,
         totalHarga: ''
     }
 
+    var priceTotal;
+
     var clientCar = {
         waktuService: req.body.waktuService,
-        merkMobil: req.body.merkMobil,
-        tipeMobil: req.body.tipeMobil,
-        jenisPerawatan: req.body.jenisPerawatan,
-        detailPerawatan: req.body.detailPerawatan
+        merkMobil: [req.body.merkMobil],
+        tipeMobil: [req.body.tipeMobil],
+        jenisPerawatan: [req.body.jenisPerawatan],
+        detailPerawatan: [req.body.detailPerawatan]
     }
 
-    if (clientCar.waktuService === undefined) {
+    if (clientCar.merkMobil.length > 1 || clientCar.tipeMobil.length > 1 || clientCar.jenisPerawatan.length > 1 || clientCar.detailPerawatan.length > 1) {
+        res.redirect('/editBooking')
+    } else if (clientCar.waktuService === undefined) {
         var error_msg = "Silahkan mengisi waktu booking servis anda."
         req.flash('error', error_msg)
         res.redirect('/editBooking')
@@ -141,8 +151,10 @@ app.post('/priceChecking', async (req, res) => {
                         throw err
                     } else {
                         globalBooking.totalHarga = rows[0].harga
+                        priceTotal = globalBooking.kuantiti * globalBooking.totalHarga;
                         res.render('pricingDetails', {
                             namaPemilik: req.body.namaPemilik,
+                            email: req.body.email,
                             alamat: req.body.alamat,
                             nomorTelepon: req.body.nomorTelepon,
                             tanggalService: req.body.tanggalService,
@@ -151,7 +163,8 @@ app.post('/priceChecking', async (req, res) => {
                             tipeMobil: req.body.tipeMobil,
                             jenisPerawatan: req.body.jenisPerawatan,
                             detailPerawatan: req.body.detailPerawatan,
-                            harga: rows[0].harga,
+                            kuantiti: req.body.kuantiti ? req.body.kuantiti : 1,
+                            harga: priceTotal
                         })
                     }
                 })
@@ -228,7 +241,7 @@ function customerEmailNotifier() {
 
     let mailOptions = {
         from: 'malkautsars@gmail.com',
-        to: 'malkautsars@gmail.com',
+        to: globalBooking.email,
         subject: "Booking Service Detail",
         context: {
             name: globalBooking.namaPemilik,
@@ -240,7 +253,7 @@ function customerEmailNotifier() {
             carType: globalBooking.tipeMobil,
             careType: globalBooking.jenisPerawatan,
             careDetail: globalBooking.detailPerawatan,
-            totalPrice:  globalBooking.totalHarga
+            totalPrice: globalBooking.totalHarga
 
         },
         template: 'customerTemplate'
@@ -257,6 +270,7 @@ function customerEmailNotifier() {
 app.post('/booked', (req, res) => {
     //Input Form Validation
     req.assert('namaPemilik', 'Silahkan Input Nama Lengkap Anda!').notEmpty()
+    req.assert('email', 'Silahkan Input Email Anda!').notEmpty()
     req.assert('alamat', 'Silahkan Input Alamat Anda!').notEmpty()
     req.assert('nomorTelepon', 'Silahkan Input Nomor Telepon Anda!').notEmpty()
     req.assert('tanggalService', 'Silahkan Pilih Tanggal Service Anda!').notEmpty()
@@ -271,6 +285,7 @@ app.post('/booked', (req, res) => {
     if (!errors) {
         var clientData = {
             namaPemilik: req.sanitize('namaPemilik').escape().trim(),
+            email: req.sanitize('email').escape().trim(),
             alamat: req.sanitize('alamat').escape().trim(),
             nomorTelepon: req.sanitize('nomorTelepon').escape().trim(),
             tanggalService: req.sanitize('tanggalService').escape().trim(),
@@ -279,6 +294,7 @@ app.post('/booked', (req, res) => {
             tipeMobil: req.sanitize('tipeMobil').escape().trim(),
             jenisPerawatan: req.sanitize('jenisPerawatan').escape().trim(),
             detailPerawatan: req.sanitize('detailPerawatan').escape().trim(),
+            kuantiti: req.sanitize('kuantiti').escape().trim(),
             harga: req.sanitize('harga').escape().trim(),
             done_flag: 'N'
         }

@@ -256,10 +256,10 @@
                                      <% } %>
                                      <% for (i; i<=pageCount; i++) { %>
                                      <% if (currentPage == i) { %>
-                                     <li class="page-item"><a class="page-link"><%= i %> </a>
+                                     <li class="page-item active"><a class="page-link"><%= i %> </a>
                                      </li>
                                      <% } else { %>
-                                     <li class="page-item active"><a class="page-link"
+                                     <li class="page-item"><a class="page-link"
                                              href="/panel/bookingList?page=<%= i %>"><%= i %></a></li>
                                      <% } %>
                                      <% if (i == (+currentPage + 2)) { %>
