@@ -56,7 +56,8 @@ app.post('/book1', (req, res) => {
         tipeMobil: '',
         jenisPerawatan: '',
         detailPerawatan: '',
-        kuantiti: ''
+        kuantiti: '',
+        deskripsiKerusakan: ''
     })
 })
 
@@ -114,6 +115,7 @@ app.post('/priceChecking', async (req, res) => {
         jenisPerawatan: req.body.jenisPerawatan,
         detailPerawatan: req.body.detailPerawatan,
         kuantiti: req.body.kuantiti ? req.body.kuantiti : 1,
+        deskripsiKerusakan: req.body.deskripsiKerusakan,
         totalHarga: ''
     }
 
@@ -138,37 +140,56 @@ app.post('/priceChecking', async (req, res) => {
         req.flash('error', error_msg)
         res.redirect('/editBooking')
     } else {
-        let log = await dateAndTimeChecking(clientCar.waktuService, globalBooking.tanggalService)
-
-        if (log.length > 0) {
-            var error_msg = "Tanggal dan waktu bookingan anda tidak tersedia. Silahkan untuk menginput kembali."
-            req.flash('error', error_msg)
-            res.redirect('/editBooking')
-        } else {
-            req.getConnection(function (err, con) {
-                con.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + clientCar.merkMobil + "' AND tipeMobil= '" + clientCar.tipeMobil + "' AND jenisPerawatan= '" + clientCar.jenisPerawatan + "' AND detailPerawatan= '" + clientCar.detailPerawatan + "'; ", function (err, rows, fields) {
-                    if (err) {
-                        throw err
-                    } else {
-                        globalBooking.totalHarga = rows[0].harga
-                        priceTotal = globalBooking.kuantiti * globalBooking.totalHarga;
-                        res.render('pricingDetails', {
-                            namaPemilik: req.body.namaPemilik,
-                            email: req.body.email,
-                            alamat: req.body.alamat,
-                            nomorTelepon: req.body.nomorTelepon,
-                            tanggalService: req.body.tanggalService,
-                            waktuService: req.body.waktuService,
-                            merkMobil: req.body.merkMobil,
-                            tipeMobil: req.body.tipeMobil,
-                            jenisPerawatan: req.body.jenisPerawatan,
-                            detailPerawatan: req.body.detailPerawatan,
-                            kuantiti: req.body.kuantiti ? req.body.kuantiti : 1,
-                            harga: priceTotal
-                        })
-                    }
-                })
+        if (globalBooking.hasOwnProperty('deskripsiKerusakan')) {
+            res.render('pricingDetails', {
+                namaPemilik: req.body.namaPemilik,
+                email: req.body.email,
+                alamat: req.body.alamat,
+                nomorTelepon: req.body.nomorTelepon,
+                tanggalService: req.body.tanggalService,
+                waktuService: req.body.waktuService,
+                merkMobil: req.body.merkMobil,
+                tipeMobil: req.body.tipeMobil,
+                jenisPerawatan: req.body.jenisPerawatan,
+                detailPerawatan: req.body.deskripsiKerusakan,
+                deskripsiKerusakan: req.body.deskripsiKerusakan,
+                multiLine: "Y",
+                kuantiti: req.body.kuantiti ? req.body.kuantiti : 1,
+                harga: 1
             })
+        } else {
+            let log = await dateAndTimeChecking(clientCar.waktuService, globalBooking.tanggalService)
+
+            if (log.length > 0) {
+                var error_msg = "Tanggal dan waktu bookingan anda tidak tersedia. Silahkan untuk menginput kembali."
+                req.flash('error', error_msg)
+                res.redirect('/editBooking')
+            } else {
+                req.getConnection(function (err, con) {
+                    con.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + clientCar.merkMobil + "' AND tipeMobil= '" + clientCar.tipeMobil + "' AND jenisPerawatan= '" + clientCar.jenisPerawatan + "' AND detailPerawatan= '" + clientCar.detailPerawatan + "'; ", function (err, rows, fields) {
+                        if (err) {
+                            throw err
+                        } else {
+                            globalBooking.totalHarga = rows[0].harga
+                            priceTotal = globalBooking.kuantiti * globalBooking.totalHarga;
+                            res.render('pricingDetails', {
+                                namaPemilik: req.body.namaPemilik,
+                                email: req.body.email,
+                                alamat: req.body.alamat,
+                                nomorTelepon: req.body.nomorTelepon,
+                                tanggalService: req.body.tanggalService,
+                                waktuService: req.body.waktuService,
+                                merkMobil: req.body.merkMobil,
+                                tipeMobil: req.body.tipeMobil,
+                                jenisPerawatan: req.body.jenisPerawatan,
+                                detailPerawatan: req.body.detailPerawatan,
+                                kuantiti: req.body.kuantiti ? req.body.kuantiti : 1,
+                                harga: priceTotal
+                            })
+                        }
+                    })
+                })
+            }
         }
     }
 })
@@ -298,6 +319,8 @@ app.post('/booked', (req, res) => {
             harga: req.sanitize('harga').escape().trim(),
             done_flag: 'N'
         }
+
+        console.log(clientData)
         req.getConnection(function (err, con) {
             con.query('INSERT INTO bookingList SET ?', clientData, function (err, result) {
                 if (err) {

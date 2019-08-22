@@ -416,6 +416,7 @@
                                      <option value="Perawatan Khusus">Perawatan Khusus</option>
                                      <option value="Variasi / Aksesoris Tambahan">Variasi / Aksesoris Tambahan</option>
                                      <option value="Car Care">Car Care</option>
+                                     <option value="Komplikasi">Komplikasi</option>
                                  </select>
                              </div>
                              <!-- Validasi Jenis Perawatan -->
@@ -426,21 +427,31 @@
                                              document.getElementById("khusus").style.display = "block";
                                              document.getElementById("variasi").style.display = "none";
                                              document.getElementById("carCare").style.display = "none";
+                                             document.getElementById("komplikasi").style.display = "none";
                                              break;
                                          case "Variasi / Aksesoris Tambahan":
                                              document.getElementById("khusus").style.display = "none";
                                              document.getElementById("variasi").style.display = "block";
                                              document.getElementById("carCare").style.display = "none";
+                                             document.getElementById("komplikasi").style.display = "none";
                                              break;
                                          case "Car Care":
                                              document.getElementById("khusus").style.display = "none";
                                              document.getElementById("variasi").style.display = "none";
                                              document.getElementById("carCare").style.display = "block";
+                                             document.getElementById("komplikasi").style.display = "none";
+                                             break;
+                                         case "Komplikasi":
+                                             document.getElementById("khusus").style.display = "none";
+                                             document.getElementById("variasi").style.display = "none";
+                                             document.getElementById("carCare").style.display = "none";
+                                             document.getElementById("komplikasi").style.display = "block";
                                              break;
                                          default:
                                              document.getElementById("khusus").style.display = "none";
                                              document.getElementById("variasi").style.display = "none";
                                              document.getElementById("carCare").style.display = "none";
+                                             document.getElementById("komplikasi").style.display = "none";
                                      }
                                  }
                              </script>
@@ -487,6 +498,11 @@
                                      <option value="Cuci Mobil Luar dan Dalam">Cuci Mobil Luar dan Dalam</option>
                                      <option value="Poles Full Body">Poles Full Body</option>
                                  </select>
+                             </div>
+                             <!-- Car Care -->
+                             <div id="komplikasi" style="display:none" class="form-group">
+                                 <label for="name" style="font-size: 16px">Deskripsi Kerusakan</label>
+                                 <textarea rows="4" cols="30" class="form-control" name="deskripsiKerusakan"></textarea>
                              </div>
                              <!-- Validasi Kuantiti -->
                              <script>
