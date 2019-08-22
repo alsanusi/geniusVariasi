@@ -27,8 +27,8 @@ var globalBooking = {
     tipeMobil: '',
     jenisPerawatan: '',
     detailPerawatan: '',
-    // kuantiti: 0,
-    totalHarga: ''
+    totalHarga: '',
+    multiLine: ''
 }
 
 // Default
@@ -103,7 +103,7 @@ function dateAndTimeChecking(time, date) {
 
 app.post('/priceChecking', async (req, res) => {
     // Set Global Variable
-    globalBooking = {
+    completeBooking = {
         namaPemilik: req.body.namaPemilik,
         email: req.body.email,
         alamat: req.body.alamat,
@@ -140,7 +140,11 @@ app.post('/priceChecking', async (req, res) => {
         req.flash('error', error_msg)
         res.redirect('/editBooking')
     } else {
-        if (globalBooking.hasOwnProperty('deskripsiKerusakan')) {
+        if (completeBooking.hasOwnProperty('deskripsiKerusakan')) {
+            // Set Description
+            globalBooking.multiLine = 'Y';
+            globalBooking.totalHarga = 0;
+
             res.render('pricingDetails', {
                 namaPemilik: req.body.namaPemilik,
                 email: req.body.email,
@@ -152,13 +156,12 @@ app.post('/priceChecking', async (req, res) => {
                 tipeMobil: req.body.tipeMobil,
                 jenisPerawatan: req.body.jenisPerawatan,
                 detailPerawatan: req.body.deskripsiKerusakan,
-                deskripsiKerusakan: req.body.deskripsiKerusakan,
                 multiLine: "Y",
-                kuantiti: req.body.kuantiti ? req.body.kuantiti : 1,
-                harga: 1
+                kuantiti: req.body.kuantiti ? req.body.kuantiti : 0,
+                harga: 0
             })
         } else {
-            let log = await dateAndTimeChecking(clientCar.waktuService, globalBooking.tanggalService)
+            let log = await dateAndTimeChecking(clientCar.waktuService, completeBooking.tanggalService)
 
             if (log.length > 0) {
                 var error_msg = "Tanggal dan waktu bookingan anda tidak tersedia. Silahkan untuk menginput kembali."
@@ -170,8 +173,13 @@ app.post('/priceChecking', async (req, res) => {
                         if (err) {
                             throw err
                         } else {
-                            globalBooking.totalHarga = rows[0].harga
-                            priceTotal = globalBooking.kuantiti * globalBooking.totalHarga;
+                            // Set Description and Total Price
+                            globalBooking.multiLine = "N";
+
+                            // Set Formula for Total Price
+                            priceTotal = completeBooking.kuantiti * rows[0].harga;
+                            globalBooking.totalHarga = priceTotal;
+
                             res.render('pricingDetails', {
                                 namaPemilik: req.body.namaPemilik,
                                 email: req.body.email,
@@ -184,6 +192,7 @@ app.post('/priceChecking', async (req, res) => {
                                 jenisPerawatan: req.body.jenisPerawatan,
                                 detailPerawatan: req.body.detailPerawatan,
                                 kuantiti: req.body.kuantiti ? req.body.kuantiti : 1,
+                                multiLine: "N",
                                 harga: priceTotal
                             })
                         }
@@ -317,10 +326,10 @@ app.post('/booked', (req, res) => {
             detailPerawatan: req.sanitize('detailPerawatan').escape().trim(),
             kuantiti: req.sanitize('kuantiti').escape().trim(),
             harga: req.sanitize('harga').escape().trim(),
-            done_flag: 'N'
+            done_flag: 'N',
+            desc_perawatan: globalBooking.multiLine
         }
 
-        console.log(clientData)
         req.getConnection(function (err, con) {
             con.query('INSERT INTO bookingList SET ?', clientData, function (err, result) {
                 if (err) {
