@@ -93,7 +93,7 @@ app.route('/editBooking')
         })
     })
 
-function dateAndTimeChecking(time, date) {
+const dateAndTimeChecking = (time, date) => {
     return new Promise(resolve => {
         conn.query("SELECT waktuService, tanggalService FROM bookingList WHERE tanggalService = '" + date + "' AND waktuService= '" + time + "'; ", function (err, rows, fields) {
             err ? console.log(err) : resolve(rows)
@@ -203,7 +203,7 @@ app.post('/priceChecking', async (req, res) => {
     }
 })
 
-function adminEmailNotifier() {
+const adminEmailNotifier = () => {
     let transporter = nodeMailer.createTransport({
         service: 'gmail',
         auth: {
@@ -247,7 +247,7 @@ function adminEmailNotifier() {
     });
 }
 
-function customerEmailNotifier() {
+const customerEmailNotifier = () => {
     let transporter = nodeMailer.createTransport({
         service: 'gmail',
         auth: {

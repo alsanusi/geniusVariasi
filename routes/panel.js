@@ -43,7 +43,7 @@ const redirectHome = (req, res, next) => {
     }
 }
 
-function filterBookingDone(bStatus) {
+const filterBookingDone = bStatus => {
     var doneStatus
     doneStatus = bStatus.filter(obj => {
         return obj.done_flag === "Y"
@@ -51,7 +51,7 @@ function filterBookingDone(bStatus) {
     return doneStatus.length
 }
 
-function filterBookingNotDone(bStatus) {
+const filterBookingNotDone = bStatus => {
     var notDoneStatus
     notDoneStatus = bStatus.filter(obj => {
         return obj.done_flag === "N"
@@ -59,7 +59,7 @@ function filterBookingNotDone(bStatus) {
     return notDoneStatus.length
 }
 
-function filterIncome(price) {
+const filterIncome = price => {
     var income, totalIncome, statusDone
     statusDone = price.filter(obj => {
         return obj.done_flag === "Y"
@@ -71,7 +71,7 @@ function filterIncome(price) {
     return totalIncome
 }
 
-function showDoneBooking(bStatus) {
+const showDoneBooking = bStatus => {
     var doneStatus
     doneStatus = bStatus.filter(obj => {
         return obj.done_flag === "Y"
@@ -79,7 +79,7 @@ function showDoneBooking(bStatus) {
     return doneStatus
 }
 
-function showNotDoneBooking(bStatus) {
+const showNotDoneBooking = bStatus => {
     var notDoneStatus
     notDoneStatus = bStatus.filter(obj => {
         return obj.done_flag === "N"
@@ -132,7 +132,7 @@ app.get('/dashboard', (req, res) => {
 
                 // Show list of not done booking
                 onGoingBookingList = onGoingBookingArray[+currentPage - 1];
-            
+
                 res.render('indexPanel', {
                     totalBooking: rows.length,
                     doneBooking: filterBookingDone(rows),
@@ -158,7 +158,7 @@ app.get('/dashboard', (req, res) => {
     })
 })
 
-function monthYearReport(month, year) {
+const monthYearReport = (month, year) => {
     return new Promise(resolve => {
         mysql.createConnection(config.database).then(function (con) {
             con.query("SELECT * FROM bookingList WHERE month(tanggalService)= '" + month + "' AND year(tanggalService)= '" + year + "' AND done_flag = 'Y' ").then(rows => {
