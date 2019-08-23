@@ -95,7 +95,7 @@ app.route('/editBooking')
 
 const dateAndTimeChecking = (time, date) => {
     return new Promise(resolve => {
-        conn.query("SELECT waktuService, tanggalService FROM bookingList WHERE tanggalService = '" + date + "' AND waktuService= '" + time + "'; ", function (err, rows, fields) {
+        conn.query("SELECT waktuService, tanggalService FROM bookingList WHERE tanggalService = '" + date + "' AND waktuService= '" + time + "'; ", (err, rows, fields) => {
             err ? console.log(err) : resolve(rows)
         })
     })
@@ -140,7 +140,7 @@ app.post('/priceChecking', async (req, res) => {
         req.flash('error', error_msg)
         res.redirect('/editBooking')
     } else {
-        if (completeBooking.hasOwnProperty('deskripsiKerusakan')) {
+        if (completeBooking.deskripsiKerusakan.length > 0) {
             // Set Description
             globalBooking.multiLine = 'Y';
             globalBooking.totalHarga = 0;
