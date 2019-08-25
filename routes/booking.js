@@ -103,7 +103,7 @@ const dateAndTimeChecking = (time, date) => {
 
 app.post('/priceChecking', async (req, res) => {
     // Set Global Variable
-    completeBooking = {
+    bookingData = {
         namaPemilik: req.body.namaPemilik,
         email: req.body.email,
         alamat: req.body.alamat,
@@ -126,8 +126,13 @@ app.post('/priceChecking', async (req, res) => {
         merkMobil: [req.body.merkMobil],
         tipeMobil: [req.body.tipeMobil],
         jenisPerawatan: [req.body.jenisPerawatan],
-        detailPerawatan: [req.body.detailPerawatan]
+        detailPerawatan: [req.body.detailPerawatan],
     }
+
+    // Set Global Name, Address and Service Date
+    globalBooking.namaPemilik = bookingData.namaPemilik;
+    globalBooking.alamat = bookingData.alamat;
+    globalBooking.tanggalService = bookingData.tanggalService;
 
     if (clientCar.merkMobil.length > 1 || clientCar.tipeMobil.length > 1 || clientCar.jenisPerawatan.length > 1 || clientCar.detailPerawatan.length > 1) {
         res.redirect('/editBooking')
@@ -135,12 +140,12 @@ app.post('/priceChecking', async (req, res) => {
         var error_msg = "Silahkan mengisi waktu booking servis anda."
         req.flash('error', error_msg)
         res.redirect('/editBooking')
-    } else if (clientCar.merkMobil === undefined || clientCar.tipeMobil === undefined || clientCar.jenisPerawatan === undefined || clientCar.detailPerawatan === undefined) {
+    } else if (typeof clientCar.merkMobil[0] === 'undefined' || typeof clientCar.tipeMobil[0] === 'undefined' || typeof clientCar.jenisPerawatan[0] === 'undefined' || typeof clientCar.detailPerawatan[0] === 'undefined') {
         var error_msg = "Silahkan mengisi data mobil anda."
         req.flash('error', error_msg)
         res.redirect('/editBooking')
     } else {
-        if (completeBooking.deskripsiKerusakan.length > 0) {
+        if (bookingData.deskripsiKerusakan.length > 0) {
             // Set Description
             globalBooking.multiLine = 'Y';
             globalBooking.totalHarga = 0;
@@ -161,7 +166,7 @@ app.post('/priceChecking', async (req, res) => {
                 harga: 0
             })
         } else {
-            let log = await dateAndTimeChecking(clientCar.waktuService, completeBooking.tanggalService)
+            let log = await dateAndTimeChecking(clientCar.waktuService, bookingData.tanggalService)
 
             if (log.length > 0) {
                 var error_msg = "Tanggal dan waktu bookingan anda tidak tersedia. Silahkan untuk menginput kembali."
@@ -177,7 +182,7 @@ app.post('/priceChecking', async (req, res) => {
                             globalBooking.multiLine = "N";
 
                             // Set Formula for Total Price
-                            priceTotal = completeBooking.kuantiti * rows[0].harga;
+                            priceTotal = bookingData.kuantiti * rows[0].harga;
                             globalBooking.totalHarga = priceTotal;
 
                             res.render('pricingDetails', {
