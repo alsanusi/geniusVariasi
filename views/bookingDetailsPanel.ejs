@@ -152,10 +152,13 @@
                                      <div class="col-8">
                                          <h3 class="mb-0">Booking Details</h3>
                                      </div>
-                                     <div class="col-4 text-right">
-                                         <button type="submit" class="btn btn-primary notika-btn-primary">Done</button>
-                                         <input type="hidden" name="_method" value="PUT" />
-                                     </div>
+                                     <% if (done_flag === "N") { %>
+                                        <div class="col-4 text-right">
+                                            <button type="submit"
+                                                class="btn btn-primary notika-btn-primary">Service Selesai</button>
+                                            <input type="hidden" name="_method" value="PUT" />
+                                        </div>
+                                     <% } %>
                                  </div>
                              </div>
                              <div class="card-body">
@@ -262,13 +265,30 @@
                                              <div class="form-group">
                                                  <label class="form-control-label" for="input-username">Detail
                                                      Perawatan</label>
+                                                 <% if(desc_perawatan === "Y") { %>
+                                                 <textarea rows="4" cols="30" class="form-control"
+                                                     name="detailPerawatan" readonly><%= detailPerawatan %></textarea>
+                                                 <% } else { %>
                                                  <input type="text" name="detailPerawatan"
                                                      class="form-control form-control-alternative"
                                                      placeholder="Detail Perawatan" value="<%= detailPerawatan %>"
                                                      readonly>
+                                                 <% } %>
                                              </div>
                                          </div>
                                      </div>
+                                     <% if(desc_perawatan === "N") { %>
+                                     <div class="row">
+                                         <div class="col-lg-12">
+                                             <div class="form-group">
+                                                 <label class="form-control-label" for="input-username">Kuantiti</label>
+                                                 <input type="text" name="kuantiti"
+                                                     class="form-control form-control-alternative"
+                                                     placeholder="Kuantiti" value="<%= kuantiti %>" readonly>
+                                             </div>
+                                         </div>
+                                     </div>
+                                     <% } %>
                                  </div>
                                  <hr class="my-4" />
                                  <!-- Description -->

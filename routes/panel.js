@@ -393,6 +393,8 @@ app.route('/showDetails/(:id)')
                         tipeMobil: rows[0].tipeMobil,
                         jenisPerawatan: rows[0].jenisPerawatan,
                         detailPerawatan: rows[0].detailPerawatan,
+                        desc_perawatan: rows[0].desc_perawatan,
+                        kuantiti: rows[0].kuantiti,
                         harga: rows[0].harga,
                         done_flag: rows[0].done_flag
                     })
@@ -427,6 +429,7 @@ app.route('/showDetails/(:id)')
                         jenisPerawatan: req.body.jenisPerawatan,
                         detailPerawatan: req.body.detailPerawatan,
                         harga: req.body.harga,
+                        kuantiti: req.body.kuantiti,
                         done_flag: req.body.done_flag,
                     })
                 })
@@ -449,6 +452,7 @@ app.route('/showDetails/(:id)')
                 jenisPerawatan: req.body.jenisPerawatan,
                 detailPerawatan: req.body.detailPerawatan,
                 harga: req.body.harga,
+                kuantiti: req.body.kuantiti,
                 done_flag: req.body.done_flag,
             })
         }
