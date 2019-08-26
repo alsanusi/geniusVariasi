@@ -183,6 +183,7 @@ app.post('/priceChecking', async (req, res) => {
     globalBooking.namaPemilik = bookingData.namaPemilik;
     globalBooking.alamat = bookingData.alamat;
     globalBooking.tanggalService = bookingData.tanggalService;
+    globalBooking.email = bookingData.email;
 
     if (clientCar.merkMobil.length > 1 || clientCar.tipeMobil.length > 1 || clientCar.jenisPerawatan.length > 1 || clientCar.detailPerawatan.length > 1) {
         res.redirect('/editBooking')
@@ -235,6 +236,9 @@ app.post('/priceChecking', async (req, res) => {
                 // Exact Total Price
                 priceTotal = priceTotal1;
 
+                // Set Global MultiLine
+                globalBooking.multiLine = 'N';
+
                 // Render Booking Details
                 res.render('pricingDetails', {
                     namaPemilik: req.body.namaPemilik,
@@ -265,6 +269,9 @@ app.post('/priceChecking', async (req, res) => {
 
                 // Exact Total Price
                 priceTotal = priceTotal1 + priceTotal2;
+
+                // Set Global MultiLine
+                globalBooking.multiLine = 'N';
 
                 // Render Booking Details
                 res.render('pricingDetails', {
@@ -305,8 +312,8 @@ app.post('/priceChecking', async (req, res) => {
                 // Exact Total Price
                 priceTotal = priceTotal1 + priceTotal2 + priceTotal3;
 
-                console.log(rawTotal1, rawTotal2, rawTotal3)
-                console.log(priceTotal1, priceTotal2, priceTotal3)
+                // Set Global MultiLine
+                globalBooking.multiLine = 'N';
 
                 // Render Booking Details
                 res.render('pricingDetails', {
@@ -459,6 +466,12 @@ app.post('/booked', (req, res) => {
             jenisPerawatan: req.sanitize('jenisPerawatan').escape().trim(),
             detailPerawatan: req.sanitize('detailPerawatan').escape().trim(),
             kuantiti: req.sanitize('kuantiti').escape().trim(),
+            jenisPerawatan1: req.sanitize('jenisPerawatan').escape().trim(),
+            detailPerawatan1: req.sanitize('detailPerawatan').escape().trim(),
+            kuantiti1: req.sanitize('kuantiti').escape().trim(),
+            jenisPerawatan2: req.sanitize('jenisPerawatan').escape().trim(),
+            detailPerawatan2: req.sanitize('detailPerawatan').escape().trim(),
+            kuantiti2: req.sanitize('kuantiti').escape().trim(),
             harga: req.sanitize('harga').escape().trim(),
             done_flag: 'N',
             desc_perawatan: globalBooking.multiLine
