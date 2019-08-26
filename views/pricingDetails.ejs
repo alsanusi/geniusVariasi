@@ -153,6 +153,12 @@
                              <% } %>
                              <% if(perawatan1 === "Y") {%>
                              <div class="form-group">
+                                 <label for="name" style="font-size: 16px">Total Harga</label>
+                                 <input type="text" class="form-control" value="<%= totalPrice1 %>" readonly>
+                             </div>
+                             <% } %>
+                             <% if(perawatan1 === "Y") {%>
+                             <div class="form-group">
                                  <h3 class="h4 text-black mb-4">Detail Perawatan Mobil - 2</h3>
                                  <label for="name" style="font-size: 16px">Jenis Perawatan</label>
                                  <input type="text" class="form-control" name="jenisPerawatan1"
@@ -167,6 +173,10 @@
                                  <label for="name" style="font-size: 16px">Kuantiti</label>
                                  <input type="text" class="form-control" name="kuantiti1" value="<%= kuantiti1 %>"
                                      readonly>
+                             </div>
+                             <div class="form-group">
+                                 <label for="name" style="font-size: 16px">Total Harga</label>
+                                 <input type="text" class="form-control" value="<%= totalPrice2 %>" readonly>
                              </div>
                              <% } %>
                              <% if(perawatan2 === "Y") {%>
@@ -185,6 +195,10 @@
                                  <label for="name" style="font-size: 16px">Kuantiti</label>
                                  <input type="text" class="form-control" name="kuantiti2" value="<%= kuantiti2 %>"
                                      readonly>
+                             </div>
+                             <div class="form-group">
+                                 <label for="name" style="font-size: 16px">Total Harga</label>
+                                 <input type="text" class="form-control" value="<%= totalPrice3 %>" readonly>
                              </div>
                              <% } %>
                              <% if(multiLine === "N") {%>

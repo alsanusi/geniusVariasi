@@ -27,6 +27,7 @@ var globalBooking = {
     tipeMobil: '',
     jenisPerawatan: '',
     detailPerawatan: '',
+    kuantiti: 1,
     totalHarga: '',
     multiLine: ''
 }
@@ -179,11 +180,12 @@ app.post('/priceChecking', async (req, res) => {
         detailPerawatan: [req.body.detailPerawatan],
     }
 
-    // Set Global Name, Address and Service Date
+    // Set GlobalVariable
     globalBooking.namaPemilik = bookingData.namaPemilik;
     globalBooking.alamat = bookingData.alamat;
     globalBooking.tanggalService = bookingData.tanggalService;
     globalBooking.email = bookingData.email;
+    globalBooking.waktuService = bookingData.waktuService;
 
     if (clientCar.merkMobil.length > 1 || clientCar.tipeMobil.length > 1 || clientCar.jenisPerawatan.length > 1 || clientCar.detailPerawatan.length > 1) {
         res.redirect('/editBooking')
@@ -238,6 +240,11 @@ app.post('/priceChecking', async (req, res) => {
 
                 // Set Global MultiLine
                 globalBooking.multiLine = 'N';
+                globalBooking.merkMobil = bookingData.merkMobil;
+                globalBooking.tipeMobil = bookingData.tipeMobil;
+                globalBooking.jenisPerawatan = bookingData.jenisPerawatan;
+                globalBooking.detailPerawatan = bookingData.detailPerawatan;
+                globalBooking.totalHarga = priceTotal;
 
                 // Render Booking Details
                 res.render('pricingDetails', {
@@ -288,9 +295,11 @@ app.post('/priceChecking', async (req, res) => {
                     jenisPerawatan: req.body.jenisPerawatan,
                     detailPerawatan: req.body.detailPerawatan,
                     kuantiti: req.body.kuantiti,
+                    totalPrice1: priceTotal1,
                     jenisPerawatan1: req.body.jenisPerawatan1,
                     detailPerawatan1: req.body.detailPerawatan1,
                     kuantiti1: req.body.kuantiti1,
+                    totalPrice2: priceTotal2,
                     multiLine: "N",
                     perawatan1: "Y",
                     perawatan2: "N",
@@ -330,12 +339,15 @@ app.post('/priceChecking', async (req, res) => {
                     jenisPerawatan: req.body.jenisPerawatan,
                     detailPerawatan: req.body.detailPerawatan,
                     kuantiti: req.body.kuantiti,
+                    totalPrice1: priceTotal1,
                     jenisPerawatan1: req.body.jenisPerawatan1,
                     detailPerawatan1: req.body.detailPerawatan1,
                     kuantiti1: req.body.kuantiti1,
+                    totalPrice2: priceTotal2,
                     jenisPerawatan2: req.body.jenisPerawatan2,
                     detailPerawatan2: req.body.detailPerawatan2,
                     kuantiti2: req.body.kuantiti2,
+                    totalPrice3: priceTotal3,
                     multiLine: "N",
                     perawatan1: "Y",
                     perawatan2: "Y",
