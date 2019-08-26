@@ -216,7 +216,7 @@ app.post('/priceChecking', async (req, res) => {
                 detailPerawatan: req.body.deskripsiKerusakan,
                 multiLine: "Y",
                 kuantiti: req.body.kuantiti ? req.body.kuantiti : 0,
-                harga: 0
+                totalHarga: 0
             })
         } else {
             // Date and Time Booking Checking
@@ -262,7 +262,7 @@ app.post('/priceChecking', async (req, res) => {
                     multiLine: "N",
                     perawatan1: "N",
                     perawatan2: "N",
-                    harga: priceTotal
+                    totalHarga: priceTotal
                 })
             } else if (bookingData.jenisPerawatan2 === "-" || bookingData.detailPerawatan2 === "-") {
                 // Price Checking
@@ -303,7 +303,7 @@ app.post('/priceChecking', async (req, res) => {
                     multiLine: "N",
                     perawatan1: "Y",
                     perawatan2: "N",
-                    harga: priceTotal
+                    totalHarga: priceTotal
                 })
             } else {
                 // Price Checking
@@ -351,7 +351,7 @@ app.post('/priceChecking', async (req, res) => {
                     multiLine: "N",
                     perawatan1: "Y",
                     perawatan2: "Y",
-                    harga: priceTotal
+                    totalHarga: priceTotal
                 })
             }
         }
@@ -486,7 +486,7 @@ app.post('/booked', (req, res) => {
             jenisPerawatan2: req.body.jenisPerawatan2 ? req.sanitize('jenisPerawatan2').escape().trim() : "-",
             detailPerawatan2: req.body.detailPerawatan2 ? req.sanitize('detailPerawatan2').escape().trim() : "-",
             kuantiti2: req.body.kuantiti2 ? req.sanitize('kuantiti2').escape().trim() : 0,
-            harga: req.sanitize('harga').escape().trim(),
+            totalHarga: req.sanitize('totalHarga').escape().trim(),
             done_flag: 'N',
             desc_perawatan: globalBooking.multiLine
         }

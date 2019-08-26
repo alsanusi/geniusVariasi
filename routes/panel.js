@@ -65,7 +65,7 @@ const filterIncome = price => {
         return obj.done_flag === "Y"
     })
     income = statusDone.map(obj => {
-        return obj.harga
+        return obj.totalHarga
     })
     totalIncome = income.reduce((a, b) => a + b, 0)
     return totalIncome
@@ -203,8 +203,8 @@ app.post('/report', async (req, res) => {
             dataRow.push(bookingData.tipeMobil)
             dataRow.push(bookingData.jenisPerawatan)
             dataRow.push(bookingData.detailPerawatan)
-            dataRow.push(bookingData.harga)
-            priceTotal.push(bookingData.harga)
+            dataRow.push(bookingData.totalHarga)
+            priceTotal.push(bookingData.totalHarga)
             bodyData.push(dataRow)
         })
 
@@ -393,10 +393,16 @@ app.route('/showDetails/(:id)')
                         tipeMobil: rows[0].tipeMobil,
                         jenisPerawatan: rows[0].jenisPerawatan,
                         detailPerawatan: rows[0].detailPerawatan,
-                        desc_perawatan: rows[0].desc_perawatan,
                         kuantiti: rows[0].kuantiti,
-                        harga: rows[0].harga,
-                        done_flag: rows[0].done_flag
+                        jenisPerawatan1: rows[0].jenisPerawatan1 ? rows[0].jenisPerawatan1 : "-",
+                        detailPerawatan1: rows[0].detailPerawatan1 ? rows[0].detailPerawatan1 : "-",
+                        kuantiti1: rows[0].kuantiti1 ? rows[0].kuantiti1 : "-",
+                        jenisPerawatan2: rows[0].jenisPerawatan2 ? rows[0].jenisPerawatan2 : "-",
+                        detailPerawatan2: rows[0].detailPerawatan2 ? rows[0].detailPerawatan2 : "-",
+                        kuantiti2: rows[0].kuantiti2 ? rows[0].kuantiti2 : "-",
+                        totalHarga: rows[0].totalHarga,
+                        done_flag: rows[0].done_flag,
+                        desc_perawatan: rows[0].desc_perawatan
                     })
                 }
             })
@@ -428,7 +434,7 @@ app.route('/showDetails/(:id)')
                         tipeMobil: req.body.tipeMobil,
                         jenisPerawatan: req.body.jenisPerawatan,
                         detailPerawatan: req.body.detailPerawatan,
-                        harga: req.body.harga,
+                        totalHarga: req.body.totalHarga,
                         kuantiti: req.body.kuantiti,
                         done_flag: req.body.done_flag,
                     })
@@ -451,7 +457,7 @@ app.route('/showDetails/(:id)')
                 tipeMobil: req.body.tipeMobil,
                 jenisPerawatan: req.body.jenisPerawatan,
                 detailPerawatan: req.body.detailPerawatan,
-                harga: req.body.harga,
+                totalHarga: req.body.totalHarga,
                 kuantiti: req.body.kuantiti,
                 done_flag: req.body.done_flag,
             })
