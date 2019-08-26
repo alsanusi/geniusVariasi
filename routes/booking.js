@@ -56,8 +56,14 @@ app.post('/book1', (req, res) => {
         tipeMobil: '',
         jenisPerawatan: '',
         detailPerawatan: '',
-        kuantiti: '',
-        deskripsiKerusakan: ''
+        kuantiti: 1,
+        deskripsiKerusakan: '',
+        jenisPerawatan1: '',
+        detailPerawatan1: '',
+        kuantiti1: 0,
+        jenisPerawatan2: '',
+        detailPerawatan2: '',
+        kuantiti2: 0
     })
 })
 
@@ -74,7 +80,13 @@ app.route('/editBooking')
             tipeMobil: '',
             jenisPerawatan: '',
             detailPerawatan: '',
-            kuantiti: ''
+            kuantiti: 1,
+            jenisPerawatan1: '',
+            detailPerawatan1: '',
+            kuantiti1: 0,
+            jenisPerawatan2: '',
+            detailPerawatan2: '',
+            kuantiti2: 0
         })
     })
     .post((req, res) => {
@@ -89,7 +101,13 @@ app.route('/editBooking')
             tipeMobil: '',
             jenisPerawatan: '',
             detailPerawatan: '',
-            kuantiti: ''
+            kuantiti: 1,
+            jenisPerawatan1: '',
+            detailPerawatan1: '',
+            kuantiti1: 0,
+            jenisPerawatan2: '',
+            detailPerawatan2: '',
+            kuantiti2: 0
         })
     })
 
@@ -97,6 +115,30 @@ const dateAndTimeChecking = (time, date) => {
     return new Promise(resolve => {
         conn.query("SELECT waktuService, tanggalService FROM bookingList WHERE tanggalService = '" + date + "' AND waktuService= '" + time + "'; ", (err, rows, fields) => {
             err ? console.log(err) : resolve(rows)
+        })
+    })
+}
+
+const priceChecking1 = (merkMobil, tipeMobil, jenisPerawatan, detailPerawatan) => {
+    return new Promise(resolve => {
+        conn.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + merkMobil + "' AND tipeMobil= '" + tipeMobil + "' AND jenisPerawatan= '" + jenisPerawatan + "' AND detailPerawatan= '" + detailPerawatan + "'; ", (err, rows, fields) => {
+            err ? console.log(err) : resolve(rows);
+        })
+    })
+}
+
+const priceChecking2 = (merkMobil, tipeMobil, jenisPerawatan, detailPerawatan) => {
+    return new Promise(resolve => {
+        conn.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + merkMobil + "' AND tipeMobil= '" + tipeMobil + "' AND jenisPerawatan= '" + jenisPerawatan + "' AND detailPerawatan= '" + detailPerawatan + "'; ", (err, rows, fields) => {
+            err ? console.log(err) : resolve(rows);
+        })
+    })
+}
+
+const priceChecking3 = (merkMobil, tipeMobil, jenisPerawatan, detailPerawatan) => {
+    return new Promise(resolve => {
+        conn.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + merkMobil + "' AND tipeMobil= '" + tipeMobil + "' AND jenisPerawatan= '" + jenisPerawatan + "' AND detailPerawatan= '" + detailPerawatan + "'; ", (err, rows, fields) => {
+            err ? console.log(err) : resolve(rows);
         })
     })
 }
@@ -114,12 +156,20 @@ app.post('/priceChecking', async (req, res) => {
         tipeMobil: req.body.tipeMobil,
         jenisPerawatan: req.body.jenisPerawatan,
         detailPerawatan: req.body.detailPerawatan,
-        kuantiti: req.body.kuantiti ? req.body.kuantiti : 1,
+        kuantiti: req.body.kuantiti,
         deskripsiKerusakan: req.body.deskripsiKerusakan,
+        jenisPerawatan1: req.body.jenisPerawatan1 ? req.body.jenisPerawatan1 : "-",
+        detailPerawatan1: req.body.detailPerawatan1 ? req.body.detailPerawatan1 : "-",
+        kuantiti1: req.body.kuantiti1,
+        jenisPerawatan2: req.body.jenisPerawatan2 ? req.body.jenisPerawatan2 : "-",
+        detailPerawatan2: req.body.detailPerawatan2 ? req.body.detailPerawatan2 : "-",
+        kuantiti2: req.body.kuantiti2,
         totalHarga: ''
     }
 
     var priceTotal;
+    var rawTotal1, rawTotal2, rawTotal3;
+    var priceTotal1, priceTotal2, priceTotal3;
 
     var clientCar = {
         waktuService: req.body.waktuService,
@@ -166,42 +216,121 @@ app.post('/priceChecking', async (req, res) => {
                 harga: 0
             })
         } else {
-            let log = await dateAndTimeChecking(clientCar.waktuService, bookingData.tanggalService)
+            // Date and Time Booking Checking
+            const log = await dateAndTimeChecking(clientCar.waktuService, bookingData.tanggalService)
 
             if (log.length > 0) {
                 var error_msg = "Tanggal dan waktu bookingan anda tidak tersedia. Silahkan untuk menginput kembali."
                 req.flash('error', error_msg)
                 res.redirect('/editBooking')
+            } else if (bookingData.jenisPerawatan1 === "-" || bookingData.detailPerawatan1 === "-") {
+                // Price Checking
+                const log1 = await priceChecking1(bookingData.merkMobil, bookingData.tipeMobil, bookingData.jenisPerawatan, bookingData.detailPerawatan)
+
+                // Total Price = (Quantity * Price)
+                rawTotal1 = bookingData.kuantiti * log1[0].harga;
+
+                priceTotal1 = rawTotal1 ? rawTotal1 : 0;
+
+                // Exact Total Price
+                priceTotal = priceTotal1;
+
+                // Render Booking Details
+                res.render('pricingDetails', {
+                    namaPemilik: req.body.namaPemilik,
+                    email: req.body.email,
+                    alamat: req.body.alamat,
+                    nomorTelepon: req.body.nomorTelepon,
+                    tanggalService: req.body.tanggalService,
+                    waktuService: req.body.waktuService,
+                    merkMobil: req.body.merkMobil,
+                    tipeMobil: req.body.tipeMobil,
+                    jenisPerawatan: req.body.jenisPerawatan,
+                    detailPerawatan: req.body.detailPerawatan,
+                    kuantiti: req.body.kuantiti,
+                    multiLine: "N",
+                    harga: priceTotal
+                })
+            } else if (bookingData.jenisPerawatan2 === "-" || bookingData.detailPerawatan2 === "-") {
+                // Price Checking
+                const log1 = await priceChecking1(bookingData.merkMobil, bookingData.tipeMobil, bookingData.jenisPerawatan, bookingData.detailPerawatan)
+                const log2 = await priceChecking2(bookingData.merkMobil, bookingData.tipeMobil, bookingData.jenisPerawatan1, bookingData.detailPerawatan1)
+
+                // Total Price = (Quantity * Price)
+                rawTotal1 = bookingData.kuantiti * log1[0].harga;
+                rawTotal2 = bookingData.kuantiti1 * log2[0].harga;
+
+                priceTotal1 = rawTotal1 ? rawTotal1 : 0;
+                priceTotal2 = rawTotal2 ? rawTotal2 : 0;
+
+                // Exact Total Price
+                priceTotal = priceTotal1 + priceTotal2;
+
+                // Render Booking Details
+                res.render('pricingDetails', {
+                    namaPemilik: req.body.namaPemilik,
+                    email: req.body.email,
+                    alamat: req.body.alamat,
+                    nomorTelepon: req.body.nomorTelepon,
+                    tanggalService: req.body.tanggalService,
+                    waktuService: req.body.waktuService,
+                    merkMobil: req.body.merkMobil,
+                    tipeMobil: req.body.tipeMobil,
+                    jenisPerawatan: req.body.jenisPerawatan,
+                    detailPerawatan: req.body.detailPerawatan,
+                    kuantiti: req.body.kuantiti,
+                    jenisPerawatan1: req.body.jenisPerawatan1,
+                    detailPerawatan1: req.body.detailPerawatan1,
+                    kuantiti1: req.body.kuantiti1,
+                    multiLine: "N",
+                    perawatan1: "Y",
+                    perawatan2: "N",
+                    harga: priceTotal
+                })
             } else {
-                req.getConnection(function (err, con) {
-                    con.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + clientCar.merkMobil + "' AND tipeMobil= '" + clientCar.tipeMobil + "' AND jenisPerawatan= '" + clientCar.jenisPerawatan + "' AND detailPerawatan= '" + clientCar.detailPerawatan + "'; ", function (err, rows, fields) {
-                        if (err) {
-                            throw err
-                        } else {
-                            // Set Description and Total Price
-                            globalBooking.multiLine = "N";
+                // Price Checking
+                const log1 = await priceChecking1(bookingData.merkMobil, bookingData.tipeMobil, bookingData.jenisPerawatan, bookingData.detailPerawatan)
+                const log2 = await priceChecking2(bookingData.merkMobil, bookingData.tipeMobil, bookingData.jenisPerawatan1, bookingData.detailPerawatan1)
+                const log3 = await priceChecking3(bookingData.merkMobil, bookingData.tipeMobil, bookingData.jenisPerawatan2, bookingData.detailPerawatan2)
 
-                            // Set Formula for Total Price
-                            priceTotal = bookingData.kuantiti * rows[0].harga;
-                            globalBooking.totalHarga = priceTotal;
+                // Total Price = (Quantity * Price)
+                rawTotal1 = bookingData.kuantiti * log1[0].harga;
+                rawTotal2 = bookingData.kuantiti1 * log2[0].harga;
+                rawTotal3 = bookingData.kuantiti2 * log3[0].harga;
 
-                            res.render('pricingDetails', {
-                                namaPemilik: req.body.namaPemilik,
-                                email: req.body.email,
-                                alamat: req.body.alamat,
-                                nomorTelepon: req.body.nomorTelepon,
-                                tanggalService: req.body.tanggalService,
-                                waktuService: req.body.waktuService,
-                                merkMobil: req.body.merkMobil,
-                                tipeMobil: req.body.tipeMobil,
-                                jenisPerawatan: req.body.jenisPerawatan,
-                                detailPerawatan: req.body.detailPerawatan,
-                                kuantiti: req.body.kuantiti ? req.body.kuantiti : 1,
-                                multiLine: "N",
-                                harga: priceTotal
-                            })
-                        }
-                    })
+                priceTotal1 = rawTotal1 ? rawTotal1 : 0;
+                priceTotal2 = rawTotal2 ? rawTotal2 : 0;
+                priceTotal3 = rawTotal3 ? rawTotal3 : 0;
+
+                // Exact Total Price
+                priceTotal = priceTotal1 + priceTotal2 + priceTotal3;
+
+                console.log(rawTotal1, rawTotal2, rawTotal3)
+                console.log(priceTotal1, priceTotal2, priceTotal3)
+
+                // Render Booking Details
+                res.render('pricingDetails', {
+                    namaPemilik: req.body.namaPemilik,
+                    email: req.body.email,
+                    alamat: req.body.alamat,
+                    nomorTelepon: req.body.nomorTelepon,
+                    tanggalService: req.body.tanggalService,
+                    waktuService: req.body.waktuService,
+                    merkMobil: req.body.merkMobil,
+                    tipeMobil: req.body.tipeMobil,
+                    jenisPerawatan: req.body.jenisPerawatan,
+                    detailPerawatan: req.body.detailPerawatan,
+                    kuantiti: req.body.kuantiti,
+                    jenisPerawatan1: req.body.jenisPerawatan1,
+                    detailPerawatan1: req.body.detailPerawatan1,
+                    kuantiti1: req.body.kuantiti1,
+                    jenisPerawatan2: req.body.jenisPerawatan2,
+                    detailPerawatan2: req.body.detailPerawatan2,
+                    kuantiti2: req.body.kuantiti2,
+                    multiLine: "N",
+                    perawatan1: "Y",
+                    perawatan2: "Y",
+                    harga: priceTotal
                 })
             }
         }

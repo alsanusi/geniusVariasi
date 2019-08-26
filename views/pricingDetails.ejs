@@ -126,6 +126,7 @@
                                      readonly>
                              </div>
                              <div class="form-group">
+                                 <h3 class="h4 text-black mb-4">Detail Perawatan Mobil</h3>
                                  <label for="name" style="font-size: 16px">Jenis Perawatan</label>
                                  <input type="text" class="form-control" name="jenisPerawatan"
                                      value="<%= jenisPerawatan %>" readonly>
@@ -150,6 +151,42 @@
                                      readonly>
                              </div>
                              <% } %>
+                             <% if(perawatan1 === "Y") {%>
+                             <div class="form-group">
+                                 <h3 class="h4 text-black mb-4">Detail Perawatan Mobil - 2</h3>
+                                 <label for="name" style="font-size: 16px">Jenis Perawatan</label>
+                                 <input type="text" class="form-control" name="jenisPerawatan1"
+                                     value="<%= jenisPerawatan1 %>" readonly>
+                             </div>
+                             <div class="form-group">
+                                 <label for="name" style="font-size: 16px">Detail Perawatan</label>
+                                 <input type="text" class="form-control" name="detailPerawatan1"
+                                     value="<%= detailPerawatan1 %>" readonly>
+                             </div>
+                             <div class="form-group">
+                                 <label for="name" style="font-size: 16px">Kuantiti</label>
+                                 <input type="text" class="form-control" name="kuantiti1" value="<%= kuantiti1 %>"
+                                     readonly>
+                             </div>
+                             <% } %>
+                             <% if(perawatan2 === "Y") {%>
+                             <div class="form-group">
+                                 <h3 class="h4 text-black mb-4">Detail Perawatan Mobil - 3</h3>
+                                 <label for="name" style="font-size: 16px">Jenis Perawatan</label>
+                                 <input type="text" class="form-control" name="jenisPerawatan2"
+                                     value="<%= jenisPerawatan2 %>" readonly>
+                             </div>
+                             <div class="form-group">
+                                 <label for="name" style="font-size: 16px">Detail Perawatan</label>
+                                 <input type="text" class="form-control" name="detailPerawatan2"
+                                     value="<%= detailPerawatan2 %>" readonly>
+                             </div>
+                             <div class="form-group">
+                                 <label for="name" style="font-size: 16px">Kuantiti</label>
+                                 <input type="text" class="form-control" name="kuantiti2" value="<%= kuantiti2 %>"
+                                     readonly>
+                             </div>
+                             <% } %>
                              <% if(multiLine === "N") {%>
                              <h3 class="h4 text-black mb-4">Kalkulasi Harga Perawatan Mobil Anda.</h3>
                              <!-- Pricing -->
@@ -159,7 +196,9 @@
                                      name="harga" placeholder="Total Harga" value="<%= harga %>" readonly>
                              </div>
                              <% } else { %>
-                             <h5 class="h4 text-black mb-4" style="margin-top: 30px; font-size: 17px; font-weight: bold;">Kami Akan Segera Menghubungi Anda Untuk Total Harga Perawatan.</h5>
+                             <h5 class="h4 text-black mb-4"
+                                 style="margin-top: 30px; font-size: 17px; font-weight: bold;">Kami Akan Segera
+                                 Menghubungi Anda Untuk Total Harga Perawatan.</h5>
                              <% } %>
                              <div style="margin-top: 40px">
                                  <div class="form-group">

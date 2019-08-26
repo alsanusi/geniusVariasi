@@ -410,6 +410,7 @@
                              </div>
                              <!-- Jenis Perawatan -->
                              <div id="perawatanMobil" style="display:none" class="form-group">
+                                 <h3 class="h4 text-black mb-4">Detail Perawatan Mobil</h3>
                                  <label for="name" style="font-size: 16px">Jenis Perawatan</label>
                                  <select class="form-control" onchange="onSelectPerawatan(this)" name="jenisPerawatan">
                                      <option disabled selected>Pilih Jenis Perawatan Mobil</option>
@@ -428,30 +429,40 @@
                                              document.getElementById("variasi").style.display = "none";
                                              document.getElementById("carCare").style.display = "none";
                                              document.getElementById("komplikasi").style.display = "none";
+                                             document.getElementById("kuantiti").style.display = "block";
+                                             document.getElementById("tambahPerawatan").style.display = "block";
                                              break;
                                          case "Variasi / Aksesoris Tambahan":
                                              document.getElementById("khusus").style.display = "none";
                                              document.getElementById("variasi").style.display = "block";
                                              document.getElementById("carCare").style.display = "none";
                                              document.getElementById("komplikasi").style.display = "none";
+                                             document.getElementById("kuantiti").style.display = "block";
+                                             document.getElementById("tambahPerawatan").style.display = "block";
                                              break;
                                          case "Car Care":
                                              document.getElementById("khusus").style.display = "none";
                                              document.getElementById("variasi").style.display = "none";
                                              document.getElementById("carCare").style.display = "block";
                                              document.getElementById("komplikasi").style.display = "none";
+                                             document.getElementById("kuantiti").style.display = "block";
+                                             document.getElementById("tambahPerawatan").style.display = "block";
                                              break;
                                          case "Komplikasi":
                                              document.getElementById("khusus").style.display = "none";
                                              document.getElementById("variasi").style.display = "none";
                                              document.getElementById("carCare").style.display = "none";
                                              document.getElementById("komplikasi").style.display = "block";
+                                             document.getElementById("kuantiti").style.display = "none";
+                                             document.getElementById("tambahPerawatan").style.display = "none";
                                              break;
                                          default:
                                              document.getElementById("khusus").style.display = "none";
                                              document.getElementById("variasi").style.display = "none";
                                              document.getElementById("carCare").style.display = "none";
                                              document.getElementById("komplikasi").style.display = "none";
+                                             document.getElementById("kuantiti").style.display = "none";
+                                             document.getElementById("tambahPerawatan").style.display = "none";
                                      }
                                  }
                              </script>
@@ -459,12 +470,12 @@
                              <!-- Perawatan Khusus -->
                              <div id="khusus" style="display:none" class="form-group">
                                  <label for="name" style="font-size: 16px">Detail Perawatan</label>
-                                 <select class="form-control" onchange="onSelectKhusus(this)" name="detailPerawatan">
+                                 <select class="form-control" name="detailPerawatan">
                                      <option disabled selected>Pilih Detail Perawatan Mobil</option>
                                      <option value="Kampas Rem">Kampas Rem</option>
                                      <option value="Kampas Kopling">Kampas Kopling</option>
                                      <option value="Shock Breaker">Shock Breaker</option>
-                                     <option value="Service AC">Servis AC</option>
+                                     <option value="Servis AC">Servis AC</option>
                                      <option value="Servis Berkala">Servis Berkala</option>
                                      <option value="Ban">Ban</option>
                                      <option value="Aki">Aki</option>
@@ -477,7 +488,7 @@
                                  <label for="name" style="font-size: 16px">Detail Perawatan</label>
                                  <select class="form-control" name="detailPerawatan">
                                      <option disabled selected>Pilih Detail Perawatan Mobil</option>
-                                     <option value="Kampas Rem">Kaca Film</option>
+                                     <option value="Kaca Film">Kaca Film</option>
                                      <option value="Cover Jok">Cover Jok</option>
                                      <option value="Bumper Clip">Bumper Clip</option>
                                      <option value="Tape Layar">Tape Layar</option>
@@ -487,56 +498,253 @@
                                      <option value="Alarm">Alarm</option>
                                      <option value="Karpet Dasar">Karpet Dasar</option>
                                      <option value="Bumper Depan">Bumper Depan</option>
-                                     <option value="Bumper Belakan">Bumper Belakang</option>
+                                     <option value="Bumper Belakang">Bumper Belakang</option>
                                  </select>
                              </div>
                              <!-- Car Care -->
                              <div id="carCare" style="display:none" class="form-group">
                                  <label for="name" style="font-size: 16px">Detail Perawatan</label>
-                                 <select class="form-control" name="detailPerawatan">
+                                 <select class="form-control" onchange="onSelectCarCare(this)" name="detailPerawatan">
                                      <option disabled selected>Pilih Detail Perawatan Mobil</option>
                                      <option value="Cuci Mobil Luar dan Dalam">Cuci Mobil Luar dan Dalam</option>
                                      <option value="Poles Full Body">Poles Full Body</option>
                                  </select>
                              </div>
-                             <!-- Car Care -->
+                             <!-- Komplikasi -->
                              <div id="komplikasi" style="display:none" class="form-group">
                                  <label for="name" style="font-size: 16px">Deskripsi Kerusakan</label>
                                  <textarea rows="4" cols="30" class="form-control" name="deskripsiKerusakan"></textarea>
                              </div>
-                             <!-- Validasi Kuantiti -->
-                             <script>
-                                 function onSelectKhusus(detailPerawatan) {
-                                     switch (detailPerawatan.value) {
-                                         case "Kampas Rem":
-                                             document.getElementById("kuantiti").style.display = "block";
-                                             break;
-                                         case "Kampas Kopling":
-                                             document.getElementById("kuantiti").style.display = "block";
-                                             break;
-                                         case "Shock Breaker":
-                                             document.getElementById("kuantiti").style.display = "block";
-                                             break;
-                                         case "Ban":
-                                             document.getElementById("kuantiti").style.display = "block";
-                                             break;
-                                         case "Aki":
-                                             document.getElementById("kuantiti").style.display = "block";
-                                             break;
-                                         case "Lahar Roda":
-                                             document.getElementById("kuantiti").style.display = "block";
-                                             break;
-                                         default:
-                                             document.getElementById("kuantiti").style.display = "none";
-                                     }
-                                 }
-                             </script>
                              <!-- Kuantiti -->
                              <div id="kuantiti" style="display:none" class="form-group">
                                  <label for="name" style="font-size: 16px">Kuantiti</label>
                                  <input type="text" class="form-control" name="kuantiti" placeholder="Kuantiti"
                                      value="<%= kuantiti %>">
                              </div>
+                             <!-- Tambah Perawatan -->
+                             <div id="tambahPerawatan" style="display:none" class="form-group">
+                                 <input type="button" class="btn" style="padding: unset" onclick="viewPerawatan1()"
+                                     value="Tambah Perawatan">
+                             </div>
+                             <!-- Tambah Perawatan - Section 1 -->
+                             <!-- Validasi Perawatan Mobil - 1  -->
+                             <script>
+                                 function viewPerawatan1() {
+                                     document.getElementById("perawatanMobil1").style.display = "block";
+                                 }
+                             </script>
+                             <!-- Jenis Perawatan - 1 -->
+                             <div id="perawatanMobil1" style="display:none" class="form-group">
+                                 <h3 class="h4 text-black mb-4">Detail Perawatan Mobil - 2</h3>
+                                 <label for="name" style="font-size: 16px">Jenis Perawatan</label>
+                                 <select class="form-control" onchange="onSelectPerawatan1(this)" name="jenisPerawatan1">
+                                     <option disabled selected>Pilih Jenis Perawatan Mobil</option>
+                                     <option value="Perawatan Khusus">Perawatan Khusus</option>
+                                     <option value="Variasi / Aksesoris Tambahan">Variasi / Aksesoris Tambahan</option>
+                                     <option value="Car Care">Car Care</option>
+                                 </select>
+                             </div>
+                             <!-- Validasi Jenis Perawatan - 1 -->
+                             <script>
+                                 function onSelectPerawatan1(jenisPerawatan) {
+                                     switch (jenisPerawatan.value) {
+                                         case "Perawatan Khusus":
+                                             document.getElementById("khusus1").style.display = "block";
+                                             document.getElementById("variasi1").style.display = "none";
+                                             document.getElementById("carCare1").style.display = "none";
+                                             document.getElementById("kuantiti1").style.display = "block";
+                                             document.getElementById("tambahPerawatan1").style.display = "block";
+                                             break;
+                                         case "Variasi / Aksesoris Tambahan":
+                                             document.getElementById("khusus1").style.display = "none";
+                                             document.getElementById("variasi1").style.display = "block";
+                                             document.getElementById("carCare1").style.display = "none";
+                                             document.getElementById("kuantiti1").style.display = "block";
+                                             document.getElementById("tambahPerawatan1").style.display = "block";
+                                             break;
+                                         case "Car Care":
+                                             document.getElementById("khusus1").style.display = "none";
+                                             document.getElementById("variasi1").style.display = "none";
+                                             document.getElementById("carCare1").style.display = "block";
+                                             document.getElementById("kuantiti1").style.display = "block";
+                                             document.getElementById("tambahPerawatan1").style.display = "block";
+                                             break;
+                                         case "Komplikasi":
+                                             document.getElementById("khusus1").style.display = "none";
+                                             document.getElementById("variasi1").style.display = "none";
+                                             document.getElementById("carCare1").style.display = "none";
+                                             document.getElementById("kuantiti1").style.display = "none";
+                                             document.getElementById("tambahPerawatan1").style.display = "none";
+                                             break;
+                                         default:
+                                             document.getElementById("khusus1").style.display = "none";
+                                             document.getElementById("variasi1").style.display = "none";
+                                             document.getElementById("carCare1").style.display = "none";
+                                             document.getElementById("kuantiti1").style.display = "none";
+                                             document.getElementById("tambahPerawatan1").style.display = "none";
+                                     }
+                                 }
+                             </script>
+                             <!-- Detail Perawatan - 1 -->
+                             <!-- Perawatan Khusus - 1 -->
+                             <div id="khusus1" style="display:none" class="form-group">
+                                 <label for="name" style="font-size: 16px">Detail Perawatan</label>
+                                 <select class="form-control" name="detailPerawatan1">
+                                     <option disabled selected>Pilih Detail Perawatan Mobil</option>
+                                     <option value="Kampas Rem">Kampas Rem</option>
+                                     <option value="Kampas Kopling">Kampas Kopling</option>
+                                     <option value="Shock Breaker">Shock Breaker</option>
+                                     <option value="Servis AC">Servis AC</option>
+                                     <option value="Servis Berkala">Servis Berkala</option>
+                                     <option value="Ban">Ban</option>
+                                     <option value="Aki">Aki</option>
+                                     <option value="Servis Radiator">Servis Radiator</option>
+                                     <option value="Lahar Roda">Lahar Roda</option>
+                                 </select>
+                             </div>
+                             <!-- Variasi / Aksesoris Tambahan - 1 -->
+                             <div id="variasi1" style="display:none" class="form-group">
+                                 <label for="name" style="font-size: 16px">Detail Perawatan</label>
+                                 <select class="form-control" name="detailPerawatan1">
+                                     <option disabled selected>Pilih Detail Perawatan Mobil</option>
+                                     <option value="Kaca Film">Kaca Film</option>
+                                     <option value="Cover Jok">Cover Jok</option>
+                                     <option value="Bumper Clip">Bumper Clip</option>
+                                     <option value="Tape Layar">Tape Layar</option>
+                                     <option value="Tape Klasik">Tape Klasik</option>
+                                     <option value="Kamera Mundur">Kamera Mundur</option>
+                                     <option value="Start Engine System">Start Engine System</option>
+                                     <option value="Alarm">Alarm</option>
+                                     <option value="Karpet Dasar">Karpet Dasar</option>
+                                     <option value="Bumper Depan">Bumper Depan</option>
+                                     <option value="Bumper Belakang">Bumper Belakang</option>
+                                 </select>
+                             </div>
+                             <!-- Car Care - 1 -->
+                             <div id="carCare1" style="display:none" class="form-group">
+                                 <label for="name" style="font-size: 16px">Detail Perawatan</label>
+                                 <select class="form-control" name="detailPerawatan1">
+                                     <option disabled selected>Pilih Detail Perawatan Mobil</option>
+                                     <option value="Cuci Mobil Luar dan Dalam">Cuci Mobil Luar dan Dalam</option>
+                                     <option value="Poles Full Body">Poles Full Body</option>
+                                 </select>
+                             </div>
+                             <!-- Kuantiti - 1 -->
+                             <div id="kuantiti1" style="display:none" class="form-group">
+                                 <label for="name" style="font-size: 16px">Kuantiti</label>
+                                 <input type="text" class="form-control" name="kuantiti1" placeholder="Kuantiti"
+                                     value="<%= kuantiti1 %>">
+                             </div>
+                             <!-- Tambah Perawatan - 1 -->
+                             <div id="tambahPerawatan1" style="display:none" class="form-group">
+                                 <input type="button" class="btn" style="padding: unset" onclick="viewPerawatan2()"
+                                     value="Tambah Perawatan">
+                             </div>
+                             <!-- Tambah Perawatan - Section 2 -->
+                             <!-- Validasi Perawatan Mobil - 2 -->
+                             <script>
+                                 function viewPerawatan2() {
+                                     document.getElementById("perawatanMobil2").style.display = "block";
+                                 }
+                             </script>
+                             <!-- Jenis Perawatan - 2 -->
+                             <div id="perawatanMobil2" style="display:none" class="form-group">
+                                 <h3 class="h4 text-black mb-4">Detail Perawatan Mobil - 3</h3>
+                                 <label for="name" style="font-size: 16px">Jenis Perawatan</label>
+                                 <select class="form-control" onchange="onSelectPerawatan2(this)" name="jenisPerawatan2">
+                                     <option disabled selected>Pilih Jenis Perawatan Mobil</option>
+                                     <option value="Perawatan Khusus">Perawatan Khusus</option>
+                                     <option value="Variasi / Aksesoris Tambahan">Variasi / Aksesoris Tambahan</option>
+                                     <option value="Car Care">Car Care</option>
+                                 </select>
+                             </div>
+                             <!-- Validasi Jenis Perawatan - 2 -->
+                             <script>
+                                 function onSelectPerawatan2(jenisPerawatan) {
+                                     switch (jenisPerawatan.value) {
+                                         case "Perawatan Khusus":
+                                             document.getElementById("khusus2").style.display = "block";
+                                             document.getElementById("variasi2").style.display = "none";
+                                             document.getElementById("carCare2").style.display = "none";
+                                             document.getElementById("kuantiti2").style.display = "block";
+                                             break;
+                                         case "Variasi / Aksesoris Tambahan":
+                                             document.getElementById("khusus2").style.display = "none";
+                                             document.getElementById("variasi2").style.display = "block";
+                                             document.getElementById("carCare2").style.display = "none";
+                                             document.getElementById("kuantiti2").style.display = "block";
+                                             break;
+                                         case "Car Care":
+                                             document.getElementById("khusus2").style.display = "none";
+                                             document.getElementById("variasi2").style.display = "none";
+                                             document.getElementById("carCare2").style.display = "block";
+                                             document.getElementById("kuantiti2").style.display = "block";
+                                             break;
+                                         case "Komplikasi":
+                                             document.getElementById("khusus2").style.display = "none";
+                                             document.getElementById("variasi2").style.display = "none";
+                                             document.getElementById("carCare2").style.display = "none";
+                                             document.getElementById("kuantiti2").style.display = "none";
+                                             break;
+                                         default:
+                                             document.getElementById("khusus2").style.display = "none";
+                                             document.getElementById("variasi2").style.display = "none";
+                                             document.getElementById("carCare2").style.display = "none";
+                                             document.getElementById("kuantiti2").style.display = "none";
+                                     }
+                                 }
+                             </script>
+                             <!-- Detail Perawatan - 2 -->
+                             <!-- Perawatan Khusus - 2 -->
+                             <div id="khusus2" style="display:none" class="form-group">
+                                 <label for="name" style="font-size: 16px">Detail Perawatan</label>
+                                 <select class="form-control" name="detailPerawatan2">
+                                     <option disabled selected>Pilih Detail Perawatan Mobil</option>
+                                     <option value="Kampas Rem">Kampas Rem</option>
+                                     <option value="Kampas Kopling">Kampas Kopling</option>
+                                     <option value="Shock Breaker">Shock Breaker</option>
+                                     <option value="Servis AC">Servis AC</option>
+                                     <option value="Servis Berkala">Servis Berkala</option>
+                                     <option value="Ban">Ban</option>
+                                     <option value="Aki">Aki</option>
+                                     <option value="Servis Radiator">Servis Radiator</option>
+                                     <option value="Lahar Roda">Lahar Roda</option>
+                                 </select>
+                             </div>
+                             <!-- Variasi / Aksesoris Tambahan - 2 -->
+                             <div id="variasi2" style="display:none" class="form-group">
+                                 <label for="name" style="font-size: 16px">Detail Perawatan</label>
+                                 <select class="form-control" name="detailPerawatan2">
+                                     <option disabled selected>Pilih Detail Perawatan Mobil</option>
+                                     <option value="Kaca Film">Kaca Film</option>
+                                     <option value="Cover Jok">Cover Jok</option>
+                                     <option value="Bumper Clip">Bumper Clip</option>
+                                     <option value="Tape Layar">Tape Layar</option>
+                                     <option value="Tape Klasik">Tape Klasik</option>
+                                     <option value="Kamera Mundur">Kamera Mundur</option>
+                                     <option value="Start Engine System">Start Engine System</option>
+                                     <option value="Alarm">Alarm</option>
+                                     <option value="Karpet Dasar">Karpet Dasar</option>
+                                     <option value="Bumper Depan">Bumper Depan</option>
+                                     <option value="Bumper Belakang">Bumper Belakang</option>
+                                 </select>
+                             </div>
+                             <!-- Car Care - 2 -->
+                             <div id="carCare2" style="display:none" class="form-group">
+                                 <label for="name" style="font-size: 16px">Detail Perawatan</label>
+                                 <select class="form-control" name="detailPerawatan2">
+                                     <option disabled selected>Pilih Detail Perawatan Mobil</option>
+                                     <option value="Cuci Mobil Luar dan Dalam">Cuci Mobil Luar dan Dalam</option>
+                                     <option value="Poles Full Body">Poles Full Body</option>
+                                 </select>
+                             </div>
+                             <!-- Kuantiti - 2 -->
+                             <div id="kuantiti2" style="display:none" class="form-group">
+                                 <label for="name" style="font-size: 16px">Kuantiti</label>
+                                 <input type="text" class="form-control" name="kuantiti2" placeholder="Kuantiti"
+                                     value="<%= kuantiti2 %>">
+                             </div>
+                             <!-- Price Checking -->
                              <div class="form-group">
                                  <input type="submit" class="btn btn-primary btn-pill" value="Kalkulasi Harga">
                              </div>
