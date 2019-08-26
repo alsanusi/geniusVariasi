@@ -222,7 +222,7 @@ app.post('/report', async (req, res) => {
                     style: 'header'
                 },
                 {
-                    text: 'CarGenius Monthly Report',
+                    text: 'Cargenius Monthly Report',
                     style: 'subHeader',
                     lineHeight: 2
                 },
