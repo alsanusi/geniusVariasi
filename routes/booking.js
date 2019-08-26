@@ -253,6 +253,8 @@ app.post('/priceChecking', async (req, res) => {
                     detailPerawatan: req.body.detailPerawatan,
                     kuantiti: req.body.kuantiti,
                     multiLine: "N",
+                    perawatan1: "N",
+                    perawatan2: "N",
                     harga: priceTotal
                 })
             } else if (bookingData.jenisPerawatan2 === "-" || bookingData.detailPerawatan2 === "-") {
@@ -466,12 +468,12 @@ app.post('/booked', (req, res) => {
             jenisPerawatan: req.sanitize('jenisPerawatan').escape().trim(),
             detailPerawatan: req.sanitize('detailPerawatan').escape().trim(),
             kuantiti: req.sanitize('kuantiti').escape().trim(),
-            jenisPerawatan1: req.sanitize('jenisPerawatan').escape().trim(),
-            detailPerawatan1: req.sanitize('detailPerawatan').escape().trim(),
-            kuantiti1: req.sanitize('kuantiti').escape().trim(),
-            jenisPerawatan2: req.sanitize('jenisPerawatan').escape().trim(),
-            detailPerawatan2: req.sanitize('detailPerawatan').escape().trim(),
-            kuantiti2: req.sanitize('kuantiti').escape().trim(),
+            jenisPerawatan1: req.body.jenisPerawatan1 ? req.sanitize('jenisPerawatan1').escape().trim() : "-",
+            detailPerawatan1: req.body.detailPerawatan1 ? req.sanitize('detailPerawatan1').escape().trim() : "-",
+            kuantiti1: req.body.kuantiti1 ? req.sanitize('kuantiti1').escape().trim() : 0,
+            jenisPerawatan2: req.body.jenisPerawatan2 ? req.sanitize('jenisPerawatan2').escape().trim() : "-",
+            detailPerawatan2: req.body.detailPerawatan2 ? req.sanitize('detailPerawatan2').escape().trim() : "-",
+            kuantiti2: req.body.kuantiti2 ? req.sanitize('kuantiti2').escape().trim() : 0,
             harga: req.sanitize('harga').escape().trim(),
             done_flag: 'N',
             desc_perawatan: globalBooking.multiLine
