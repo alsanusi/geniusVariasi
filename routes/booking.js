@@ -87,7 +87,7 @@ app.route('/editBooking')
             kuantiti1: 0,
             jenisPerawatan2: '',
             detailPerawatan2: '',
-            kuantiti2: 0
+            kuantiti2: 0,
         })
     })
     .post((req, res) => {
@@ -103,12 +103,15 @@ app.route('/editBooking')
             jenisPerawatan: '',
             detailPerawatan: '',
             kuantiti: 1,
+            harga: '',
             jenisPerawatan1: '',
             detailPerawatan1: '',
             kuantiti1: 0,
+            harga1: 0,
             jenisPerawatan2: '',
             detailPerawatan2: '',
-            kuantiti2: 0
+            kuantiti2: 0,
+            harga2: 0
         })
     })
 
@@ -339,15 +342,15 @@ app.post('/priceChecking', async (req, res) => {
                     jenisPerawatan: req.body.jenisPerawatan,
                     detailPerawatan: req.body.detailPerawatan,
                     kuantiti: req.body.kuantiti,
-                    totalPrice1: priceTotal1,
+                    harga: priceTotal1,
                     jenisPerawatan1: req.body.jenisPerawatan1,
                     detailPerawatan1: req.body.detailPerawatan1,
                     kuantiti1: req.body.kuantiti1,
-                    totalPrice2: priceTotal2,
+                    harga1: priceTotal2,
                     jenisPerawatan2: req.body.jenisPerawatan2,
                     detailPerawatan2: req.body.detailPerawatan2,
                     kuantiti2: req.body.kuantiti2,
-                    totalPrice3: priceTotal3,
+                    harga2: priceTotal3,
                     multiLine: "N",
                     perawatan1: "Y",
                     perawatan2: "Y",
@@ -480,12 +483,15 @@ app.post('/booked', (req, res) => {
             jenisPerawatan: req.sanitize('jenisPerawatan').escape().trim(),
             detailPerawatan: req.sanitize('detailPerawatan').escape().trim(),
             kuantiti: req.sanitize('kuantiti').escape().trim(),
+            harga: req.body.harga ? req.sanitize('harga').escape().trim() : req.sanitize('totalHarga').escape().trim(),
             jenisPerawatan1: req.body.jenisPerawatan1 ? req.sanitize('jenisPerawatan1').escape().trim() : "-",
             detailPerawatan1: req.body.detailPerawatan1 ? req.sanitize('detailPerawatan1').escape().trim() : "-",
             kuantiti1: req.body.kuantiti1 ? req.sanitize('kuantiti1').escape().trim() : 0,
+            harga1: req.body.harga1 ? req.sanitize('harga1').escape().trim() : 0,
             jenisPerawatan2: req.body.jenisPerawatan2 ? req.sanitize('jenisPerawatan2').escape().trim() : "-",
             detailPerawatan2: req.body.detailPerawatan2 ? req.sanitize('detailPerawatan2').escape().trim() : "-",
             kuantiti2: req.body.kuantiti2 ? req.sanitize('kuantiti2').escape().trim() : 0,
+            harga2: req.body.harga2 ? req.sanitize('harga2').escape().trim() : 0,
             totalHarga: req.sanitize('totalHarga').escape().trim(),
             done_flag: 'N',
             desc_perawatan: globalBooking.multiLine
