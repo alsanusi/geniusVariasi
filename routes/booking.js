@@ -17,28 +17,30 @@ var conn = mysql.createConnection({
 
 // Global Variable
 var globalBooking = {
-    namaPemilik: '',
-    email: '',
-    alamat: '',
-    nomorTelepon: '',
-    tanggalService: '',
-    waktuService: '',
-    merkMobil: '',
-    tipeMobil: '',
-    jenisPerawatan: '',
-    detailPerawatan: '',
-    kuantiti: '',
-    harga: '',
-    jenisPerawatan1: '',
-    detailPerawatan1: '',
-    kuantiti1: '',
-    harga1: '',
-    jenisPerawatan2: '',
-    detailPerawatan2: '',
-    kuantiti2: '',
-    harga2: '',
-    totalHarga: '',
-    multiLine: ''
+    namaPemilik: "",
+    email: "",
+    alamat: "",
+    nomorTelepon: "",
+    tanggalService: "",
+    waktuService: "",
+    merkMobil: "",
+    tipeMobil: "",
+    jenisPerawatan: "",
+    detailPerawatan: "",
+    kuantiti: "",
+    harga: "",
+    jenisPerawatan1: "",
+    detailPerawatan1: "",
+    kuantiti1: "",
+    harga1: "",
+    jenisPerawatan2: "",
+    detailPerawatan2: "",
+    kuantiti2: "",
+    harga2: "",
+    totalHarga: "",
+    multiLine: "",
+    perawatan1: "",
+    perawatan2: ""
 }
 
 // Default
@@ -262,6 +264,7 @@ app.post('/priceChecking', async (req, res) => {
             globalBooking.tipeMobil = bookingData.tipeMobil;
             globalBooking.jenisPerawatan = bookingData.jenisPerawatan;
             globalBooking.detailPerawatan = bookingData.detailPerawatan;
+            globalBooking.kuantiti = bookingData.kuantiti;
             globalBooking.totalHarga = priceTotal;
 
             // Render Booking Details
@@ -299,7 +302,19 @@ app.post('/priceChecking', async (req, res) => {
             priceTotal = priceTotal1 + priceTotal2;
 
             // Set Global MultiLine
-            globalBooking.multiLine = 'N';
+            globalBooking.multiLine = "N";
+            globalBooking.merkMobil = bookingData.merkMobil;
+            globalBooking.tipeMobil = bookingData.tipeMobil;
+            globalBooking.jenisPerawatan = bookingData.jenisPerawatan;
+            globalBooking.detailPerawatan = bookingData.detailPerawatan;
+            globalBooking.kuantiti = bookingData.kuantiti;
+            globalBooking.harga = priceTotal1;
+            globalBooking.jenisPerawatan1 = bookingData.jenisPerawatan1;
+            globalBooking.detailPerawatan1 = bookingData.detailPerawatan1;
+            globalBooking.kuantiti1 = bookingData.kuantiti1;
+            globalBooking.harga1 = priceTotal2;
+            globalBooking.totalHarga = priceTotal;
+            globalBooking.perawatan1 = "Y";
 
             // Render Booking Details
             res.render('pricingDetails', {
@@ -343,8 +358,24 @@ app.post('/priceChecking', async (req, res) => {
             priceTotal = priceTotal1 + priceTotal2 + priceTotal3;
 
             // Set Global MultiLine
-            globalBooking.multiLine = 'N';
-            
+            globalBooking.multiLine = "N";
+            globalBooking.merkMobil = bookingData.merkMobil;
+            globalBooking.tipeMobil = bookingData.tipeMobil;
+            globalBooking.jenisPerawatan = bookingData.jenisPerawatan;
+            globalBooking.detailPerawatan = bookingData.detailPerawatan;
+            globalBooking.kuantiti = bookingData.kuantiti;
+            globalBooking.harga = priceTotal1;
+            globalBooking.jenisPerawatan1 = bookingData.jenisPerawatan1;
+            globalBooking.detailPerawatan1 = bookingData.detailPerawatan1;
+            globalBooking.kuantiti1 = bookingData.kuantiti1;
+            globalBooking.harga1 = priceTotal2;
+            globalBooking.jenisPerawatan2 = bookingData.jenisPerawatan2;
+            globalBooking.detailPerawatan2 = bookingData.detailPerawatan2;
+            globalBooking.kuantiti2 = bookingData.kuantiti2;
+            globalBooking.harga2 = priceTotal3;
+            globalBooking.totalHarga = priceTotal;
+            globalBooking.perawatan1 = "Y";
+            globalBooking.perawatan2 = "Y";
 
             // Render Booking Details
             res.render('pricingDetails', {
@@ -457,7 +488,19 @@ const customerEmailNotifier = () => {
             carType: globalBooking.tipeMobil,
             careType: globalBooking.jenisPerawatan,
             careDetail: globalBooking.detailPerawatan,
-            totalPrice: globalBooking.totalHarga
+            kuantiti: globalBooking.kuantiti,
+            price: globalBooking.harga,
+            careType1: globalBooking.jenisPerawatan1,
+            careDetail1: globalBooking.detailPerawatan1,
+            kuantiti1: globalBooking.kuantiti1,
+            price1: globalBooking.harga1,
+            careType2: globalBooking.jenisPerawatan2,
+            careDetail2: globalBooking.detailPerawatan2,
+            kuantiti2: globalBooking.kuantiti2,
+            price2: globalBooking.harga2,
+            totalPrice: globalBooking.totalHarga,
+            perawatan1: globalBooking.perawatan1,
+            perawatan2: globalBooking.perawatan2
         },
         template: 'customerTemplate'
     };
@@ -484,7 +527,7 @@ const customerMultiServiceNotifier = () => {
             extName: '.handlebars',
             partialsDir: './views',
             layoutsDir: './views',
-            defaultLayout: 'customerTemplate.handlebars',
+            defaultLayout: 'customerMultiServiceTemplate.handlebars',
         },
         viewPath: './views',
         extName: '.handlebars',
