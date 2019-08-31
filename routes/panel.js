@@ -6,7 +6,7 @@ const pdfPrinter = require('pdfmake')
 const fs = require('fs')
 
 // Global Variable
-var globalId, pdfJson
+var globalId, pdfJson, globalTotalPrice
 
 // Admin Credentials
 const admin = {
@@ -381,6 +381,9 @@ app.route('/showDetails/(:id)')
                 if (err) {
                     throw err
                 } else {
+                    //Set Global Variable
+                    globalTotalPrice = rows[0].totalHarga;
+
                     res.render('bookingDetailsPanel', {
                         id: rows[0].id,
                         namaPemilik: rows[0].namaPemilik,
@@ -417,7 +420,7 @@ app.route('/showDetails/(:id)')
         var errors = req.validationErrors()
         if (!errors) {
             var bookingStatus = {
-                totalHarga: req.body.totalHarga,
+                totalHarga: req.body.totalHarga ? req.body.totalHarga : globalTotalPrice,
                 done_flag: 'Y'
             }
             mysql.createConnection(config.database).then(function (con) {

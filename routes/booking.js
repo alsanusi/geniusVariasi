@@ -85,7 +85,7 @@ app.route('/editBooking')
             namaPemilik: globalBooking.namaPemilik,
             email: globalBooking.email,
             alamat: globalBooking.alamat,
-            nomorTelepon: '',
+            nomorTelepon: globalBooking.nomorTelepon,
             tanggalService: globalBooking.tanggalService,
             waktuService: '',
             merkMobil: '',
@@ -220,6 +220,8 @@ app.post('/priceChecking', async (req, res) => {
         globalBooking.tipeMobil = bookingData.tipeMobil;
         globalBooking.jenisPerawatan = bookingData.jenisPerawatan;
         globalBooking.detailPerawatan = bookingData.deskripsiKerusakan;
+        globalBooking.kuantiti = 0;
+        globalBooking.totalHarga = 0;
 
         res.render('pricingDetails', {
             namaPemilik: req.body.namaPemilik,
@@ -235,7 +237,7 @@ app.post('/priceChecking', async (req, res) => {
             multiLine: "Y",
             perawatan1: "N",
             perawatan2: "N",
-            kuantiti: 1,
+            kuantiti: 0,
             totalHarga: 0
         })
     } else {
@@ -578,73 +580,53 @@ app.post('/booked', (req, res) => {
     var errors = req.validationErrors()
 
     if (!errors) {
-        if (globalBooking.multiLine === "Y") {
-            var clientData = {
-                namaPemilik: req.sanitize('namaPemilik').escape().trim(),
-                email: req.sanitize('email').escape().trim(),
-                alamat: req.sanitize('alamat').escape().trim(),
-                nomorTelepon: req.sanitize('nomorTelepon').escape().trim(),
-                tanggalService: req.sanitize('tanggalService').escape().trim(),
-                waktuService: req.sanitize('waktuService').escape().trim(),
-                merkMobil: req.sanitize('merkMobil').escape().trim(),
-                tipeMobil: req.sanitize('tipeMobil').escape().trim(),
-                jenisPerawatan: req.sanitize('jenisPerawatan').escape().trim(),
-                detailPerawatan: globalBooking.detailPerawatan,
-                totalHarga: 0,
-                done_flag: 'N'
-            }
-
-            req.getConnection(function (err, con) {
-                con.query('INSERT INTO bookingListMultiService SET ?', clientData, function (err, result) {
-                    if (err) {
-                        req.flash('error', err)
-                        res.redirect('/bookingDetails')
-                    } else {
-                        customerMultiServiceNotifier()
-                        adminEmailNotifier()
-                        setTimeout(_ => res.render('thankyou'), 5000)
-                    }
-                })
-            })
-        } else {
-            var clientData = {
-                namaPemilik: req.sanitize('namaPemilik').escape().trim(),
-                email: req.sanitize('email').escape().trim(),
-                alamat: req.sanitize('alamat').escape().trim(),
-                nomorTelepon: req.sanitize('nomorTelepon').escape().trim(),
-                tanggalService: req.sanitize('tanggalService').escape().trim(),
-                waktuService: req.sanitize('waktuService').escape().trim(),
-                merkMobil: req.sanitize('merkMobil').escape().trim(),
-                tipeMobil: req.sanitize('tipeMobil').escape().trim(),
-                jenisPerawatan: req.sanitize('jenisPerawatan').escape().trim(),
-                detailPerawatan: req.sanitize('detailPerawatan').escape().trim(),
-                kuantiti: req.sanitize('kuantiti').escape().trim(),
-                harga: req.body.harga ? req.sanitize('harga').escape().trim() : req.sanitize('totalHarga').escape().trim(),
-                jenisPerawatan1: req.body.jenisPerawatan1 ? req.sanitize('jenisPerawatan1').escape().trim() : "-",
-                detailPerawatan1: req.body.detailPerawatan1 ? req.sanitize('detailPerawatan1').escape().trim() : "-",
-                kuantiti1: req.body.kuantiti1 ? req.sanitize('kuantiti1').escape().trim() : 0,
-                harga1: req.body.harga1 ? req.sanitize('harga1').escape().trim() : 0,
-                jenisPerawatan2: req.body.jenisPerawatan2 ? req.sanitize('jenisPerawatan2').escape().trim() : "-",
-                detailPerawatan2: req.body.detailPerawatan2 ? req.sanitize('detailPerawatan2').escape().trim() : "-",
-                kuantiti2: req.body.kuantiti2 ? req.sanitize('kuantiti2').escape().trim() : 0,
-                harga2: req.body.harga2 ? req.sanitize('harga2').escape().trim() : 0,
-                totalHarga: req.sanitize('totalHarga').escape().trim(),
-                done_flag: 'N'
-            }
-
-            req.getConnection(function (err, con) {
-                con.query('INSERT INTO bookingList SET ?', clientData, function (err, result) {
-                    if (err) {
-                        req.flash('error', err)
-                        res.redirect('/bookingDetails')
-                    } else {
-                        customerEmailNotifier()
-                        adminEmailNotifier()
-                        setTimeout(_ => res.render('thankyou'), 5000)
-                    }
-                })
-            })
+        var clientData = {
+            namaPemilik: req.sanitize('namaPemilik').escape().trim(),
+            email: req.sanitize('email').escape().trim(),
+            alamat: req.sanitize('alamat').escape().trim(),
+            nomorTelepon: req.sanitize('nomorTelepon').escape().trim(),
+            tanggalService: req.sanitize('tanggalService').escape().trim(),
+            waktuService: req.sanitize('waktuService').escape().trim(),
+            merkMobil: req.sanitize('merkMobil').escape().trim(),
+            tipeMobil: req.sanitize('tipeMobil').escape().trim(),
+            jenisPerawatan: req.sanitize('jenisPerawatan').escape().trim(),
+            detailPerawatan: globalBooking.detailPerawatan,
+            kuantiti: globalBooking.kuantiti,
+            harga: req.body.harga ? req.sanitize('harga').escape().trim() : globalBooking.totalHarga,
+            jenisPerawatan1: req.body.jenisPerawatan1 ? req.sanitize('jenisPerawatan1').escape().trim() : "-",
+            detailPerawatan1: req.body.detailPerawatan1 ? req.sanitize('detailPerawatan1').escape().trim() : "-",
+            kuantiti1: req.body.kuantiti1 ? req.sanitize('kuantiti1').escape().trim() : 0,
+            harga1: req.body.harga1 ? req.sanitize('harga1').escape().trim() : 0,
+            jenisPerawatan2: req.body.jenisPerawatan2 ? req.sanitize('jenisPerawatan2').escape().trim() : "-",
+            detailPerawatan2: req.body.detailPerawatan2 ? req.sanitize('detailPerawatan2').escape().trim() : "-",
+            kuantiti2: req.body.kuantiti2 ? req.sanitize('kuantiti2').escape().trim() : 0,
+            harga2: req.body.harga2 ? req.sanitize('harga2').escape().trim() : 0,
+            totalHarga: globalBooking.totalHarga,
+            done_flag: 'N',
+            desc_perawatan: globalBooking.multiLine
         }
+
+        req.getConnection(function (err, con) {
+            con.query('INSERT INTO bookingList SET ?', clientData, function (err, result) {
+                console.log(err)
+                if (err) {
+                    req.flash('error', err)
+                    res.redirect('/bookingDetails')
+                } else {
+                    switch (globalBooking.multiLine) {
+                        case "Y":
+                            customerMultiServiceNotifier();
+                            adminEmailNotifier()
+                            setTimeout(_ => res.render('thankyou'), 5000)
+                            break;
+                        default:
+                            customerEmailNotifier();
+                            adminEmailNotifier()
+                            setTimeout(_ => res.render('thankyou'), 5000)
+                    }
+                }
+            })
+        })
     } else {
         // When error occurs, the message will show.
         var error_msg = ''
