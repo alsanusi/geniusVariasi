@@ -162,6 +162,7 @@ const monthYearReport = (month, year) => {
     return new Promise(resolve => {
         mysql.createConnection(config.database).then(function (con) {
             con.query("SELECT * FROM bookingList WHERE month(tanggalService)= '" + month + "' AND year(tanggalService)= '" + year + "' AND done_flag = 'Y' ").then(rows => {
+                console.log(rows)
                 resolve(rows)
             })
         })

@@ -411,47 +411,47 @@ app.post('/priceChecking', async (req, res) => {
 })
 
 const adminEmailNotifier = () => {
-    let transporter = nodeMailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'malkautsars@gmail.com',
-            pass: 'Sesar181196'
-        }
-    });
+    return new Promise((resolve, reject) => {
+        let transporter = nodeMailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'malkautsars@gmail.com',
+                pass: 'Sesar181196'
+            }
+        });
 
-    const handlebarOptions = {
-        viewEngine: {
+        const handlebarOptions = {
+            viewEngine: {
+                extName: '.handlebars',
+                partialsDir: './views',
+                layoutsDir: './views',
+                defaultLayout: 'adminTemplate.handlebars',
+            },
+            viewPath: './views',
             extName: '.handlebars',
-            partialsDir: './views',
-            layoutsDir: './views',
-            defaultLayout: 'adminTemplate.handlebars',
-        },
-        viewPath: './views',
-        extName: '.handlebars',
-    };
+        };
 
-    transporter.use('compile', hbs(handlebarOptions));
+        transporter.use('compile', hbs(handlebarOptions));
 
-    let mailOptions = {
-        from: 'malkautsars@gmail.com',
-        to: 'malkautsars@gmail.com',
-        subject: "New Incoming Booking!",
-        context: {
-            name: globalBooking.namaPemilik,
-            address: globalBooking.alamat,
-            date: globalBooking.tanggalService,
-            time: globalBooking.waktuService,
+        let mailOptions = {
+            from: 'malkautsars@gmail.com',
+            to: 'malkautsars@gmail.com',
+            subject: "New Incoming Booking!",
+            context: {
+                name: globalBooking.namaPemilik,
+                address: globalBooking.alamat,
+                date: globalBooking.tanggalService,
+                time: globalBooking.waktuService,
 
-        },
-        template: 'adminTemplate'
-    };
+            },
+            template: 'adminTemplate'
+        };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            return console.log(error);
-        }
-        console.log('Message %s sent: %s', info.messageId, info.response);
-    });
+        transporter.sendMail(mailOptions, (error, info) => {
+            error ? reject(console.log(error)) : resolve(console.log('Message %s sent: %s', info.messageId, info.response));
+        });
+    })
+
 }
 
 const customerEmailNotifier = () => {
@@ -516,52 +516,51 @@ const customerEmailNotifier = () => {
 }
 
 const customerMultiServiceNotifier = () => {
-    let transporter = nodeMailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'malkautsars@gmail.com',
-            pass: 'Sesar181196'
-        }
-    });
+    return new Promise((resolve, reject) => {
+        let transporter = nodeMailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'malkautsars@gmail.com',
+                pass: 'Sesar181196'
+            }
+        });
 
-    const handlebarOptions = {
-        viewEngine: {
+        const handlebarOptions = {
+            viewEngine: {
+                extName: '.handlebars',
+                partialsDir: './views',
+                layoutsDir: './views',
+                defaultLayout: 'customerMultiServiceTemplate.handlebars',
+            },
+            viewPath: './views',
             extName: '.handlebars',
-            partialsDir: './views',
-            layoutsDir: './views',
-            defaultLayout: 'customerMultiServiceTemplate.handlebars',
-        },
-        viewPath: './views',
-        extName: '.handlebars',
-    };
+        };
 
-    transporter.use('compile', hbs(handlebarOptions));
+        transporter.use('compile', hbs(handlebarOptions));
 
-    let mailOptions = {
-        from: 'malkautsars@gmail.com',
-        to: globalBooking.email,
-        subject: "Booking Service Detail",
-        context: {
-            name: globalBooking.namaPemilik,
-            address: globalBooking.alamat,
-            date: globalBooking.tanggalService,
-            time: globalBooking.waktuService,
-            phoneNumber: globalBooking.nomorTelepon,
-            carBrand: globalBooking.merkMobil,
-            carType: globalBooking.tipeMobil,
-            careType: globalBooking.jenisPerawatan,
-            careDetail: globalBooking.detailPerawatan,
-            totalPrice: "Kami akan segara menghubungi anda."
-        },
-        template: 'customerMultiServiceTemplate'
-    };
+        let mailOptions = {
+            from: 'malkautsars@gmail.com',
+            to: globalBooking.email,
+            subject: "Booking Service Detail",
+            context: {
+                name: globalBooking.namaPemilik,
+                address: globalBooking.alamat,
+                date: globalBooking.tanggalService,
+                time: globalBooking.waktuService,
+                phoneNumber: globalBooking.nomorTelepon,
+                carBrand: globalBooking.merkMobil,
+                carType: globalBooking.tipeMobil,
+                careType: globalBooking.jenisPerawatan,
+                careDetail: globalBooking.detailPerawatan,
+                totalPrice: "Kami akan segara menghubungi anda."
+            },
+            template: 'customerMultiServiceTemplate'
+        };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            return console.log(error);
-        }
-        console.log('Message %s sent: %s', info.messageId, info.response);
-    });
+        transporter.sendMail(mailOptions, (error, info) => {
+            error ? reject(console.log(error)) : resolve(console.log('Message %s sent: %s', info.messageId, info.response));
+        });
+    })
 }
 
 app.post('/booked', (req, res) => {
@@ -608,16 +607,18 @@ app.post('/booked', (req, res) => {
 
         req.getConnection(function (err, con) {
             con.query('INSERT INTO bookingList SET ?', clientData, function (err, result) {
-                console.log(err)
                 if (err) {
                     req.flash('error', err)
                     res.redirect('/bookingDetails')
                 } else {
                     switch (globalBooking.multiLine) {
                         case "Y":
-                            customerMultiServiceNotifier();
-                            adminEmailNotifier()
-                            setTimeout(_ => res.render('thankyou'), 5000)
+                            Promise.all([
+                                customerMultiServiceNotifier(),
+                                adminEmailNotifier()
+                            ]).then(() => {
+                                setTimeout(_ => res.render('thankyou'), 3000)
+                            })
                             break;
                         default:
                             customerEmailNotifier();
