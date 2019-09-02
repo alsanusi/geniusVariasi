@@ -455,64 +455,63 @@ const adminEmailNotifier = () => {
 }
 
 const customerEmailNotifier = () => {
-    let transporter = nodeMailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'malkautsars@gmail.com',
-            pass: 'Sesar181196'
-        }
-    });
+    return new Promise((resolve, reject) => {
+        let transporter = nodeMailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'malkautsars@gmail.com',
+                pass: 'Sesar181196'
+            }
+        });
 
-    const handlebarOptions = {
-        viewEngine: {
+        const handlebarOptions = {
+            viewEngine: {
+                extName: '.handlebars',
+                partialsDir: './views',
+                layoutsDir: './views',
+                defaultLayout: 'customerTemplate.handlebars',
+            },
+            viewPath: './views',
             extName: '.handlebars',
-            partialsDir: './views',
-            layoutsDir: './views',
-            defaultLayout: 'customerTemplate.handlebars',
-        },
-        viewPath: './views',
-        extName: '.handlebars',
-    };
+        };
 
-    transporter.use('compile', hbs(handlebarOptions));
+        transporter.use('compile', hbs(handlebarOptions));
 
-    let mailOptions = {
-        from: 'malkautsars@gmail.com',
-        to: globalBooking.email,
-        subject: "Booking Service Detail",
-        context: {
-            name: globalBooking.namaPemilik,
-            address: globalBooking.alamat,
-            date: globalBooking.tanggalService,
-            time: globalBooking.waktuService,
-            phoneNumber: globalBooking.nomorTelepon,
-            carBrand: globalBooking.merkMobil,
-            carType: globalBooking.tipeMobil,
-            careType: globalBooking.jenisPerawatan,
-            careDetail: globalBooking.detailPerawatan,
-            kuantiti: globalBooking.kuantiti,
-            price: globalBooking.harga,
-            careType1: globalBooking.jenisPerawatan1,
-            careDetail1: globalBooking.detailPerawatan1,
-            kuantiti1: globalBooking.kuantiti1,
-            price1: globalBooking.harga1,
-            careType2: globalBooking.jenisPerawatan2,
-            careDetail2: globalBooking.detailPerawatan2,
-            kuantiti2: globalBooking.kuantiti2,
-            price2: globalBooking.harga2,
-            totalPrice: globalBooking.totalHarga,
-            perawatan1: globalBooking.perawatan1,
-            perawatan2: globalBooking.perawatan2
-        },
-        template: 'customerTemplate'
-    };
+        let mailOptions = {
+            from: 'malkautsars@gmail.com',
+            to: globalBooking.email,
+            subject: "Booking Service Detail",
+            context: {
+                name: globalBooking.namaPemilik,
+                address: globalBooking.alamat,
+                date: globalBooking.tanggalService,
+                time: globalBooking.waktuService,
+                phoneNumber: globalBooking.nomorTelepon,
+                carBrand: globalBooking.merkMobil,
+                carType: globalBooking.tipeMobil,
+                careType: globalBooking.jenisPerawatan,
+                careDetail: globalBooking.detailPerawatan,
+                kuantiti: globalBooking.kuantiti,
+                price: globalBooking.harga,
+                careType1: globalBooking.jenisPerawatan1,
+                careDetail1: globalBooking.detailPerawatan1,
+                kuantiti1: globalBooking.kuantiti1,
+                price1: globalBooking.harga1,
+                careType2: globalBooking.jenisPerawatan2,
+                careDetail2: globalBooking.detailPerawatan2,
+                kuantiti2: globalBooking.kuantiti2,
+                price2: globalBooking.harga2,
+                totalPrice: globalBooking.totalHarga,
+                perawatan1: globalBooking.perawatan1,
+                perawatan2: globalBooking.perawatan2
+            },
+            template: 'customerTemplate'
+        };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            return console.log(error);
-        }
-        console.log('Message %s sent: %s', info.messageId, info.response);
-    });
+        transporter.sendMail(mailOptions, (error, info) => {
+            error ? reject(console.log(error)) : resolve(console.log('Message %s sent: %s', info.messageId, info.response));
+        });
+    })
 }
 
 const customerMultiServiceNotifier = () => {
@@ -618,12 +617,15 @@ app.post('/booked', (req, res) => {
                                 adminEmailNotifier()
                             ]).then(() => {
                                 setTimeout(_ => res.render('thankyou'), 3000)
-                            })
+                            });
                             break;
                         default:
-                            customerEmailNotifier();
-                            adminEmailNotifier()
-                            setTimeout(_ => res.render('thankyou'), 5000)
+                            Promise.all([
+                                customerEmailNotifier(),
+                                adminEmailNotifier()
+                            ]).then(() => {
+                                setTimeout(_ => res.render('thankyou'), 3000)
+                            });
                     }
                 }
             })

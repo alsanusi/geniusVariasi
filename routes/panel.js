@@ -6,7 +6,7 @@ const pdfPrinter = require('pdfmake')
 const fs = require('fs')
 
 // Global Variable
-var globalId, pdfJson, globalTotalPrice
+var globalId, pdfJson, globalTotalPrice, reportError;
 
 // Admin Credentials
 const admin = {
@@ -161,8 +161,7 @@ app.get('/dashboard', (req, res) => {
 const monthYearReport = (month, year) => {
     return new Promise(resolve => {
         mysql.createConnection(config.database).then(function (con) {
-            con.query("SELECT * FROM bookingList WHERE month(tanggalService)= '" + month + "' AND year(tanggalService)= '" + year + "' AND done_flag = 'Y' ").then(rows => {
-                console.log(rows)
+            con.query("SELECT * FROM bookingList WHERE month(tanggalService)= '" + month + "' AND year(tanggalService)= '" + year + "' AND done_flag = 'Y' ", (err, rows, fields) => {
                 resolve(rows)
             })
         })
@@ -187,7 +186,11 @@ app.post('/report', async (req, res) => {
 
     let getMonthYearReport = await monthYearReport(month, year)
 
-    if (getMonthYearReport) {
+    if (getMonthYearReport.length === 0) {
+        var error_msg = "Tidak ada track record booking di bulan ini."
+        req.flash('error', error_msg)
+        res.redirect('/panel/dashboard')
+    } else {
         pdfJson = getMonthYearReport
 
         var bodyData = []
@@ -202,8 +205,8 @@ app.post('/report', async (req, res) => {
             dataRow.push(bookingData.waktuService)
             dataRow.push(bookingData.merkMobil)
             dataRow.push(bookingData.tipeMobil)
-            dataRow.push(bookingData.jenisPerawatan)
-            dataRow.push(bookingData.detailPerawatan)
+            dataRow.push([bookingData.jenisPerawatan, bookingData.jenisPerawatan1, bookingData.jenisPerawatan2])
+            dataRow.push([bookingData.detailPerawatan, bookingData.detailPerawatan1, bookingData.detailPerawatan2])
             dataRow.push(bookingData.totalHarga)
             priceTotal.push(bookingData.totalHarga)
             bodyData.push(dataRow)
@@ -283,9 +286,8 @@ app.post('/report', async (req, res) => {
         }
 
         donwloadGeneratePdf()
-    } else {
-        res.redirect('/panel/dashboard')
     }
+
 })
 
 app.route('/pricingList')
