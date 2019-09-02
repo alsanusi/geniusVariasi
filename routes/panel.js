@@ -6,7 +6,7 @@ const pdfPrinter = require('pdfmake')
 const fs = require('fs')
 
 // Global Variable
-var globalId, pdfJson
+var globalId, pdfJson, globalTotalPrice, reportError;
 
 // Admin Credentials
 const admin = {
@@ -43,7 +43,7 @@ const redirectHome = (req, res, next) => {
     }
 }
 
-function filterBookingDone(bStatus) {
+const filterBookingDone = bStatus => {
     var doneStatus
     doneStatus = bStatus.filter(obj => {
         return obj.done_flag === "Y"
@@ -51,7 +51,7 @@ function filterBookingDone(bStatus) {
     return doneStatus.length
 }
 
-function filterBookingNotDone(bStatus) {
+const filterBookingNotDone = bStatus => {
     var notDoneStatus
     notDoneStatus = bStatus.filter(obj => {
         return obj.done_flag === "N"
@@ -59,19 +59,19 @@ function filterBookingNotDone(bStatus) {
     return notDoneStatus.length
 }
 
-function filterIncome(price) {
+const filterIncome = price => {
     var income, totalIncome, statusDone
     statusDone = price.filter(obj => {
         return obj.done_flag === "Y"
     })
     income = statusDone.map(obj => {
-        return obj.harga
+        return obj.totalHarga
     })
     totalIncome = income.reduce((a, b) => a + b, 0)
     return totalIncome
 }
 
-function showDoneBooking(bStatus) {
+const showDoneBooking = bStatus => {
     var doneStatus
     doneStatus = bStatus.filter(obj => {
         return obj.done_flag === "Y"
@@ -79,7 +79,7 @@ function showDoneBooking(bStatus) {
     return doneStatus
 }
 
-function showNotDoneBooking(bStatus) {
+const showNotDoneBooking = bStatus => {
     var notDoneStatus
     notDoneStatus = bStatus.filter(obj => {
         return obj.done_flag === "N"
@@ -132,7 +132,7 @@ app.get('/dashboard', (req, res) => {
 
                 // Show list of not done booking
                 onGoingBookingList = onGoingBookingArray[+currentPage - 1];
-            
+
                 res.render('indexPanel', {
                     totalBooking: rows.length,
                     doneBooking: filterBookingDone(rows),
@@ -158,10 +158,10 @@ app.get('/dashboard', (req, res) => {
     })
 })
 
-function monthYearReport(month, year) {
+const monthYearReport = (month, year) => {
     return new Promise(resolve => {
         mysql.createConnection(config.database).then(function (con) {
-            con.query("SELECT * FROM bookingList WHERE month(tanggalService)= '" + month + "' AND year(tanggalService)= '" + year + "' AND done_flag = 'Y' ").then(rows => {
+            con.query("SELECT * FROM bookingList WHERE month(tanggalService)= '" + month + "' AND year(tanggalService)= '" + year + "' AND done_flag = 'Y' ", (err, rows, fields) => {
                 resolve(rows)
             })
         })
@@ -186,7 +186,11 @@ app.post('/report', async (req, res) => {
 
     let getMonthYearReport = await monthYearReport(month, year)
 
-    if (getMonthYearReport) {
+    if (getMonthYearReport.length === 0) {
+        var error_msg = "Tidak ada track record booking di bulan ini."
+        req.flash('error', error_msg)
+        res.redirect('/panel/dashboard')
+    } else {
         pdfJson = getMonthYearReport
 
         var bodyData = []
@@ -201,10 +205,10 @@ app.post('/report', async (req, res) => {
             dataRow.push(bookingData.waktuService)
             dataRow.push(bookingData.merkMobil)
             dataRow.push(bookingData.tipeMobil)
-            dataRow.push(bookingData.jenisPerawatan)
-            dataRow.push(bookingData.detailPerawatan)
-            dataRow.push(bookingData.harga)
-            priceTotal.push(bookingData.harga)
+            dataRow.push([bookingData.jenisPerawatan, bookingData.jenisPerawatan1, bookingData.jenisPerawatan2])
+            dataRow.push([bookingData.detailPerawatan, bookingData.detailPerawatan1, bookingData.detailPerawatan2])
+            dataRow.push(bookingData.totalHarga)
+            priceTotal.push(bookingData.totalHarga)
             bodyData.push(dataRow)
         })
 
@@ -222,7 +226,7 @@ app.post('/report', async (req, res) => {
                     style: 'header'
                 },
                 {
-                    text: 'CarGenius Monthly Report',
+                    text: 'Cargenius Monthly Report',
                     style: 'subHeader',
                     lineHeight: 2
                 },
@@ -282,9 +286,8 @@ app.post('/report', async (req, res) => {
         }
 
         donwloadGeneratePdf()
-    } else {
-        res.redirect('/panel/dashboard')
     }
+
 })
 
 app.route('/pricingList')
@@ -381,10 +384,14 @@ app.route('/showDetails/(:id)')
                 if (err) {
                     throw err
                 } else {
+                    //Set Global Variable
+                    globalTotalPrice = rows[0].totalHarga;
+
                     res.render('bookingDetailsPanel', {
                         id: rows[0].id,
                         namaPemilik: rows[0].namaPemilik,
                         alamat: rows[0].alamat,
+                        email: rows[0].email,
                         nomorTelepon: rows[0].nomorTelepon,
                         tanggalService: rows[0].tanggalService,
                         waktuService: rows[0].waktuService,
@@ -392,8 +399,19 @@ app.route('/showDetails/(:id)')
                         tipeMobil: rows[0].tipeMobil,
                         jenisPerawatan: rows[0].jenisPerawatan,
                         detailPerawatan: rows[0].detailPerawatan,
-                        harga: rows[0].harga,
-                        done_flag: rows[0].done_flag
+                        kuantiti: rows[0].kuantiti,
+                        harga: rows[0].harga ? rows[0].harga : rows[0].totalHarga,
+                        jenisPerawatan1: rows[0].jenisPerawatan1 ? rows[0].jenisPerawatan1 : "-",
+                        detailPerawatan1: rows[0].detailPerawatan1 ? rows[0].detailPerawatan1 : "-",
+                        kuantiti1: rows[0].kuantiti1 ? rows[0].kuantiti1 : "-",
+                        harga1: rows[0].harga1 ? rows[0].harga1 : "-",
+                        jenisPerawatan2: rows[0].jenisPerawatan2 ? rows[0].jenisPerawatan2 : "-",
+                        detailPerawatan2: rows[0].detailPerawatan2 ? rows[0].detailPerawatan2 : "-",
+                        kuantiti2: rows[0].kuantiti2 ? rows[0].kuantiti2 : "-",
+                        harga2: rows[0].harga2 ? rows[0].harga1 : "-",
+                        totalHarga: rows[0].totalHarga,
+                        done_flag: rows[0].done_flag,
+                        desc_perawatan: rows[0].desc_perawatan
                     })
                 }
             })
@@ -405,6 +423,7 @@ app.route('/showDetails/(:id)')
         var errors = req.validationErrors()
         if (!errors) {
             var bookingStatus = {
+                totalHarga: req.body.totalHarga ? req.body.totalHarga : globalTotalPrice,
                 done_flag: 'Y'
             }
             mysql.createConnection(config.database).then(function (con) {
@@ -417,6 +436,7 @@ app.route('/showDetails/(:id)')
                         id: req.params.id,
                         namaPemilik: req.body.namaPemilik,
                         alamat: req.body.alamat,
+                        email: req.body.email,
                         nomorTelepon: req.body.nomorTelepon,
                         tanggalService: req.body.tanggalService,
                         waktuService: req.body.waktuService,
@@ -424,7 +444,17 @@ app.route('/showDetails/(:id)')
                         tipeMobil: req.body.tipeMobil,
                         jenisPerawatan: req.body.jenisPerawatan,
                         detailPerawatan: req.body.detailPerawatan,
+                        kuantiti: req.body.kuantiti,
                         harga: req.body.harga,
+                        jenisPerawatan1: req.body.jenisPerawatan1,
+                        detailPerawatan1: req.body.detailPerawatan1,
+                        kuantiti1: req.body.kuantiti1,
+                        harga1: req.body.harga1,
+                        jenisPerawatan2: req.body.jenisPerawatan2,
+                        detailPerawatan2: req.body.detailPerawatan2,
+                        kuantiti2: req.body.kuantiti2,
+                        harga2: req.body.harga2,
+                        totalHarga: req.body.totalHarga,
                         done_flag: req.body.done_flag,
                     })
                 })
@@ -438,6 +468,7 @@ app.route('/showDetails/(:id)')
                 id: req.params.id,
                 namaPemilik: req.body.namaPemilik,
                 alamat: req.body.alamat,
+                email: req.body.email,
                 nomorTelepon: req.body.nomorTelepon,
                 tanggalService: req.body.tanggalService,
                 waktuService: req.body.waktuService,
@@ -445,7 +476,17 @@ app.route('/showDetails/(:id)')
                 tipeMobil: req.body.tipeMobil,
                 jenisPerawatan: req.body.jenisPerawatan,
                 detailPerawatan: req.body.detailPerawatan,
+                kuantiti: req.body.kuantiti,
                 harga: req.body.harga,
+                jenisPerawatan1: req.body.jenisPerawatan1,
+                detailPerawatan1: req.body.detailPerawatan1,
+                kuantiti1: req.body.kuantiti1,
+                harga1: req.body.harga1,
+                jenisPerawatan2: req.body.jenisPerawatan2,
+                detailPerawatan2: req.body.detailPerawatan2,
+                kuantiti2: req.body.kuantiti2,
+                harga2: req.body.harga2,
+                totalHarga: req.body.totalHarga,
                 done_flag: req.body.done_flag,
             })
         }

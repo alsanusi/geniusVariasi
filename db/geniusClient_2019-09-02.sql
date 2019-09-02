@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 8.0.16)
 # Database: geniusClient
-# Generation Time: 2019-08-13 04:26:21 +0000
+# Generation Time: 2019-09-02 12:58:41 +0000
 # ************************************************************
 
 
@@ -29,6 +29,7 @@ DROP TABLE IF EXISTS `bookingList`;
 CREATE TABLE `bookingList` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `namaPemilik` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
+  `email` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
   `alamat` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
   `nomorTelepon` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
   `tanggalService` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
@@ -36,27 +37,40 @@ CREATE TABLE `bookingList` (
   `merkMobil` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
   `tipeMobil` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
   `jenisPerawatan` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
-  `detailPerawatan` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
-  `harga` int(30) NOT NULL,
+  `detailPerawatan` varchar(5000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
+  `kuantiti` int(30) NOT NULL,
+  `harga` decimal(19,0) NOT NULL,
+  `jenisPerawatan1` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
+  `detailPerawatan1` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
+  `kuantiti1` int(30) NOT NULL,
+  `harga1` decimal(19,0) NOT NULL,
+  `jenisPerawatan2` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
+  `detailPerawatan2` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
+  `kuantiti2` int(30) NOT NULL,
+  `harga2` decimal(19,0) NOT NULL,
+  `totalHarga` decimal(19,0) NOT NULL,
   `done_flag` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
+  `desc_perawatan` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 LOCK TABLES `bookingList` WRITE;
 /*!40000 ALTER TABLE `bookingList` DISABLE KEYS */;
 
-INSERT INTO `bookingList` (`id`, `namaPemilik`, `alamat`, `nomorTelepon`, `tanggalService`, `waktuService`, `merkMobil`, `tipeMobil`, `jenisPerawatan`, `detailPerawatan`, `harga`, `done_flag`)
+INSERT INTO `bookingList` (`id`, `namaPemilik`, `email`, `alamat`, `nomorTelepon`, `tanggalService`, `waktuService`, `merkMobil`, `tipeMobil`, `jenisPerawatan`, `detailPerawatan`, `kuantiti`, `harga`, `jenisPerawatan1`, `detailPerawatan1`, `kuantiti1`, `harga1`, `jenisPerawatan2`, `detailPerawatan2`, `kuantiti2`, `harga2`, `totalHarga`, `done_flag`, `desc_perawatan`)
 VALUES
-	(9,'Muhammad Alkautsar Sanusi','Toddopuli X No 11','01112829758','2019-07-30','11 AM','Toyota','Avanza','Perawatan Khusus','Shock Breaker',1,'Y'),
-	(10,'Sadiq Sanusi','Toddopuli X No 11','082194275704','2019-08-01','13 PM','Honda','HR-V','Perawatan Khusus','Servis Berkala',1,'Y'),
-	(14,'Test4','Jln Toddopuli X No 11','01112829758','2019-08-15','12 PM','Honda','CR-V','Variasi &#x2F; Aksesoris Tambahan','Cover Jok',1,'Y'),
-	(15,'Test5','Jln Toddopuli X No 11','082194275704','2019-08-15','14 PM','Datsun','Go','Variasi &#x2F; Aksesoris Tambahan','Start Engine System',1,'N'),
-	(17,'Atuk Dalang','Toddopuli X No 11','082194275704','2019-08-17','12 PM','Datsun','Got','Variasi &#x2F; Aksesoris Tambahan','Cover Jok',1,'N'),
-	(18,'Drake Bedenna','Jln Toddopuli X No 11','01112829758','2019-08-17','11 AM','Datsun','Cross','Perawatan Khusus','Ban',1,'N'),
-	(19,'Travis Scoot','Toddopuli X No 11','01112829758','2019-08-13','13 PM','Suzuki','Ertiga','Variasi &#x2F; Aksesoris Tambahan','Bumper Clip',1,'N'),
-	(21,'Selalu Salah','Toddopuli X No 11','01112829758','2019-08-15','13 PM','Honda','Civic','Perawatan Khusus','Ban',1,'N'),
-	(22,'Ebiet G Ade','Toddopuli','082194275704','2019-08-31','12 PM','Nissan','Livina X-Gear','Car Care','Poles Full Body',1,'N'),
-	(23,'Travis Scoot','Jln Toddopuli X No 11','082194275704','2019-08-23','13 PM','Suzuki','Ertiga','Perawatan Khusus','Shock Breaker',1,'N');
+	(60,'Muhammad Alkautsar Sanusi','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-10-01','12 PM','Toyota','Agya','Perawatan Khusus','Ban',4,2000000,'Perawatan Khusus','Shock Breaker',2,2,'-','-',0,0,200,'N','N'),
+	(61,'Sadiq Sanusi','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-11-13','13 PM','Toyota','Agya','Car Care','Poles Full Body',1,1,'-','-',0,0,'-','-',0,0,1,'Y','N'),
+	(62,'Regita Anwar','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-10-22','12 PM','Toyota','Agya','Komplikasi','Mobil Saya Rusak Disebabkan Terendam Air.',0,0,'-','-',0,0,'-','-',0,0,200,'Y','Y'),
+	(63,'Regita Anwar','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-09-12','10 AM','Toyota','Agya','Perawatan Khusus','Kampas Rem',5,5000,'-','-',0,0,'-','-',0,0,5000,'N','N'),
+	(64,'Abdullah Bin Rasyid','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-10-24','13 PM','Honda','Civic','Perawatan Khusus','Kampas Rem',2,2,'-','-',0,0,'-','-',0,0,2,'N','N'),
+	(65,'Alkautsar Sanusi','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-11-19','12 PM','Toyota','Agya','Komplikasi','Test1234',0,0,'-','-',0,0,'-','-',0,0,0,'N','Y'),
+	(66,'Alkautsar Sanusi','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-09-17','12 PM','Toyota','Agya','Komplikasi','`123',0,0,'-','-',0,0,'-','-',0,0,0,'N','Y'),
+	(67,'Regita Anwar','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-10-31','14 PM','Ford','Ranger','Komplikasi','12345',0,0,'-','-',0,0,'-','-',0,0,0,'N','Y'),
+	(68,'Regita','malkautsars@gmail.com','123','01112829758','2019-09-17','11 AM','Toyota','Agya','Komplikasi','11',0,0,'-','-',0,0,'-','-',0,0,0,'N','Y'),
+	(69,'Sadiq Sanusi','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-11-12','10 AM','Ford','Focus','Komplikasi','haha',0,0,'-','-',0,0,'-','-',0,0,0,'N','Y'),
+	(70,'Fadhil Dzaki','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-10-08','11 AM','Toyota','Agya','Perawatan Khusus','Kampas Rem',2,24000,'Perawatan Khusus','Shock Breaker',2,2,'Variasi &#x2F; Aksesoris Tambahan','Kaca Film',1,1,24003,'Y','N'),
+	(71,'Ahmad Sadiq Sanusi','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-11-13','11 AM','Toyota','Agya','Perawatan Khusus','Kampas Rem',1,12000,'Perawatan Khusus','Kampas Kopling',1,1,'-','-',0,0,12001,'Y','N');
 
 /*!40000 ALTER TABLE `bookingList` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -73,7 +87,7 @@ CREATE TABLE `carTreatment` (
   `tipeMobil` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
   `jenisPerawatan` varchar(28) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
   `detailPerawatan` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
-  `harga` int(11) NOT NULL,
+  `harga` decimal(15,0) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -82,12 +96,12 @@ LOCK TABLES `carTreatment` WRITE;
 
 INSERT INTO `carTreatment` (`id`, `merkMobil`, `tipeMobil`, `jenisPerawatan`, `detailPerawatan`, `harga`)
 VALUES
-	(1,'Toyota','Agya','Perawatan Khusus','Kampas Rem',1),
+	(1,'Toyota','Agya','Perawatan Khusus','Kampas Rem',12000),
 	(2,'Toyota','Agya','Perawatan Khusus','Kampas Kopling',1),
 	(3,'Toyota','Agya','Perawatan Khusus','Shock Breaker',1),
 	(4,'Toyota','Agya','Perawatan Khusus','Servis AC',1),
 	(5,'Toyota','Agya','Perawatan Khusus','Servis Berkala',1),
-	(6,'Toyota','Agya','Perawatan Khusus','Ban',200),
+	(6,'Toyota','Agya','Perawatan Khusus','Ban',800),
 	(7,'Toyota','Agya','Perawatan Khusus','Aki',1),
 	(8,'Toyota','Agya','Perawatan Khusus','Servis Radiator',1),
 	(9,'Toyota','Agya','Perawatan Khusus','Lahar Roda',1),

@@ -17,18 +17,30 @@ var conn = mysql.createConnection({
 
 // Global Variable
 var globalBooking = {
-    namaPemilik: '',
-    email: '',
-    alamat: '',
-    nomorTelepon: '',
-    tanggalService: '',
-    waktuService: '',
-    merkMobil: '',
-    tipeMobil: '',
-    jenisPerawatan: '',
-    detailPerawatan: '',
-    // kuantiti: 0,
-    totalHarga: ''
+    namaPemilik: "",
+    email: "",
+    alamat: "",
+    nomorTelepon: "",
+    tanggalService: "",
+    waktuService: "",
+    merkMobil: "",
+    tipeMobil: "",
+    jenisPerawatan: "",
+    detailPerawatan: "",
+    kuantiti: "",
+    harga: "",
+    jenisPerawatan1: "",
+    detailPerawatan1: "",
+    kuantiti1: "",
+    harga1: "",
+    jenisPerawatan2: "",
+    detailPerawatan2: "",
+    kuantiti2: "",
+    harga2: "",
+    totalHarga: "",
+    multiLine: "",
+    perawatan1: "",
+    perawatan2: ""
 }
 
 // Default
@@ -56,7 +68,14 @@ app.post('/book1', (req, res) => {
         tipeMobil: '',
         jenisPerawatan: '',
         detailPerawatan: '',
-        kuantiti: ''
+        kuantiti: 1,
+        deskripsiKerusakan: '',
+        jenisPerawatan1: '',
+        detailPerawatan1: '',
+        kuantiti1: 0,
+        jenisPerawatan2: '',
+        detailPerawatan2: '',
+        kuantiti2: 0
     })
 })
 
@@ -66,14 +85,20 @@ app.route('/editBooking')
             namaPemilik: globalBooking.namaPemilik,
             email: globalBooking.email,
             alamat: globalBooking.alamat,
-            nomorTelepon: '',
+            nomorTelepon: globalBooking.nomorTelepon,
             tanggalService: globalBooking.tanggalService,
             waktuService: '',
             merkMobil: '',
             tipeMobil: '',
             jenisPerawatan: '',
             detailPerawatan: '',
-            kuantiti: ''
+            kuantiti: 1,
+            jenisPerawatan1: '',
+            detailPerawatan1: '',
+            kuantiti1: 0,
+            jenisPerawatan2: '',
+            detailPerawatan2: '',
+            kuantiti2: 0,
         })
     })
     .post((req, res) => {
@@ -88,21 +113,54 @@ app.route('/editBooking')
             tipeMobil: '',
             jenisPerawatan: '',
             detailPerawatan: '',
-            kuantiti: ''
+            kuantiti: 1,
+            harga: '',
+            jenisPerawatan1: '',
+            detailPerawatan1: '',
+            kuantiti1: 0,
+            harga1: 0,
+            jenisPerawatan2: '',
+            detailPerawatan2: '',
+            kuantiti2: 0,
+            harga2: 0
         })
     })
 
-function dateAndTimeChecking(time, date) {
+const dateAndTimeChecking = (time, date) => {
     return new Promise(resolve => {
-        conn.query("SELECT waktuService, tanggalService FROM bookingList WHERE tanggalService = '" + date + "' AND waktuService= '" + time + "'; ", function (err, rows, fields) {
+        conn.query("SELECT waktuService, tanggalService FROM bookingList WHERE tanggalService = '" + date + "' AND waktuService= '" + time + "'; ", (err, rows, fields) => {
             err ? console.log(err) : resolve(rows)
+        })
+    })
+}
+
+const priceChecking1 = (merkMobil, tipeMobil, jenisPerawatan, detailPerawatan) => {
+    return new Promise(resolve => {
+        conn.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + merkMobil + "' AND tipeMobil= '" + tipeMobil + "' AND jenisPerawatan= '" + jenisPerawatan + "' AND detailPerawatan= '" + detailPerawatan + "'; ", (err, rows, fields) => {
+            err ? console.log(err) : resolve(rows);
+        })
+    })
+}
+
+const priceChecking2 = (merkMobil, tipeMobil, jenisPerawatan, detailPerawatan) => {
+    return new Promise(resolve => {
+        conn.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + merkMobil + "' AND tipeMobil= '" + tipeMobil + "' AND jenisPerawatan= '" + jenisPerawatan + "' AND detailPerawatan= '" + detailPerawatan + "'; ", (err, rows, fields) => {
+            err ? console.log(err) : resolve(rows);
+        })
+    })
+}
+
+const priceChecking3 = (merkMobil, tipeMobil, jenisPerawatan, detailPerawatan) => {
+    return new Promise(resolve => {
+        conn.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + merkMobil + "' AND tipeMobil= '" + tipeMobil + "' AND jenisPerawatan= '" + jenisPerawatan + "' AND detailPerawatan= '" + detailPerawatan + "'; ", (err, rows, fields) => {
+            err ? console.log(err) : resolve(rows);
         })
     })
 }
 
 app.post('/priceChecking', async (req, res) => {
     // Set Global Variable
-    globalBooking = {
+    bookingData = {
         namaPemilik: req.body.namaPemilik,
         email: req.body.email,
         alamat: req.body.alamat,
@@ -113,11 +171,20 @@ app.post('/priceChecking', async (req, res) => {
         tipeMobil: req.body.tipeMobil,
         jenisPerawatan: req.body.jenisPerawatan,
         detailPerawatan: req.body.detailPerawatan,
-        kuantiti: req.body.kuantiti ? req.body.kuantiti : 1,
-        totalHarga: ''
+        kuantiti: req.body.kuantiti,
+        jenisPerawatan1: req.body.jenisPerawatan1 ? req.body.jenisPerawatan1 : "-",
+        detailPerawatan1: req.body.detailPerawatan1 ? req.body.detailPerawatan1 : "-",
+        kuantiti1: req.body.kuantiti1,
+        jenisPerawatan2: req.body.jenisPerawatan2 ? req.body.jenisPerawatan2 : "-",
+        detailPerawatan2: req.body.detailPerawatan2 ? req.body.detailPerawatan2 : "-",
+        kuantiti2: req.body.kuantiti2,
+        totalHarga: '',
+        deskripsiKerusakan: req.body.deskripsiKerusakan
     }
 
     var priceTotal;
+    var rawTotal1, rawTotal2, rawTotal3;
+    var priceTotal1, priceTotal2, priceTotal3;
 
     var clientCar = {
         waktuService: req.body.waktuService,
@@ -127,144 +194,372 @@ app.post('/priceChecking', async (req, res) => {
         detailPerawatan: [req.body.detailPerawatan]
     }
 
+    // Set GlobalVariable
+    globalBooking.namaPemilik = bookingData.namaPemilik;
+    globalBooking.nomorTelepon = bookingData.nomorTelepon;
+    globalBooking.alamat = bookingData.alamat;
+    globalBooking.tanggalService = bookingData.tanggalService;
+    globalBooking.email = bookingData.email;
+    globalBooking.waktuService = bookingData.waktuService;
+
+    // Validation
     if (clientCar.merkMobil.length > 1 || clientCar.tipeMobil.length > 1 || clientCar.jenisPerawatan.length > 1 || clientCar.detailPerawatan.length > 1) {
         res.redirect('/editBooking')
     } else if (clientCar.waktuService === undefined) {
         var error_msg = "Silahkan mengisi waktu booking servis anda."
         req.flash('error', error_msg)
         res.redirect('/editBooking')
-    } else if (clientCar.merkMobil === undefined || clientCar.tipeMobil === undefined || clientCar.jenisPerawatan === undefined || clientCar.detailPerawatan === undefined) {
+    } else if (typeof clientCar.merkMobil[0] === 'undefined' || typeof clientCar.tipeMobil[0] === 'undefined' || typeof clientCar.jenisPerawatan[0] === 'undefined') {
         var error_msg = "Silahkan mengisi data mobil anda."
         req.flash('error', error_msg)
         res.redirect('/editBooking')
+    } else if (typeof clientCar.detailPerawatan[0] === 'undefined') {
+        // Set Description
+        globalBooking.multiLine = 'Y';
+        globalBooking.merkMobil = bookingData.merkMobil;
+        globalBooking.tipeMobil = bookingData.tipeMobil;
+        globalBooking.jenisPerawatan = bookingData.jenisPerawatan;
+        globalBooking.detailPerawatan = bookingData.deskripsiKerusakan;
+        globalBooking.kuantiti = 0;
+        globalBooking.totalHarga = 0;
+
+        res.render('pricingDetails', {
+            namaPemilik: req.body.namaPemilik,
+            email: req.body.email,
+            alamat: req.body.alamat,
+            nomorTelepon: req.body.nomorTelepon,
+            tanggalService: req.body.tanggalService,
+            waktuService: req.body.waktuService,
+            merkMobil: req.body.merkMobil,
+            tipeMobil: req.body.tipeMobil,
+            jenisPerawatan: req.body.jenisPerawatan,
+            detailPerawatan: req.body.deskripsiKerusakan,
+            multiLine: "Y",
+            perawatan1: "N",
+            perawatan2: "N",
+            kuantiti: 0,
+            totalHarga: 0
+        })
     } else {
-        let log = await dateAndTimeChecking(clientCar.waktuService, globalBooking.tanggalService)
+        // Date and Time Booking Checking
+        const log = await dateAndTimeChecking(clientCar.waktuService, bookingData.tanggalService)
 
         if (log.length > 0) {
             var error_msg = "Tanggal dan waktu bookingan anda tidak tersedia. Silahkan untuk menginput kembali."
             req.flash('error', error_msg)
             res.redirect('/editBooking')
+        } else if (bookingData.jenisPerawatan1 === "-" || bookingData.detailPerawatan1 === "-") {
+            // Price Checking
+            const log1 = await priceChecking1(bookingData.merkMobil, bookingData.tipeMobil, bookingData.jenisPerawatan, bookingData.detailPerawatan)
+
+            // Total Price = (Quantity * Price)
+            rawTotal1 = bookingData.kuantiti * log1[0].harga;
+
+            priceTotal1 = rawTotal1 ? rawTotal1 : 0;
+
+            // Exact Total Price
+            priceTotal = priceTotal1;
+
+            // Set Global MultiLine
+            globalBooking.multiLine = 'N';
+            globalBooking.merkMobil = bookingData.merkMobil;
+            globalBooking.tipeMobil = bookingData.tipeMobil;
+            globalBooking.jenisPerawatan = bookingData.jenisPerawatan;
+            globalBooking.detailPerawatan = bookingData.detailPerawatan;
+            globalBooking.kuantiti = bookingData.kuantiti;
+            globalBooking.totalHarga = priceTotal;
+
+            // Render Booking Details
+            res.render('pricingDetails', {
+                namaPemilik: req.body.namaPemilik,
+                email: req.body.email,
+                alamat: req.body.alamat,
+                nomorTelepon: req.body.nomorTelepon,
+                tanggalService: req.body.tanggalService,
+                waktuService: req.body.waktuService,
+                merkMobil: req.body.merkMobil,
+                tipeMobil: req.body.tipeMobil,
+                jenisPerawatan: req.body.jenisPerawatan,
+                detailPerawatan: req.body.detailPerawatan,
+                kuantiti: req.body.kuantiti,
+                harga: priceTotal,
+                multiLine: "N",
+                perawatan1: "N",
+                perawatan2: "N",
+                totalHarga: priceTotal
+            })
+        } else if (bookingData.jenisPerawatan2 === "-" || bookingData.detailPerawatan2 === "-") {
+            // Price Checking
+            const log1 = await priceChecking1(bookingData.merkMobil, bookingData.tipeMobil, bookingData.jenisPerawatan, bookingData.detailPerawatan)
+            const log2 = await priceChecking2(bookingData.merkMobil, bookingData.tipeMobil, bookingData.jenisPerawatan1, bookingData.detailPerawatan1)
+
+            // Total Price = (Quantity * Price)
+            rawTotal1 = bookingData.kuantiti * log1[0].harga;
+            rawTotal2 = bookingData.kuantiti1 * log2[0].harga;
+
+            priceTotal1 = rawTotal1 ? rawTotal1 : 0;
+            priceTotal2 = rawTotal2 ? rawTotal2 : 0;
+
+            // Exact Total Price
+            priceTotal = priceTotal1 + priceTotal2;
+
+            // Set Global MultiLine
+            globalBooking.multiLine = "N";
+            globalBooking.merkMobil = bookingData.merkMobil;
+            globalBooking.tipeMobil = bookingData.tipeMobil;
+            globalBooking.jenisPerawatan = bookingData.jenisPerawatan;
+            globalBooking.detailPerawatan = bookingData.detailPerawatan;
+            globalBooking.kuantiti = bookingData.kuantiti;
+            globalBooking.harga = priceTotal1;
+            globalBooking.jenisPerawatan1 = bookingData.jenisPerawatan1;
+            globalBooking.detailPerawatan1 = bookingData.detailPerawatan1;
+            globalBooking.kuantiti1 = bookingData.kuantiti1;
+            globalBooking.harga1 = priceTotal2;
+            globalBooking.totalHarga = priceTotal;
+            globalBooking.perawatan1 = "Y";
+
+            // Render Booking Details
+            res.render('pricingDetails', {
+                namaPemilik: req.body.namaPemilik,
+                email: req.body.email,
+                alamat: req.body.alamat,
+                nomorTelepon: req.body.nomorTelepon,
+                tanggalService: req.body.tanggalService,
+                waktuService: req.body.waktuService,
+                merkMobil: req.body.merkMobil,
+                tipeMobil: req.body.tipeMobil,
+                jenisPerawatan: req.body.jenisPerawatan,
+                detailPerawatan: req.body.detailPerawatan,
+                kuantiti: req.body.kuantiti,
+                harga: priceTotal1,
+                jenisPerawatan1: req.body.jenisPerawatan1,
+                detailPerawatan1: req.body.detailPerawatan1,
+                kuantiti1: req.body.kuantiti1,
+                harga1: priceTotal2,
+                multiLine: "N",
+                perawatan1: "Y",
+                perawatan2: "N",
+                totalHarga: priceTotal
+            })
         } else {
-            req.getConnection(function (err, con) {
-                con.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + clientCar.merkMobil + "' AND tipeMobil= '" + clientCar.tipeMobil + "' AND jenisPerawatan= '" + clientCar.jenisPerawatan + "' AND detailPerawatan= '" + clientCar.detailPerawatan + "'; ", function (err, rows, fields) {
-                    if (err) {
-                        throw err
-                    } else {
-                        globalBooking.totalHarga = rows[0].harga
-                        priceTotal = globalBooking.kuantiti * globalBooking.totalHarga;
-                        res.render('pricingDetails', {
-                            namaPemilik: req.body.namaPemilik,
-                            email: req.body.email,
-                            alamat: req.body.alamat,
-                            nomorTelepon: req.body.nomorTelepon,
-                            tanggalService: req.body.tanggalService,
-                            waktuService: req.body.waktuService,
-                            merkMobil: req.body.merkMobil,
-                            tipeMobil: req.body.tipeMobil,
-                            jenisPerawatan: req.body.jenisPerawatan,
-                            detailPerawatan: req.body.detailPerawatan,
-                            kuantiti: req.body.kuantiti ? req.body.kuantiti : 1,
-                            harga: priceTotal
-                        })
-                    }
-                })
+            // Price Checking
+            const log1 = await priceChecking1(bookingData.merkMobil, bookingData.tipeMobil, bookingData.jenisPerawatan, bookingData.detailPerawatan)
+            const log2 = await priceChecking2(bookingData.merkMobil, bookingData.tipeMobil, bookingData.jenisPerawatan1, bookingData.detailPerawatan1)
+            const log3 = await priceChecking3(bookingData.merkMobil, bookingData.tipeMobil, bookingData.jenisPerawatan2, bookingData.detailPerawatan2)
+
+            // Total Price = (Quantity * Price)
+            rawTotal1 = bookingData.kuantiti * log1[0].harga;
+            rawTotal2 = bookingData.kuantiti1 * log2[0].harga;
+            rawTotal3 = bookingData.kuantiti2 * log3[0].harga;
+
+            priceTotal1 = rawTotal1 ? rawTotal1 : 0;
+            priceTotal2 = rawTotal2 ? rawTotal2 : 0;
+            priceTotal3 = rawTotal3 ? rawTotal3 : 0;
+
+            // Exact Total Price
+            priceTotal = priceTotal1 + priceTotal2 + priceTotal3;
+
+            // Set Global MultiLine
+            globalBooking.multiLine = "N";
+            globalBooking.merkMobil = bookingData.merkMobil;
+            globalBooking.tipeMobil = bookingData.tipeMobil;
+            globalBooking.jenisPerawatan = bookingData.jenisPerawatan;
+            globalBooking.detailPerawatan = bookingData.detailPerawatan;
+            globalBooking.kuantiti = bookingData.kuantiti;
+            globalBooking.harga = priceTotal1;
+            globalBooking.jenisPerawatan1 = bookingData.jenisPerawatan1;
+            globalBooking.detailPerawatan1 = bookingData.detailPerawatan1;
+            globalBooking.kuantiti1 = bookingData.kuantiti1;
+            globalBooking.harga1 = priceTotal2;
+            globalBooking.jenisPerawatan2 = bookingData.jenisPerawatan2;
+            globalBooking.detailPerawatan2 = bookingData.detailPerawatan2;
+            globalBooking.kuantiti2 = bookingData.kuantiti2;
+            globalBooking.harga2 = priceTotal3;
+            globalBooking.totalHarga = priceTotal;
+            globalBooking.perawatan1 = "Y";
+            globalBooking.perawatan2 = "Y";
+
+            // Render Booking Details
+            res.render('pricingDetails', {
+                namaPemilik: req.body.namaPemilik,
+                email: req.body.email,
+                alamat: req.body.alamat,
+                nomorTelepon: req.body.nomorTelepon,
+                tanggalService: req.body.tanggalService,
+                waktuService: req.body.waktuService,
+                merkMobil: req.body.merkMobil,
+                tipeMobil: req.body.tipeMobil,
+                jenisPerawatan: req.body.jenisPerawatan,
+                detailPerawatan: req.body.detailPerawatan,
+                kuantiti: req.body.kuantiti,
+                harga: priceTotal1,
+                jenisPerawatan1: req.body.jenisPerawatan1,
+                detailPerawatan1: req.body.detailPerawatan1,
+                kuantiti1: req.body.kuantiti1,
+                harga1: priceTotal2,
+                jenisPerawatan2: req.body.jenisPerawatan2,
+                detailPerawatan2: req.body.detailPerawatan2,
+                kuantiti2: req.body.kuantiti2,
+                harga2: priceTotal3,
+                multiLine: "N",
+                perawatan1: "Y",
+                perawatan2: "Y",
+                totalHarga: priceTotal
             })
         }
     }
 })
 
-function adminEmailNotifier() {
-    let transporter = nodeMailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'malkautsars@gmail.com',
-            pass: 'Sesar181196'
-        }
-    });
+const adminEmailNotifier = () => {
+    return new Promise((resolve, reject) => {
+        let transporter = nodeMailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'malkautsars@gmail.com',
+                pass: 'Sesar181196'
+            }
+        });
 
-    const handlebarOptions = {
-        viewEngine: {
+        const handlebarOptions = {
+            viewEngine: {
+                extName: '.handlebars',
+                partialsDir: './views',
+                layoutsDir: './views',
+                defaultLayout: 'adminTemplate.handlebars',
+            },
+            viewPath: './views',
             extName: '.handlebars',
-            partialsDir: './views',
-            layoutsDir: './views',
-            defaultLayout: 'adminTemplate.handlebars',
-        },
-        viewPath: './views',
-        extName: '.handlebars',
-    };
+        };
 
-    transporter.use('compile', hbs(handlebarOptions));
+        transporter.use('compile', hbs(handlebarOptions));
 
-    let mailOptions = {
-        from: 'malkautsars@gmail.com',
-        to: 'malkautsars@gmail.com',
-        subject: "New Incoming Booking!",
-        context: {
-            name: globalBooking.namaPemilik,
-            address: globalBooking.alamat,
-            date: globalBooking.tanggalService,
-            time: globalBooking.waktuService,
+        let mailOptions = {
+            from: 'malkautsars@gmail.com',
+            to: 'malkautsars@gmail.com',
+            subject: "New Incoming Booking!",
+            context: {
+                name: globalBooking.namaPemilik,
+                address: globalBooking.alamat,
+                date: globalBooking.tanggalService,
+                time: globalBooking.waktuService,
 
-        },
-        template: 'adminTemplate'
-    };
+            },
+            template: 'adminTemplate'
+        };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            return console.log(error);
-        }
-        console.log('Message %s sent: %s', info.messageId, info.response);
-    });
+        transporter.sendMail(mailOptions, (error, info) => {
+            error ? reject(console.log(error)) : resolve(console.log('Message %s sent: %s', info.messageId, info.response));
+        });
+    })
+
 }
 
-function customerEmailNotifier() {
-    let transporter = nodeMailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'malkautsars@gmail.com',
-            pass: 'Sesar181196'
-        }
-    });
+const customerEmailNotifier = () => {
+    return new Promise((resolve, reject) => {
+        let transporter = nodeMailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'malkautsars@gmail.com',
+                pass: 'Sesar181196'
+            }
+        });
 
-    const handlebarOptions = {
-        viewEngine: {
+        const handlebarOptions = {
+            viewEngine: {
+                extName: '.handlebars',
+                partialsDir: './views',
+                layoutsDir: './views',
+                defaultLayout: 'customerTemplate.handlebars',
+            },
+            viewPath: './views',
             extName: '.handlebars',
-            partialsDir: './views',
-            layoutsDir: './views',
-            defaultLayout: 'customerTemplate.handlebars',
-        },
-        viewPath: './views',
-        extName: '.handlebars',
-    };
+        };
 
-    transporter.use('compile', hbs(handlebarOptions));
+        transporter.use('compile', hbs(handlebarOptions));
 
-    let mailOptions = {
-        from: 'malkautsars@gmail.com',
-        to: globalBooking.email,
-        subject: "Booking Service Detail",
-        context: {
-            name: globalBooking.namaPemilik,
-            address: globalBooking.alamat,
-            date: globalBooking.tanggalService,
-            time: globalBooking.waktuService,
-            phoneNumber: globalBooking.nomorTelepon,
-            carBrand: globalBooking.merkMobil,
-            carType: globalBooking.tipeMobil,
-            careType: globalBooking.jenisPerawatan,
-            careDetail: globalBooking.detailPerawatan,
-            totalPrice: globalBooking.totalHarga
+        let mailOptions = {
+            from: 'malkautsars@gmail.com',
+            to: globalBooking.email,
+            subject: "Booking Service Detail",
+            context: {
+                name: globalBooking.namaPemilik,
+                address: globalBooking.alamat,
+                date: globalBooking.tanggalService,
+                time: globalBooking.waktuService,
+                phoneNumber: globalBooking.nomorTelepon,
+                carBrand: globalBooking.merkMobil,
+                carType: globalBooking.tipeMobil,
+                careType: globalBooking.jenisPerawatan,
+                careDetail: globalBooking.detailPerawatan,
+                kuantiti: globalBooking.kuantiti,
+                price: globalBooking.harga,
+                careType1: globalBooking.jenisPerawatan1,
+                careDetail1: globalBooking.detailPerawatan1,
+                kuantiti1: globalBooking.kuantiti1,
+                price1: globalBooking.harga1,
+                careType2: globalBooking.jenisPerawatan2,
+                careDetail2: globalBooking.detailPerawatan2,
+                kuantiti2: globalBooking.kuantiti2,
+                price2: globalBooking.harga2,
+                totalPrice: globalBooking.totalHarga,
+                perawatan1: globalBooking.perawatan1,
+                perawatan2: globalBooking.perawatan2
+            },
+            template: 'customerTemplate'
+        };
 
-        },
-        template: 'customerTemplate'
-    };
+        transporter.sendMail(mailOptions, (error, info) => {
+            error ? reject(console.log(error)) : resolve(console.log('Message %s sent: %s', info.messageId, info.response));
+        });
+    })
+}
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            return console.log(error);
-        }
-        console.log('Message %s sent: %s', info.messageId, info.response);
-    });
+const customerMultiServiceNotifier = () => {
+    return new Promise((resolve, reject) => {
+        let transporter = nodeMailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'malkautsars@gmail.com',
+                pass: 'Sesar181196'
+            }
+        });
+
+        const handlebarOptions = {
+            viewEngine: {
+                extName: '.handlebars',
+                partialsDir: './views',
+                layoutsDir: './views',
+                defaultLayout: 'customerMultiServiceTemplate.handlebars',
+            },
+            viewPath: './views',
+            extName: '.handlebars',
+        };
+
+        transporter.use('compile', hbs(handlebarOptions));
+
+        let mailOptions = {
+            from: 'malkautsars@gmail.com',
+            to: globalBooking.email,
+            subject: "Booking Service Detail",
+            context: {
+                name: globalBooking.namaPemilik,
+                address: globalBooking.alamat,
+                date: globalBooking.tanggalService,
+                time: globalBooking.waktuService,
+                phoneNumber: globalBooking.nomorTelepon,
+                carBrand: globalBooking.merkMobil,
+                carType: globalBooking.tipeMobil,
+                careType: globalBooking.jenisPerawatan,
+                careDetail: globalBooking.detailPerawatan,
+                totalPrice: "Kami akan segara menghubungi anda."
+            },
+            template: 'customerMultiServiceTemplate'
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            error ? reject(console.log(error)) : resolve(console.log('Message %s sent: %s', info.messageId, info.response));
+        });
+    })
 }
 
 app.post('/booked', (req, res) => {
@@ -293,20 +588,45 @@ app.post('/booked', (req, res) => {
             merkMobil: req.sanitize('merkMobil').escape().trim(),
             tipeMobil: req.sanitize('tipeMobil').escape().trim(),
             jenisPerawatan: req.sanitize('jenisPerawatan').escape().trim(),
-            detailPerawatan: req.sanitize('detailPerawatan').escape().trim(),
-            kuantiti: req.sanitize('kuantiti').escape().trim(),
-            harga: req.sanitize('harga').escape().trim(),
-            done_flag: 'N'
+            detailPerawatan: globalBooking.detailPerawatan,
+            kuantiti: globalBooking.kuantiti,
+            harga: req.body.harga ? req.sanitize('harga').escape().trim() : globalBooking.totalHarga,
+            jenisPerawatan1: req.body.jenisPerawatan1 ? req.sanitize('jenisPerawatan1').escape().trim() : "-",
+            detailPerawatan1: req.body.detailPerawatan1 ? req.sanitize('detailPerawatan1').escape().trim() : "-",
+            kuantiti1: req.body.kuantiti1 ? req.sanitize('kuantiti1').escape().trim() : 0,
+            harga1: req.body.harga1 ? req.sanitize('harga1').escape().trim() : 0,
+            jenisPerawatan2: req.body.jenisPerawatan2 ? req.sanitize('jenisPerawatan2').escape().trim() : "-",
+            detailPerawatan2: req.body.detailPerawatan2 ? req.sanitize('detailPerawatan2').escape().trim() : "-",
+            kuantiti2: req.body.kuantiti2 ? req.sanitize('kuantiti2').escape().trim() : 0,
+            harga2: req.body.harga2 ? req.sanitize('harga2').escape().trim() : 0,
+            totalHarga: globalBooking.totalHarga,
+            done_flag: 'N',
+            desc_perawatan: globalBooking.multiLine
         }
+
         req.getConnection(function (err, con) {
             con.query('INSERT INTO bookingList SET ?', clientData, function (err, result) {
                 if (err) {
                     req.flash('error', err)
                     res.redirect('/bookingDetails')
                 } else {
-                    customerEmailNotifier()
-                    adminEmailNotifier()
-                    setTimeout(_ => res.render('thankyou'), 5000)
+                    switch (globalBooking.multiLine) {
+                        case "Y":
+                            Promise.all([
+                                customerMultiServiceNotifier(),
+                                adminEmailNotifier()
+                            ]).then(() => {
+                                setTimeout(_ => res.render('thankyou'), 3000)
+                            });
+                            break;
+                        default:
+                            Promise.all([
+                                customerEmailNotifier(),
+                                adminEmailNotifier()
+                            ]).then(() => {
+                                setTimeout(_ => res.render('thankyou'), 3000)
+                            });
+                    }
                 }
             })
         })

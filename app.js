@@ -12,7 +12,9 @@ const dbOptions = {
     user: dbConfig.database.user,
     password: dbConfig.database.password,
     port: dbConfig.database.port,
-    database: dbConfig.database.database
+    database: dbConfig.database.database,
+    supportBigNumbers: true,
+    bigNumberStrings: true
 }
 
 // Database

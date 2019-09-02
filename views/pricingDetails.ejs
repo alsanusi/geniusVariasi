@@ -49,7 +49,7 @@
                              <div class="row justify-content-center align-items-center text-center">
                                  <div class="col-lg-6">
                                      <h1 data-aos="fade-up" data-aos-delay="0">Service Booking System</h1>
-                                     <p data-aos="fade-up" data-aos-delay="100">&bullet; CarGenius Details
+                                     <p data-aos="fade-up" data-aos-delay="100">&bullet; Cargenius Details
                                          Booking System</p>
                                  </div>
 
@@ -86,67 +86,134 @@
                              <h3 class="h4 text-black mb-4">Data Personal Anda.</h3>
                              <!-- Data Personal -->
                              <div class="form-group">
-                                 <label for="name">Nama Lengkap</label>
+                                 <label for="name" style="font-size: 16px">Nama Lengkap</label>
                                  <input type="text" class="form-control" name="namaPemilik" value="<%= namaPemilik %>"
                                      readonly>
                              </div>
                              <div class="form-group">
-                                 <label for="name">Email</label>
+                                 <label for="name" style="font-size: 16px">Email</label>
                                  <input type="email" class="form-control" name="email" value="<%= email %>" readonly>
                              </div>
                              <div class="form-group">
-                                 <label for="name">Alamat Lengkap</label>
+                                 <label for="name" style="font-size: 16px">Alamat Lengkap</label>
                                  <input type="text" class="form-control" name="alamat" value="<%= alamat %>" readonly>
                              </div>
                              <div class="form-group">
-                                 <label for="name">Nomor Telepon</label>
+                                 <label for="name" style="font-size: 16px">Nomor Telepon</label>
                                  <input type="text" class="form-control" name="nomorTelepon" value="<%= nomorTelepon %>"
                                      readonly>
                              </div>
                              <div class="form-group">
-                                 <label for="name">Tanggal Service</label>
+                                 <label for="name" style="font-size: 16px">Tanggal Service</label>
                                  <input type="date" id="bookingDate" class="form-control" name="tanggalService"
                                      value="<%= tanggalService %>" readonly>
                              </div>
                              <div class="form-group">
-                                 <label for="name">Waktu Service</label>
+                                 <label for="name" style="font-size: 16px">Waktu Service</label>
                                  <input type="text" class="form-control" name="waktuService" value="<%= waktuService %>"
                                      readonly>
                              </div>
                              <h3 class="h4 text-black mb-4">Data Mobil Anda.</h3>
                              <!-- Data Kendaraan -->
                              <div class="form-group">
-                                 <label for="name">Merk Mobil</label>
+                                 <label for="name" style="font-size: 16px">Merk Mobil</label>
                                  <input type="text" class="form-control" name="merkMobil" value="<%= merkMobil %>"
                                      readonly>
                              </div>
                              <div class="form-group">
-                                 <label for="name">Tipe Mobil</label>
+                                 <label for="name" style="font-size: 16px">Tipe Mobil</label>
                                  <input type="text" class="form-control" name="tipeMobil" value="<%= tipeMobil %>"
                                      readonly>
                              </div>
                              <div class="form-group">
-                                 <label for="name">Jenis Perawatan</label>
+                                 <h3 class="h4 text-black mb-4">Detail Perawatan Mobil</h3>
+                                 <label for="name" style="font-size: 16px">Jenis Perawatan</label>
                                  <input type="text" class="form-control" name="jenisPerawatan"
                                      value="<%= jenisPerawatan %>" readonly>
                              </div>
+                             <% if(multiLine === "Y") {%>
                              <div class="form-group">
-                                 <label for="name">Detail Perawatan</label>
+                                 <label for="name" style="font-size: 16px">Deskripsi Kerusakan</label>
+                                 <textarea rows="4" cols="30" class="form-control" name="detailPerawatan"
+                                     readonly><%= detailPerawatan %></textarea>
+                             </div>
+                             <% } else { %>
+                             <div class="form-group">
+                                 <label for="name" style="font-size: 16px">Detail Perawatan</label>
                                  <input type="text" class="form-control" name="detailPerawatan"
                                      value="<%= detailPerawatan %>" readonly>
                              </div>
+                             <% } %>
+                             <% if(multiLine === "N") {%>
                              <div class="form-group">
-                                 <label for="name">Kuantiti</label>
+                                 <label for="name" style="font-size: 16px">Kuantiti</label>
                                  <input type="text" class="form-control" name="kuantiti" value="<%= kuantiti %>"
                                      readonly>
                              </div>
+                             <% } %>
+                             <% if(perawatan1 === "Y") {%>
+                             <div class="form-group">
+                                 <label for="name" style="font-size: 16px">Total Harga</label>
+                                 <input type="text" class="form-control" name="harga" value="<%= harga %>" readonly>
+                             </div>
+                             <% } %>
+                             <% if(perawatan1 === "Y") {%>
+                             <div class="form-group">
+                                 <h3 class="h4 text-black mb-4">Detail Perawatan Mobil - 2</h3>
+                                 <label for="name" style="font-size: 16px">Jenis Perawatan</label>
+                                 <input type="text" class="form-control" name="jenisPerawatan1"
+                                     value="<%= jenisPerawatan1 %>" readonly>
+                             </div>
+                             <div class="form-group">
+                                 <label for="name" style="font-size: 16px">Detail Perawatan</label>
+                                 <input type="text" class="form-control" name="detailPerawatan1"
+                                     value="<%= detailPerawatan1 %>" readonly>
+                             </div>
+                             <div class="form-group">
+                                 <label for="name" style="font-size: 16px">Kuantiti</label>
+                                 <input type="text" class="form-control" name="kuantiti1" value="<%= kuantiti1 %>"
+                                     readonly>
+                             </div>
+                             <div class="form-group">
+                                 <label for="name" style="font-size: 16px">Total Harga</label>
+                                 <input type="text" class="form-control" name="harga1" value="<%= harga1 %>" readonly>
+                             </div>
+                             <% } %>
+                             <% if(perawatan2 === "Y") {%>
+                             <div class="form-group">
+                                 <h3 class="h4 text-black mb-4">Detail Perawatan Mobil - 3</h3>
+                                 <label for="name" style="font-size: 16px">Jenis Perawatan</label>
+                                 <input type="text" class="form-control" name="jenisPerawatan2"
+                                     value="<%= jenisPerawatan2 %>" readonly>
+                             </div>
+                             <div class="form-group">
+                                 <label for="name" style="font-size: 16px">Detail Perawatan</label>
+                                 <input type="text" class="form-control" name="detailPerawatan2"
+                                     value="<%= detailPerawatan2 %>" readonly>
+                             </div>
+                             <div class="form-group">
+                                 <label for="name" style="font-size: 16px">Kuantiti</label>
+                                 <input type="text" class="form-control" name="kuantiti2" value="<%= kuantiti2 %>"
+                                     readonly>
+                             </div>
+                             <div class="form-group">
+                                 <label for="name" style="font-size: 16px">Total Harga</label>
+                                 <input type="text" class="form-control" name="harga2" value="<%= harga2 %>" readonly>
+                             </div>
+                             <% } %>
+                             <% if(multiLine === "N") {%>
                              <h3 class="h4 text-black mb-4">Kalkulasi Harga Perawatan Mobil Anda.</h3>
                              <!-- Pricing -->
                              <div class="form-group">
                                  <input type="text" class="form-control"
                                      style="background-color: unset; border: 0; border-radius: unset; border-bottom: 2px solid green; width: 40%"
-                                     name="harga" placeholder="Total Harga" value="<%= harga %>" readonly>
+                                     name="totalHarga" placeholder="Total Harga" value="<%= totalHarga %>" readonly>
                              </div>
+                             <% } else { %>
+                             <h5 class="h4 text-black mb-4"
+                                 style="margin-top: 30px; font-size: 17px; font-weight: bold;">Kami Akan Segera
+                                 Menghubungi Anda Untuk Total Harga Perawatan.</h5>
+                             <% } %>
                              <div style="margin-top: 40px">
                                  <div class="form-group">
                                      <input type="submit" class="btn btn-primary btn-pill" value="Book Sekarang">
@@ -173,7 +240,7 @@
              <div class="container">
                  <div class="row">
                      <div class="col-md-4">
-                         <h3>CarGenius</h3>
+                         <h3>Cargenius</h3>
                          <p>Kami hadir sebagai partner mobil anda dalam segala situasi kerusakan. Kami menjamin kualitas
                              perawatan dan layanan yang kami berikan, because we are the geniuses!</p>
                      </div>

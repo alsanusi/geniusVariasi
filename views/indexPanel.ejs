@@ -341,11 +341,15 @@
                                      <div class="card-header border-0">
                                          <h3 class="mb-0">Download Report.</h3>
                                          </br>
+                                         <% if(messages.error){ %>
+                                         <h4 style="color:#d82436">Report Gagal!</h4>
+                                         <p><%- messages.error %></p>
+                                         </br>
+                                         <% } %>
                                          <div>
                                              <form action="/panel/Report" method="post">
                                                  <div class="form-group">
-                                                     <input type="month" class="form-control" name="inputDate"
-                                                         required>
+                                                     <input type="month" class="form-control" name="inputDate" required>
                                                  </div>
                                                  <div class="form-group">
                                                      <input type="submit" class="btn btn-primary btn-pill"
