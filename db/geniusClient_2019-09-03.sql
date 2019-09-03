@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 8.0.16)
 # Database: geniusClient
-# Generation Time: 2019-09-02 12:58:41 +0000
+# Generation Time: 2019-09-03 15:38:39 +0000
 # ************************************************************
 
 
@@ -67,10 +67,14 @@ VALUES
 	(65,'Alkautsar Sanusi','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-11-19','12 PM','Toyota','Agya','Komplikasi','Test1234',0,0,'-','-',0,0,'-','-',0,0,0,'N','Y'),
 	(66,'Alkautsar Sanusi','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-09-17','12 PM','Toyota','Agya','Komplikasi','`123',0,0,'-','-',0,0,'-','-',0,0,0,'N','Y'),
 	(67,'Regita Anwar','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-10-31','14 PM','Ford','Ranger','Komplikasi','12345',0,0,'-','-',0,0,'-','-',0,0,0,'N','Y'),
-	(68,'Regita','malkautsars@gmail.com','123','01112829758','2019-09-17','11 AM','Toyota','Agya','Komplikasi','11',0,0,'-','-',0,0,'-','-',0,0,0,'N','Y'),
+	(68,'Regita','malkautsars@gmail.com','123','01112829758','2019-09-17','11 AM','Toyota','Agya','Komplikasi','11',0,0,'-','-',0,0,'-','-',0,0,1800000,'Y','Y'),
 	(69,'Sadiq Sanusi','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-11-12','10 AM','Ford','Focus','Komplikasi','haha',0,0,'-','-',0,0,'-','-',0,0,0,'N','Y'),
 	(70,'Fadhil Dzaki','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-10-08','11 AM','Toyota','Agya','Perawatan Khusus','Kampas Rem',2,24000,'Perawatan Khusus','Shock Breaker',2,2,'Variasi &#x2F; Aksesoris Tambahan','Kaca Film',1,1,24003,'Y','N'),
-	(71,'Ahmad Sadiq Sanusi','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-11-13','11 AM','Toyota','Agya','Perawatan Khusus','Kampas Rem',1,12000,'Perawatan Khusus','Kampas Kopling',1,1,'-','-',0,0,12001,'Y','N');
+	(71,'Ahmad Sadiq Sanusi','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-11-13','11 AM','Toyota','Agya','Perawatan Khusus','Kampas Rem',1,12000,'Perawatan Khusus','Kampas Kopling',1,1,'-','-',0,0,12001,'Y','N'),
+	(72,'Alkautsar Sanusi','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-11-19','10 AM','Toyota','Agya','Perawatan Khusus','Kampas Rem',2,300000,'-','-',0,0,'-','-',0,0,300000,'Y','N'),
+	(73,'Travis Scoot','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-10-03','10 AM','Toyota','Agya','Perawatan Khusus','Kampas Rem',2,300,'Perawatan Khusus','Kampas Rem',3,450,'Perawatan Khusus','Kampas Rem',4,600,1350000,'N','N'),
+	(74,'Skrrt','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-10-23','10 AM','Toyota','Agya','Perawatan Khusus','Kampas Rem',2,300,'Perawatan Khusus','Kampas Rem',1,150,'-','-',0,0,450000,'N','N'),
+	(75,'Bombom','malkautsars@gmail.com','Jln Toddopuli X No 11','01112829758','2019-10-18','11 AM','Toyota','Agya','Perawatan Khusus','Kampas Rem',2,300000,'Perawatan Khusus','Kampas Rem',1,150000,'Perawatan Khusus','Kampas Rem',3,450000,900000,'N','N');
 
 /*!40000 ALTER TABLE `bookingList` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -87,7 +91,7 @@ CREATE TABLE `carTreatment` (
   `tipeMobil` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
   `jenisPerawatan` varchar(28) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
   `detailPerawatan` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
-  `harga` decimal(15,0) NOT NULL,
+  `harga` decimal(10,0) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -96,7 +100,7 @@ LOCK TABLES `carTreatment` WRITE;
 
 INSERT INTO `carTreatment` (`id`, `merkMobil`, `tipeMobil`, `jenisPerawatan`, `detailPerawatan`, `harga`)
 VALUES
-	(1,'Toyota','Agya','Perawatan Khusus','Kampas Rem',12000),
+	(1,'Toyota','Agya','Perawatan Khusus','Kampas Rem',150000),
 	(2,'Toyota','Agya','Perawatan Khusus','Kampas Kopling',1),
 	(3,'Toyota','Agya','Perawatan Khusus','Shock Breaker',1),
 	(4,'Toyota','Agya','Perawatan Khusus','Servis AC',1),

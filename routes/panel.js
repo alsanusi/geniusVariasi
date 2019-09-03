@@ -207,8 +207,8 @@ app.post('/report', async (req, res) => {
             dataRow.push(bookingData.tipeMobil)
             dataRow.push([bookingData.jenisPerawatan, bookingData.jenisPerawatan1, bookingData.jenisPerawatan2])
             dataRow.push([bookingData.detailPerawatan, bookingData.detailPerawatan1, bookingData.detailPerawatan2])
-            dataRow.push(bookingData.totalHarga)
-            priceTotal.push(bookingData.totalHarga)
+            dataRow.push(bookingData.totalHarga.toLocaleString('id'))
+            priceTotal.push(bookingData.totalHarga.toLocaleString('id'))
             bodyData.push(dataRow)
         })
 
@@ -344,8 +344,9 @@ app.put('/pricingListDetails', (req, res) => {
             tipeMobil: req.body.tipeMobil,
             jenisPerawatan: req.body.jenisPerawatan,
             detailPerawatan: req.body.detailPerawatan,
-            harga: req.body.harga
+            harga: parseFloat(req.body.harga.replace(/\./g, "").replace(",", "."))
         }
+
         mysql.createConnection(config.database).then(function (con) {
                 con.query('UPDATE carTreatment SET ? WHERE id = ' + globalId, bookingStatus).then(rows => {
                     res.redirect('/panel/pricingList')
@@ -385,7 +386,7 @@ app.route('/showDetails/(:id)')
                     throw err
                 } else {
                     //Set Global Variable
-                    globalTotalPrice = rows[0].totalHarga;
+                    globalTotalPrice = parseFloat(rows[0].totalHarga.replace(/\./g, "").replace(",", "."));
 
                     res.render('bookingDetailsPanel', {
                         id: rows[0].id,
@@ -400,16 +401,16 @@ app.route('/showDetails/(:id)')
                         jenisPerawatan: rows[0].jenisPerawatan,
                         detailPerawatan: rows[0].detailPerawatan,
                         kuantiti: rows[0].kuantiti,
-                        harga: rows[0].harga ? rows[0].harga : rows[0].totalHarga,
+                        harga: rows[0].harga ? parseFloat(rows[0].harga.replace(/\./g, "").replace(",", ".")) : rows[0].totalHarga,
                         jenisPerawatan1: rows[0].jenisPerawatan1 ? rows[0].jenisPerawatan1 : "-",
                         detailPerawatan1: rows[0].detailPerawatan1 ? rows[0].detailPerawatan1 : "-",
                         kuantiti1: rows[0].kuantiti1 ? rows[0].kuantiti1 : "-",
-                        harga1: rows[0].harga1 ? rows[0].harga1 : "-",
+                        harga1: rows[0].harga1 ? parseFloat(rows[0].harga1.replace(/\./g, "").replace(",", ".")) : "-",
                         jenisPerawatan2: rows[0].jenisPerawatan2 ? rows[0].jenisPerawatan2 : "-",
                         detailPerawatan2: rows[0].detailPerawatan2 ? rows[0].detailPerawatan2 : "-",
                         kuantiti2: rows[0].kuantiti2 ? rows[0].kuantiti2 : "-",
-                        harga2: rows[0].harga2 ? rows[0].harga1 : "-",
-                        totalHarga: rows[0].totalHarga,
+                        harga2: rows[0].harga2 ? parseFloat(rows[0].harga1.replace(/\./g, "").replace(",", ".")) : "-",
+                        totalHarga: parseFloat(rows[0].totalHarga.replace(/\./g, "").replace(",", ".")),
                         done_flag: rows[0].done_flag,
                         desc_perawatan: rows[0].desc_perawatan
                     })
@@ -423,7 +424,7 @@ app.route('/showDetails/(:id)')
         var errors = req.validationErrors()
         if (!errors) {
             var bookingStatus = {
-                totalHarga: req.body.totalHarga ? req.body.totalHarga : globalTotalPrice,
+                totalHarga: req.body.totalHarga ? parseFloat(req.body.totalHarga.replace(/\./g, "").replace(",", ".")) : globalTotalPrice,
                 done_flag: 'Y'
             }
             mysql.createConnection(config.database).then(function (con) {

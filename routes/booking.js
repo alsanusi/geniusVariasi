@@ -492,16 +492,16 @@ const customerEmailNotifier = () => {
                 careType: globalBooking.jenisPerawatan,
                 careDetail: globalBooking.detailPerawatan,
                 kuantiti: globalBooking.kuantiti,
-                price: globalBooking.harga,
+                price: globalBooking.harga.toLocaleString('id'),
                 careType1: globalBooking.jenisPerawatan1,
                 careDetail1: globalBooking.detailPerawatan1,
                 kuantiti1: globalBooking.kuantiti1,
-                price1: globalBooking.harga1,
+                price1: globalBooking.harga1.toLocaleString('id'),
                 careType2: globalBooking.jenisPerawatan2,
                 careDetail2: globalBooking.detailPerawatan2,
                 kuantiti2: globalBooking.kuantiti2,
-                price2: globalBooking.harga2,
-                totalPrice: globalBooking.totalHarga,
+                price2: globalBooking.harga2.toLocaleString('id'),
+                totalPrice: globalBooking.totalHarga.toLocaleString('id'),
                 perawatan1: globalBooking.perawatan1,
                 perawatan2: globalBooking.perawatan2
             },
@@ -590,19 +590,21 @@ app.post('/booked', (req, res) => {
             jenisPerawatan: req.sanitize('jenisPerawatan').escape().trim(),
             detailPerawatan: globalBooking.detailPerawatan,
             kuantiti: globalBooking.kuantiti,
-            harga: req.body.harga ? req.sanitize('harga').escape().trim() : globalBooking.totalHarga,
+            harga: req.body.harga ? parseFloat(req.sanitize('harga').escape().trim().replace(/\./g,"").replace(",",".")) : globalBooking.totalHarga,
             jenisPerawatan1: req.body.jenisPerawatan1 ? req.sanitize('jenisPerawatan1').escape().trim() : "-",
             detailPerawatan1: req.body.detailPerawatan1 ? req.sanitize('detailPerawatan1').escape().trim() : "-",
             kuantiti1: req.body.kuantiti1 ? req.sanitize('kuantiti1').escape().trim() : 0,
-            harga1: req.body.harga1 ? req.sanitize('harga1').escape().trim() : 0,
+            harga1: req.body.harga1 ? parseFloat(req.sanitize('harga1').escape().trim().replace(/\./g,"").replace(",",".")) : 0,
             jenisPerawatan2: req.body.jenisPerawatan2 ? req.sanitize('jenisPerawatan2').escape().trim() : "-",
             detailPerawatan2: req.body.detailPerawatan2 ? req.sanitize('detailPerawatan2').escape().trim() : "-",
             kuantiti2: req.body.kuantiti2 ? req.sanitize('kuantiti2').escape().trim() : 0,
-            harga2: req.body.harga2 ? req.sanitize('harga2').escape().trim() : 0,
+            harga2: req.body.harga2 ? parseFloat(req.sanitize('harga2').escape().trim().replace(/\./g,"").replace(",",".")) : 0,
             totalHarga: globalBooking.totalHarga,
             done_flag: 'N',
             desc_perawatan: globalBooking.multiLine
         }
+
+        console.log(clientData)
 
         req.getConnection(function (err, con) {
             con.query('INSERT INTO bookingList SET ?', clientData, function (err, result) {
