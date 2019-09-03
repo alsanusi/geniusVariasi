@@ -213,7 +213,8 @@
                                                  <label class="form-control-label" for="input-last-name">Harga</label>
                                                  <input type="text" name="harga" onkeyup="idrMoneyFormat()"
                                                      class="money form-control form-control-alternative"
-                                                     placeholder="Harga" value="<%= harga %>" required>
+                                                     placeholder="Harga" value="<%= harga.toLocaleString('id') %>"
+                                                     required>
                                              </div>
                                          </div>
                                      </div>
@@ -248,23 +249,10 @@
      </div>
      <script>
          function idrMoneyFormat() {
-             var a = updateHarga.harga.value.replace(/[^\d]/g, "");
-             var a = +a;
-             updateHarga.harga.value = formatNum(a);
-         }
-
-         function formatNum(rawNum) {
-             rawNum = "" + rawNum; // converts the given number back to a string
-             var retNum = "";
-             var j = 0;
-             for (var i = rawNum.length; i > 0; i--) {
-                 j++;
-                 if (((j % 3) == 1) && (j != 1))
-                     retNum = rawNum.substr(i - 1, 1) + "." + retNum;
-                 else
-                     retNum = rawNum.substr(i - 1, 1) + retNum;
-             }
-             return retNum;
+             var a = updateHarga.harga.value.replace(/\./g, "").replace(",",
+                 ".");
+             if (a && !isNaN(a))
+                 updateHarga.harga.value = parseFloat(a).toLocaleString("id");
          }
      </script>
  </body>

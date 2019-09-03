@@ -344,8 +344,9 @@ app.put('/pricingListDetails', (req, res) => {
             tipeMobil: req.body.tipeMobil,
             jenisPerawatan: req.body.jenisPerawatan,
             detailPerawatan: req.body.detailPerawatan,
-            harga: req.body.harga
+            harga: parseFloat(req.body.harga.replace(/\./g,"").replace(",","."))
         }
+        console.log(bookingStatus)
         mysql.createConnection(config.database).then(function (con) {
                 con.query('UPDATE carTreatment SET ? WHERE id = ' + globalId, bookingStatus).then(rows => {
                     res.redirect('/panel/pricingList')
