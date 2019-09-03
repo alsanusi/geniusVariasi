@@ -146,7 +146,7 @@
              <div class="row">
                  <div class="col-xl-12 order-xl-1">
                      <div class="card bg-secondary shadow">
-                         <form name="update-booking" action="/panel/showDetails/<%= id %>" method="POST">
+                         <form name="updateStatus" action="/panel/showDetails/<%= id %>" method="POST">
                              <div class="card-header bg-white border-0">
                                  <div class="row align-items-center">
                                      <div class="col-8">
@@ -301,7 +301,7 @@
                                                  <label class="form-control-label" for="input-username">Harga</label>
                                                  <input type="text" name="harga"
                                                      class="form-control form-control-alternative" placeholder="Harga"
-                                                     value="<%= harga %>" readonly>
+                                                     value="<%= harga.toLocaleString('id') %>" readonly>
                                              </div>
                                          </div>
                                      </div>
@@ -358,7 +358,7 @@
                                                  <label class="form-control-label" for="input-username">Harga</label>
                                                  <input type="text" name="harga1"
                                                      class="form-control form-control-alternative" placeholder="Harga"
-                                                     value="<%= harga1 %>" readonly>
+                                                     value="<%= harga1.toLocaleString('id') %>" readonly>
                                              </div>
                                          </div>
                                      </div>
@@ -416,7 +416,7 @@
                                                  <label class="form-control-label" for="input-username">Harga</label>
                                                  <input type="text" name="harga2"
                                                      class="form-control form-control-alternative" placeholder="Harga"
-                                                     value="<%= harga2 %>" readonly>
+                                                     value="<%= harga2.toLocaleString('id') %>" readonly>
                                              </div>
                                          </div>
                                      </div>
@@ -442,15 +442,17 @@
                                                  <% if(desc_perawatan === "Y") { %>
                                                  <label class="form-control-label" for="input-username">Total
                                                      Harga</label>
-                                                 <input type="text" name="totalHarga"
-                                                     class="form-control form-control-alternative"
-                                                     placeholder="Total Harga" value="<%= totalHarga %>">
+                                                 <input type="text" name="totalHarga" onkeyup="idrMoneyFormat()"
+                                                     class="money form-control form-control-alternative"
+                                                     placeholder="Total Harga"
+                                                     value="<%= totalHarga.toLocaleString('id') %>">
                                                  <% } else { %>
                                                  <label class="form-control-label" for="input-username">Total
                                                      Harga</label>
                                                  <input type="text" name="harga"
                                                      class="form-control form-control-alternative"
-                                                     placeholder="Total Harga" value="<%= totalHarga %>" readonly>
+                                                     placeholder="Total Harga"
+                                                     value="<%= totalHarga.toLocaleString('id') %>" readonly>
                                                  <% } %>
                                              </div>
                                          </div>
@@ -484,6 +486,13 @@
          </footer>
      </div>
      </div>
+     <script>
+         function idrMoneyFormat() {
+             var a = updateStatus.totalHarga.value.replace(/\./g, "").replace(",", ".");
+             if (a && !isNaN(a))
+                 updateStatus.totalHarga.value = parseFloat(a).toLocaleString("id");
+         }
+     </script>
  </body>
 
  <!-- Include Footer -->

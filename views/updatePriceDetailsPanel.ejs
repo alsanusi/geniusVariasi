@@ -249,8 +249,7 @@
      </div>
      <script>
          function idrMoneyFormat() {
-             var a = updateHarga.harga.value.replace(/\./g, "").replace(",",
-                 ".");
+             var a = updateHarga.harga.value.replace(/\./g, "").replace(",",".");
              if (a && !isNaN(a))
                  updateHarga.harga.value = parseFloat(a).toLocaleString("id");
          }
