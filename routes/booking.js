@@ -604,8 +604,6 @@ app.post('/booked', (req, res) => {
             desc_perawatan: globalBooking.multiLine
         }
 
-        console.log(clientData)
-
         req.getConnection(function (err, con) {
             con.query('INSERT INTO bookingList SET ?', clientData, function (err, result) {
                 if (err) {
