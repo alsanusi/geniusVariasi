@@ -128,7 +128,7 @@ app.route('/editBooking')
 
 const dateAndTimeChecking = (time, date) => {
     return new Promise(resolve => {
-        conn.query("SELECT waktuService, tanggalService FROM bookingList WHERE tanggalService = '" + date + "' AND waktuService= '" + time + "'; ", (err, rows, fields) => {
+        conn.query("SELECT waktuService, tanggalService FROM bookingList WHERE tanggalService = ? AND waktuService= ?; ", [time, date], (err, rows, fields) => {
             err ? console.log(err) : resolve(rows)
         })
     })
@@ -136,7 +136,7 @@ const dateAndTimeChecking = (time, date) => {
 
 const priceChecking1 = (merkMobil, tipeMobil, jenisPerawatan, detailPerawatan) => {
     return new Promise(resolve => {
-        conn.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + merkMobil + "' AND tipeMobil= '" + tipeMobil + "' AND jenisPerawatan= '" + jenisPerawatan + "' AND detailPerawatan= '" + detailPerawatan + "'; ", (err, rows, fields) => {
+        conn.query("SELECT harga FROM carTreatment WHERE merkMobil = ? AND tipeMobil= ? AND jenisPerawatan= ? AND detailPerawatan= ?;", [merkMobil, tipeMobil, jenisPerawatan, detailPerawatan], (err, rows, fields) => {
             err ? console.log(err) : resolve(rows);
         })
     })
@@ -144,7 +144,7 @@ const priceChecking1 = (merkMobil, tipeMobil, jenisPerawatan, detailPerawatan) =
 
 const priceChecking2 = (merkMobil, tipeMobil, jenisPerawatan, detailPerawatan) => {
     return new Promise(resolve => {
-        conn.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + merkMobil + "' AND tipeMobil= '" + tipeMobil + "' AND jenisPerawatan= '" + jenisPerawatan + "' AND detailPerawatan= '" + detailPerawatan + "'; ", (err, rows, fields) => {
+        conn.query("SELECT harga FROM carTreatment WHERE merkMobil = ? AND tipeMobil= ? AND jenisPerawatan= ? AND detailPerawatan= ?;", [merkMobil, tipeMobil, jenisPerawatan, detailPerawatan], (err, rows, fields) => {
             err ? console.log(err) : resolve(rows);
         })
     })
@@ -152,7 +152,7 @@ const priceChecking2 = (merkMobil, tipeMobil, jenisPerawatan, detailPerawatan) =
 
 const priceChecking3 = (merkMobil, tipeMobil, jenisPerawatan, detailPerawatan) => {
     return new Promise(resolve => {
-        conn.query("SELECT harga FROM carTreatment WHERE merkMobil = '" + merkMobil + "' AND tipeMobil= '" + tipeMobil + "' AND jenisPerawatan= '" + jenisPerawatan + "' AND detailPerawatan= '" + detailPerawatan + "'; ", (err, rows, fields) => {
+        conn.query("SELECT harga FROM carTreatment WHERE merkMobil = ? AND tipeMobil= ? AND jenisPerawatan= ? AND detailPerawatan= ?;", [merkMobil, tipeMobil, jenisPerawatan, detailPerawatan], (err, rows, fields) => {
             err ? console.log(err) : resolve(rows);
         })
     })
@@ -590,15 +590,15 @@ app.post('/booked', (req, res) => {
             jenisPerawatan: req.sanitize('jenisPerawatan').escape().trim(),
             detailPerawatan: globalBooking.detailPerawatan,
             kuantiti: globalBooking.kuantiti,
-            harga: req.body.harga ? parseFloat(req.sanitize('harga').escape().trim().replace(/\./g,"").replace(",",".")) : globalBooking.totalHarga,
+            harga: req.body.harga ? parseFloat(req.sanitize('harga').escape().trim().replace(/\./g, "").replace(",", ".")) : globalBooking.totalHarga,
             jenisPerawatan1: req.body.jenisPerawatan1 ? req.sanitize('jenisPerawatan1').escape().trim() : "-",
             detailPerawatan1: req.body.detailPerawatan1 ? req.sanitize('detailPerawatan1').escape().trim() : "-",
             kuantiti1: req.body.kuantiti1 ? req.sanitize('kuantiti1').escape().trim() : 0,
-            harga1: req.body.harga1 ? parseFloat(req.sanitize('harga1').escape().trim().replace(/\./g,"").replace(",",".")) : 0,
+            harga1: req.body.harga1 ? parseFloat(req.sanitize('harga1').escape().trim().replace(/\./g, "").replace(",", ".")) : 0,
             jenisPerawatan2: req.body.jenisPerawatan2 ? req.sanitize('jenisPerawatan2').escape().trim() : "-",
             detailPerawatan2: req.body.detailPerawatan2 ? req.sanitize('detailPerawatan2').escape().trim() : "-",
             kuantiti2: req.body.kuantiti2 ? req.sanitize('kuantiti2').escape().trim() : 0,
-            harga2: req.body.harga2 ? parseFloat(req.sanitize('harga2').escape().trim().replace(/\./g,"").replace(",",".")) : 0,
+            harga2: req.body.harga2 ? parseFloat(req.sanitize('harga2').escape().trim().replace(/\./g, "").replace(",", ".")) : 0,
             totalHarga: globalBooking.totalHarga,
             done_flag: 'N',
             desc_perawatan: globalBooking.multiLine
