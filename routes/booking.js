@@ -1,5 +1,7 @@
 const express = require('express')
 const app = express()
+
+// Booking Controller
 const bookingController = require('../controller/booking')
 
 // EndPoint
