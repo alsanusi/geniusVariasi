@@ -556,9 +556,4 @@ exports.logout = (req, res) => {
     })
 }
 
-// Logout
-app.post('/logout', redirectLogin, function (req, res) {
-
-})
-
 module.exports = app
