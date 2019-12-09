@@ -14,4 +14,4 @@ app.route('/editBooking')
 app.post('/priceChecking', bookingController.postPriceChecking)
 app.post('/booked', bookingController.postBook)
 
-module.exports = app;
+module.exports = app

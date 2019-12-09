@@ -67,7 +67,10 @@ const filterIncome = price => {
     income = statusDone.map(obj => {
         return obj.totalHarga
     })
-    totalIncome = income.reduce((a, b) => a + b, 0)
+    totalIncome = income.reduce((prev, curr) => {
+        return (Number(prev) || 0) + (Number(curr) || 0)
+    })
+
     return totalIncome
 }
 
@@ -89,10 +92,8 @@ const showNotDoneBooking = bStatus => {
 
 const monthYearReport = (month, year) => {
     return new Promise(resolve => {
-        mysql.createConnection(config.database).then(function (con) {
-            con.query("SELECT * FROM bookingList WHERE month(tanggalService)= '" + month + "' AND year(tanggalService)= '" + year + "' AND done_flag = 'Y' ", (err, rows, fields) => {
-                resolve(rows)
-            })
+        dbConnection.con.query("SELECT * FROM bookingList WHERE month(tanggalService)= '" + month + "' AND year(tanggalService)= '" + year + "' AND done_flag = 'Y' ", (err, rows, fields) => {
+            resolve(rows)
         })
     })
 }
@@ -128,7 +129,8 @@ exports.postLogin = (req, res) => {
 }
 
 exports.showDashboard = (req, res) => {
-    dbConnection.con.query('SELECT * FROM bookingList ORDER BY ID DESC').then(rows => {
+    dbConnection.con.query('SELECT * FROM bookingList ORDER BY ID DESC', (err, rows) => {
+        if (rows) {
             // Table Pagination
             let totalOnGoingBooking = filterBookingNotDone(rows),
                 pageSize = 8,
@@ -162,8 +164,7 @@ exports.showDashboard = (req, res) => {
                 pageCount: pageCount,
                 currentPage: currentPage
             })
-        })
-        .catch(err => {
+        } else {
             res.render('indexPanel', {
                 totalBooking: '',
                 bookingList: '',
@@ -172,7 +173,8 @@ exports.showDashboard = (req, res) => {
                 pageCount: '',
                 currentPage: ''
             })
-        })
+        }
+    })
 }
 
 exports.postReport = async (req, res) => {
@@ -305,17 +307,17 @@ exports.postPricingList = (req, res) => {
         detailPerawatan: req.body.detailPerawatan
     }
 
-    dbConnection.con.query("SELECT harga, id FROM carTreatment WHERE merkMobil = '" + clientCar.merkMobil + "' AND tipeMobil= '" + clientCar.tipeMobil + "' AND jenisPerawatan= '" + clientCar.jenisPerawatan + "' AND detailPerawatan= '" + clientCar.detailPerawatan + "'").then(rows => {
-        globalId = rows[0].id
-        res.render('updatePriceDetailsPanel', {
-            merkMobil: req.body.merkMobil,
-            tipeMobil: req.body.tipeMobil,
-            jenisPerawatan: req.body.jenisPerawatan,
-            detailPerawatan: req.body.detailPerawatan,
-            harga: rows[0].harga
-        })
-    }).catch(err => {
-        if (err) {
+    dbConnection.con.query("SELECT harga, id FROM carTreatment WHERE merkMobil = '" + clientCar.merkMobil + "' AND tipeMobil= '" + clientCar.tipeMobil + "' AND jenisPerawatan= '" + clientCar.jenisPerawatan + "' AND detailPerawatan= '" + clientCar.detailPerawatan + "'", (err, rows) => {
+        if (rows) {
+            globalId = rows[0].id
+            res.render('updatePriceDetailsPanel', {
+                merkMobil: req.body.merkMobil,
+                tipeMobil: req.body.tipeMobil,
+                jenisPerawatan: req.body.jenisPerawatan,
+                detailPerawatan: req.body.detailPerawatan,
+                harga: rows[0].harga
+            })
+        } else {
             res.render('updatePriceDetailsPanel', {
                 merkMobil: req.body.merkMobil,
                 tipeMobil: req.body.tipeMobil,
@@ -344,10 +346,10 @@ exports.updatePricingList = (req, res) => {
             detailPerawatan: req.body.detailPerawatan,
             harga: parseFloat(req.body.harga.replace(/\./g, "").replace(",", "."))
         }
-        dbConnection.con.query('UPDATE carTreatment SET ? WHERE id = ' + globalId, bookingStatus).then(rows => {
-            res.redirect('/panel/pricingList')
-        }).catch(err => {
-            if (err) {
+        dbConnection.con.query('UPDATE carTreatment SET ? WHERE id = ' + globalId, bookingStatus, (err, rows) => {
+            if (rows) {
+                res.redirect('/panel/pricingList')
+            } else {
                 res.render('updatePricePanel', {
                     merkMobil: req.body.merkMobil,
                     tipeMobil: req.body.tipeMobil,
@@ -421,10 +423,10 @@ exports.updateDetailBasedOnId = (req, res) => {
             totalHarga: req.body.totalHarga ? parseFloat(req.body.totalHarga.replace(/\./g, "").replace(",", ".")) : globalTotalPrice,
             done_flag: 'Y'
         }
-        dbConnection.con.query('UPDATE bookingList SET ? WHERE id = ' + req.params.id, bookingStatus).then(rows => {
-            res.redirect('/panel/dashboard')
-        }).catch(err => {
-            if (err) {
+        dbConnection.con.query('UPDATE bookingList SET ? WHERE id = ' + req.params.id, bookingStatus, (err, rows) => {
+            if (rows) {
+                res.redirect('/panel/dashboard')
+            } else {
                 res.render('bookingDetailsPanel', {
                     id: req.params.id,
                     namaPemilik: req.body.namaPemilik,
@@ -453,7 +455,7 @@ exports.updateDetailBasedOnId = (req, res) => {
             }
         })
     } else {
-        var error_msg = ''
+        let error_msg = ''
         errors.forEach(function (error) {
             error_msg += error.msg + '</br>'
         })
@@ -487,40 +489,40 @@ exports.updateDetailBasedOnId = (req, res) => {
 }
 
 exports.showBookingList = (req, res) => {
-    dbConnection.con.query('SELECT * FROM bookingList ORDER BY ID DESC').then(rows => {
-        // Table Pagination
-        let totalDoneBooking = filterBookingDone(rows),
-            pageSize = 8,
-            pageCount = totalDoneBooking / 4,
-            currentPage = 1,
-            doneBookingsArray = [],
-            doneBookingList = [],
-            doneBooking = JSON.parse(JSON.stringify(showDoneBooking(rows)))
+    dbConnection.con.query('SELECT * FROM bookingList ORDER BY ID DESC', (err, rows) => {
+        if (rows) {
+            // Table Pagination
+            let totalDoneBooking = filterBookingDone(rows),
+                pageSize = 8,
+                pageCount = totalDoneBooking / 4,
+                currentPage = 1,
+                doneBookingsArray = [],
+                doneBookingList = [],
+                doneBooking = JSON.parse(JSON.stringify(showDoneBooking(rows)))
 
-        // Split to groups
-        while (doneBooking.length > 0) {
-            doneBookingsArray.push(doneBooking.splice(0, pageSize))
-        }
+            // Split to groups
+            while (doneBooking.length > 0) {
+                doneBookingsArray.push(doneBooking.splice(0, pageSize))
+            }
 
-        // Set current page
-        if (typeof req.query.page != 'undefined') {
-            currentPage = +req.query.page
-        }
+            // Set current page
+            if (typeof req.query.page != 'undefined') {
+                currentPage = +req.query.page
+            }
 
-        // Show list of not done booking
-        doneBookingList = doneBookingsArray[+currentPage - 1];
+            // Show list of not done booking
+            doneBookingList = doneBookingsArray[+currentPage - 1];
 
-        res.render('tablePanel', {
-            doneBooking: filterBookingDone(rows),
-            totalIncome: filterIncome(rows),
-            doneTable: doneBookingList,
-            pageSize: pageSize,
-            totalDoneBooking: totalDoneBooking,
-            pageCount: pageCount,
-            currentPage: currentPage
-        })
-    }).catch(err => {
-        if (err) {
+            res.render('tablePanel', {
+                doneBooking: filterBookingDone(rows),
+                totalIncome: filterIncome(rows),
+                doneTable: doneBookingList,
+                pageSize: pageSize,
+                totalDoneBooking: totalDoneBooking,
+                pageCount: pageCount,
+                currentPage: currentPage
+            })
+        } else {
             res.render('tablePanel', {
                 doneTable: doneBookingList,
                 pageSize: '',
@@ -555,5 +557,3 @@ exports.logout = (req, res) => {
         res.redirect('/panel')
     })
 }
-
-module.exports = app
