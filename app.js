@@ -1,25 +1,6 @@
 const express = require('express')
 const app = express()
 
-//Load MySQL Configuration
-const mysql = require('mysql')
-const myConnection = require('express-myconnection')
-
-//Load DB Configuration
-const dbConfig = require('./config')
-const dbOptions = {
-    host: dbConfig.database.host,
-    user: dbConfig.database.user,
-    password: dbConfig.database.password,
-    port: dbConfig.database.port,
-    database: dbConfig.database.database,
-    supportBigNumbers: true,
-    bigNumberStrings: true
-}
-
-// Database
-app.use(myConnection(mysql, dbOptions, 'pool'))
-
 // Express Validator Middleware for Form Validation
 const expressValidator = require('express-validator')
 app.use(expressValidator())
